@@ -1,0 +1,20 @@
+MANGALOG PWA v9.2 — PUBBLICAZIONE GRATUITA
+
+1. Se non vuoi conservare i dati di prova, non serve esportare alcun backup. Questa versione parte con una collezione vuota su un nuovo indirizzo.
+2. Crea un repository pubblico su GitHub, per esempio "mangalog".
+3. ESTRAI questo ZIP. Carica nella radice del repository (non lo ZIP):
+   index.html, manifest.webmanifest, service-worker.js, .nojekyll e la cartella icons/.
+4. In GitHub: Settings > Pages > Deploy from a branch > main > /(root) > Save.
+5. Dopo la pubblicazione HTTPS apri MangaLog nel browser: la collezione iniziale e' vuota. Importa un JSON solo se desideri recuperare vecchi dati.
+6. Su Android Chrome: menu > Aggiungi a schermata Home / Installa app.
+
+NOTA DATI
+- I dati sono nel localStorage di ogni sito/browser. Il passaggio dal file locale a
+  GitHub Pages NON porta automaticamente i dati: esporta e importa il backup JSON.
+- Non caricare backup personali su GitHub: un repository pubblico e' visibile a tutti.
+- I dati non si sincronizzano tra dispositivi; servirà un servizio cloud futuro.
+- Le successive versioni possono essere caricate sullo stesso repository.
+- L'installazione PWA richiede HTTPS o localhost e supporto browser.
+- Servizio senza promesse di disponibilità perpetua: soggetto ai limiti GitHub Pages.
+
+PACCHETTO PULITO: i quattro manga dimostrativi non vengono inseriti automaticamente.
