@@ -1,0 +1,916 @@
+<!doctype html><html lang="it"><head><meta name="theme-color" content="#121318"><meta name="description" content="MangaLog: organizza la tua collezione manga, i volumi mancanti e gli acquisti."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" sizes="192x192" href="./icons/icon-192.png"><link rel="apple-touch-icon" href="./icons/apple-touch-icon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MangaLog — Collezione manga</title><style>
+:root{font-family:Inter,system-ui,-apple-system,sans-serif;color:#f6f4f5;background:#0c0d11;font-synthesis:none}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.4;cursor:not-allowed}.app{display:flex;min-height:100vh}.sidebar{width:240px;background:#121318;border-right:1px solid #292a30;padding:27px 16px;position:sticky;top:0;height:100vh;flex-shrink:0}.logo{font-size:25px;font-weight:950;letter-spacing:-1.3px;padding:0 12px 32px}.logo b{color:#f14353}.nav{width:100%;display:flex;align-items:center;gap:13px;text-align:left;border:0;background:none;color:#aaaab3;padding:13px 15px;border-radius:11px;margin:4px 0;font-weight:650}.nav.active,.nav:hover{background:#2b181f;color:#fff}.nav.active:before{content:'';width:4px;height:20px;border-radius:3px;background:#ff4255;margin-left:-9px}.sidefoot{position:absolute;bottom:22px;left:24px;color:#777782;font-size:12px}.main{max-width:1380px;width:100%;margin:auto;padding:30px 38px 100px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:26px}.eyebrow{color:#f14a5b;text-transform:uppercase;font-weight:850;font-size:11px;letter-spacing:2px}.heading{font-size:clamp(27px,4vw,40px);font-weight:900;letter-spacing:-1.5px;margin:5px 0}.muted{color:#9899a5}.btn{border:1px solid #343640;background:#202127;color:#fff;border-radius:10px;padding:11px 15px;font-weight:750}.btn.primary{background:#ef3d51;border-color:#ef3d51}.btn:hover{filter:brightness(1.13)}.btn.small{padding:7px 10px;font-size:12px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.stat,.panel,.series,.volume,.wishlist-card{background:#17181e;border:1px solid #2a2c35;border-radius:15px}.stat{padding:19px}.stat .num{font-size:31px;font-weight:900;margin-top:13px}.stat .label{font-size:12px;color:#aaaab3}.stat .accent{color:#f14a5b}.hero{padding:28px;background:linear-gradient(115deg,#311923,#181920 68%);border:1px solid #57303b;border-radius:18px;margin-bottom:20px;display:flex;justify-content:space-between;gap:15px;align-items:center}.hero h2{margin:7px 0;font-size:27px}.hero p{max-width:560px;color:#c8b6bd;font-size:14px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:30px 0 16px}.section-head h2{margin:0;font-size:20px}.series-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(188px,1fr));gap:17px}.series{overflow:hidden;transition:transform .15s;cursor:pointer}.series:hover{transform:translateY(-3px);border-color:#a84453}.cover{height:218px;background:linear-gradient(145deg,#3b222b,#1b1b26);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;position:relative;text-align:center;padding:16px}.cover:after{content:'';position:absolute;inset:9px;border:1px solid #ffffff18;pointer-events:none}.cover .cover-mark{font-size:42px;letter-spacing:-4px;font-weight:900;color:#ffffff25;line-height:1}.cover strong{font-size:16px;max-width:100%;overflow-wrap:anywhere;z-index:1}.cover small{color:#f56c7c;letter-spacing:2px;font-weight:850;z-index:1}.series-body{padding:14px}.series-title{font-size:15px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.series-sub{font-size:12px;color:#999aa5;margin:6px 0 13px}.progress{height:6px;background:#34343c;border-radius:9px;overflow:hidden}.progress i{display:block;background:#f04457;height:100%;border-radius:9px}.progress-info{display:flex;justify-content:space-between;color:#aaaab3;font-size:11px;margin-top:7px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0 23px}.input{background:#1a1b22;border:1px solid #393b45;border-radius:10px;color:white;padding:12px 13px;min-width:0}.toolbar .input{flex:1;min-width:180px}.toolbar select{max-width:220px}.panel{padding:21px}.list-row{display:flex;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid #2c2e36}.list-row:last-child{border:0}.mini-cover{width:48px;height:62px;border-radius:6px;background:#45242d;color:#f26b7c;display:grid;place-items:center;font-size:15px;letter-spacing:-1px;font-weight:900;flex-shrink:0}.grow{flex:1;min-width:0}.list-title{font-weight:800}.list-sub{color:#999aa5;font-size:12px;margin-top:5px}.pill{border-radius:50px;background:#38252d;color:#ff8998;padding:6px 10px;font-size:12px;font-weight:750}.volume-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:10px;margin-top:18px}.volume{padding:16px 5px;text-align:center;font-weight:900}.volume.owned{background:#34232b;border-color:#ef3d51;color:#ff6679}.volume small{display:block;font-size:10px;margin-top:5px;color:#aaaab3;font-weight:500}.detail-head{display:flex;gap:24px;align-items:center}.detail-cover{width:170px;min-width:170px;height:220px;border-radius:12px}.detail-cover .cover-mark{font-size:60px}.detail-meta{display:grid;grid-template-columns:repeat(2,minmax(100px,1fr));gap:15px;margin:18px 0}.detail-meta small{display:block;color:#999aa5;margin-bottom:4px}.empty{padding:38px;text-align:center;border:1px dashed #454650;border-radius:15px;color:#999aa5}.empty strong{color:#fff;display:block;margin-bottom:7px}.modal-back{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:20;padding:15px}.modal-back.show{display:flex}.modal{background:#1b1c23;border:1px solid #42434d;border-radius:18px;width:min(560px,100%);padding:24px;max-height:92vh;overflow:auto}.modal h2{margin:0 0 5px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:20px 0}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{color:#bbbcc6;font-size:12px;font-weight:750}.field input,.field select,.field textarea{width:100%}.actions{display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap}.mobile-nav{display:none}.hide{display:none!important}.chart-bar{height:13px;background:#33343c;border-radius:8px;overflow:hidden;flex:1}.chart-bar i{display:block;background:#ee4256;height:100%}.chart-line{display:flex;align-items:center;gap:14px;margin:16px 0}.chart-line span{width:105px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}.chart-line small{width:35px;text-align:right}.wishlist-card{padding:17px}.wishlist-card h3{margin:0 0 8px}.note{font-size:12px;color:#858693;margin-top:14px}@media(max-width:800px){.sidebar{display:none}.main{padding:22px 17px 95px}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:10;background:#17181eee;border-top:1px solid #33343e;justify-content:space-around;padding:9px 4px max(9px,env(safe-area-inset-bottom));backdrop-filter:blur(15px)}.mobile-nav button{border:0;background:none;color:#999aa5;font-size:10px;padding:6px 2px;min-width:58px}.mobile-nav button.active{color:#ff5366}.mobile-nav span{display:block;font-size:19px;margin-bottom:3px}.stats{grid-template-columns:repeat(2,1fr)}.hero{padding:20px}.hero h2{font-size:22px}.detail-head{align-items:flex-start}.detail-cover{width:110px;min-width:110px;height:158px}.detail-cover .cover-mark{font-size:38px}.detail-head .heading{font-size:25px}}@media(max-width:420px){.series-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.cover{height:175px}.cover strong{font-size:14px}.stats{gap:9px}.stat{padding:14px}.stat .num{font-size:25px}.detail-head{gap:13px}.detail-meta{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
+
+.collection-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 13px}.filter-chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid #363841;background:#1b1c22;color:#c2c2ca;border-radius:40px;padding:9px 15px;font-size:12px;font-weight:700}.chip.selected{background:#ed3e52;border-color:#ed3e52;color:white}.view-switch{display:flex;gap:4px;padding:4px;background:#17181d;border:1px solid #33343c;border-radius:12px}.view-btn{width:39px;height:34px;border:0;border-radius:8px;background:transparent;color:#9a9ba5;font-size:22px;line-height:1}.view-btn.selected{background:#ef3d51;color:#fff}.results-count{color:#92939e;font-size:12px;margin:0 0 15px}.collection-list{background:#17181e;border:1px solid #2a2c35;border-radius:16px;overflow:hidden}.collection-list-item{display:flex;align-items:center;gap:16px;padding:15px 18px;border-bottom:1px solid #2c2e36;cursor:pointer;transition:background .15s}.collection-list-item:last-child{border-bottom:0}.collection-list-item:hover,.collection-list-item:focus-visible{background:#252029;outline:none}.collection-list-item .mini-cover{width:54px;height:73px}.list-progress{max-width:320px;margin-top:12px}.list-count{font-size:14px;font-weight:850;white-space:nowrap;text-align:right}.list-count small{display:block;color:#a2a3ad;font-weight:500;font-size:11px;margin-top:5px}.chevron{font-size:27px;color:#f14a5b}.view-btn:focus-visible,.chip:focus-visible{outline:2px solid white;outline-offset:2px}@media(max-width:500px){.collection-list-item{padding:12px;gap:10px}.collection-list-item .mini-cover{width:42px;height:60px}.list-count{font-size:12px}.chevron{font-size:20px}.chip{padding:8px 11px}.toolbar select{max-width:none}.toolbar .input{width:100%}}
+.detail-hero{border:1px solid #4c3039;border-radius:20px;padding:24px;background:linear-gradient(120deg,#251921,#16171d 75%)}.detail-progress{margin-top:24px;border-top:1px solid #393039;padding-top:20px}.detail-progress-top{display:flex;justify-content:space-between;gap:10px;margin-bottom:12px;font-size:14px}.accent-text{color:#ff596d}.detail-progress .progress{height:10px}.detail-hint{margin-top:10px;font-size:12px}.detail-actions{display:flex;gap:9px;flex-wrap:wrap}.volume-legend{display:flex;gap:20px;flex-wrap:wrap;font-size:12px;color:#c2c0c8}.volume-legend span{display:inline-flex;align-items:center;gap:7px}.legend-dot{display:inline-block;width:12px;height:12px;border-radius:4px;background:#2c2d35;border:1px solid #555660}.legend-owned{background:#ef3d51;border-color:#ef3d51}.volume{min-height:76px;transition:background .12s,border-color .12s,transform .12s}.volume:hover{transform:translateY(-2px);border-color:#fa6072}.volume:focus-visible{outline:3px solid #ff8a99;outline-offset:3px}.volume-number{display:block;font-size:21px}.volume.owned{background:linear-gradient(135deg,#502331,#311d27)}.volume.owned small{color:#ffa3ae}@media(max-width:520px){.detail-hero{padding:15px}.volume-grid{grid-template-columns:repeat(auto-fill,minmax(64px,1fr));gap:8px}.volume{padding:12px 2px;min-height:69px}.volume-number{font-size:18px}.detail-actions .btn{font-size:12px;padding:9px}.detail-meta{gap:10px}}.volume-grid.dragging{user-select:none;-webkit-user-select:none;cursor:crosshair}.volume-grid.dragging .volume{cursor:crosshair}.volume-grid .volume{touch-action:pan-y;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}.drag-tip{font-size:12px;color:#ff8998;margin-top:7px}
+
+/* MangaLog v6: lista acquisti e wishlist evoluta */
+.buy-summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin:17px 0 20px}
+.buy-series{background:#17181e;border:1px solid #30313a;border-radius:16px;margin:13px 0;overflow:hidden}
+.buy-series summary{display:flex;align-items:center;gap:14px;padding:17px 20px;cursor:pointer;list-style:none;user-select:none}
+.buy-series summary::-webkit-details-marker{display:none}.buy-series summary:after{content:'⌄';color:#f65b6d;font-size:24px;margin-left:auto}
+.buy-series[open] summary:after{content:'⌃'}.buy-series summary:hover{background:#202028}
+.buy-series-content{padding:0 16px 17px;border-top:1px solid #30313a}
+.buy-volume-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(182px,1fr));gap:10px;padding-top:16px}
+.buy-volume{border:1px solid #383a43;border-radius:12px;background:#202127;padding:14px;min-width:0;display:flex;flex-direction:column;gap:10px}
+.buy-volume.queued{border-color:#914354;background:#2a1e25}
+.buy-volume-head{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.buy-vol-num{font-weight:900;font-size:20px}.priority-tag{font-size:11px;border:1px solid #4a3541;color:#ff9aaa;border-radius:30px;padding:4px 9px;white-space:nowrap}
+.priority-tag.high{background:#542331;border-color:#aa4255;color:#ffd0d6}.priority-tag.low{background:#292932;border-color:#444550;color:#afb0bd}
+.buy-meta{font-size:12px;color:#b6aab0;min-height:18px;overflow-wrap:anywhere}
+.buy-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:auto}.buy-actions .btn{font-size:11px;padding:8px 9px;flex:1}
+.buy-actions .btn.primary{flex:1.3}.buy-actions .btn.buy-check{background:#182b26;border-color:#3b6d58;color:#b9f4d4}
+.buy-actions .btn:hover{filter:brightness(1.12)}
+.wishlist-card{display:flex;flex-direction:column;gap:10px}.wishlist-card h3{font-size:19px;margin:0}.wishlist-card .wish-price{font-size:25px;font-weight:850}
+.wish-tools{display:flex;flex-wrap:wrap;gap:8px;margin-top:auto}.wish-tools .btn{flex:1;font-size:12px}
+.detail-quicklink{display:inline-flex;align-items:center;gap:6px;margin-top:12px}
+.helper-note{font-size:13px;color:#b0abb4;line-height:1.55}.highlight-amount{font-weight:850;color:#ff8997}
+@media(max-width:700px){.buy-summary{grid-template-columns:repeat(2,minmax(0,1fr))}.buy-summary .stat:last-child{grid-column:1/-1}.buy-volume-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.buy-series summary{padding:13px}.buy-series-content{padding:0 9px 10px}.buy-volume{padding:11px}.buy-vol-num{font-size:18px}.buy-actions{flex-direction:column}.buy-actions .btn{width:100%}}
+@media(max-width:350px){.buy-volume-grid{grid-template-columns:1fr}}
+
+/* v6.1: Mancolista compatta, con numeri e menu a tendina per ogni serie */
+.missing-intro{display:flex;justify-content:space-between;align-items:center;gap:14px;margin:0 0 20px;flex-wrap:wrap}
+.missing-intro p{margin:0;color:#a8a9b4;font-size:14px}
+.missing-series{border:1px solid #30313a;border-radius:14px;background:#17181e;margin:11px 0;overflow:hidden}
+.missing-series summary{display:flex;gap:13px;align-items:center;cursor:pointer;padding:16px 18px;list-style:none;user-select:none}
+.missing-series summary::-webkit-details-marker{display:none}
+.missing-series summary:after{content:'⌄';margin-left:auto;color:#f45164;font-size:24px;font-weight:600;line-height:1;transition:transform .14s}
+.missing-series[open] summary:after{transform:rotate(180deg)}
+.missing-series summary:hover{background:#202027}
+.missing-series .missing-edition{font-size:12px;color:#9798a5;margin-top:4px}
+.missing-series .missing-count{color:#f26879;font-weight:750;font-size:12px;border:1px solid #50303b;border-radius:30px;padding:6px 9px;white-space:nowrap}
+.missing-number-list{display:flex;flex-wrap:wrap;gap:8px;border-top:1px solid #30313a;padding:17px 18px 20px}
+.missing-number{display:grid;place-items:center;min-width:45px;height:44px;padding:0 9px;color:#f4f4f6;font-size:14px;font-weight:800;background:#25262e;border:1px solid #42434d;border-radius:9px;font-variant-numeric:tabular-nums}
+.missing-number-list:empty:after{content:'Nessun volume mancante';color:#a8a9b4}
+.missing-subtle-btn{border-color:#393b45!important;background:#191a20!important;color:#d7d7de!important}
+@media(max-width:540px){.missing-series summary{padding:13px 11px;gap:9px}.missing-series .mini-cover{width:39px;height:49px}.missing-series .missing-count{font-size:11px;padding:5px 7px}.missing-number-list{padding:13px 12px 16px;gap:7px}.missing-number{min-width:43px;height:43px}}
+
+/* v6.2 — Selezione provvisoria direttamente nella Mancolista. */
+.missing-number{font-family:inherit;cursor:pointer;touch-action:manipulation;transition:background .14s,border-color .14s,transform .12s;position:relative}
+.missing-number:hover{border-color:#ff6678;background:#32303a}
+.missing-number:focus-visible{outline:3px solid #f88496;outline-offset:3px}
+.missing-number.selected{color:#fff;background:#bb2d49;border-color:#ff7185;box-shadow:inset 0 0 0 1px #fd8494}
+.missing-number.selected::after{content:'✓';font-size:9px;position:absolute;top:1px;right:4px;color:#fff}
+.missing-number:active{transform:scale(.97)}
+.missing-batch{display:flex;align-items:center;gap:12px;justify-content:space-between;flex-wrap:wrap;position:sticky;top:10px;z-index:10;border:1px solid #884151;border-radius:14px;padding:11px 13px;background:#261922;box-shadow:0 8px 25px #05050582;margin:0 0 15px}
+.missing-batch[hidden]{display:none!important}
+.missing-batch-copy{color:#fff;font-weight:750;font-size:14px}
+.missing-batch-copy small{display:block;color:#d0bfc3;font-size:11px;font-weight:400;margin-top:2px}
+.missing-batch-actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.missing-batch-actions .btn{white-space:nowrap}
+.missing-success{padding:12px 14px;border-radius:12px;border:1px solid #436952;background:#15271c;color:#dcfce7;font-size:14px;margin:0 0 14px}
+.missing-hint{font-size:12px;color:#aeb0bd;margin:0 0 15px}
+@media(max-width:540px){.missing-batch{top:5px;padding:9px;gap:8px}.missing-batch-copy{font-size:12px}.missing-batch-actions{width:100%}.missing-batch-actions .btn.primary{flex:1}.missing-batch-actions .btn{font-size:12px;padding:9px 10px}}
+
+/* v6.3 — Numeri ad alto contrasto e selezione rapida con mouse. */
+#content .missing-number-list button.missing-number{
+ color:#ffffff!important;-webkit-text-fill-color:#ffffff;
+ background:#32343f;border:1px solid #626675;
+ font-size:16px;font-weight:900;line-height:1;letter-spacing:.2px;
+ user-select:none;-webkit-user-select:none;
+}
+#content .missing-number-list button.missing-number:hover{background:#424554;border-color:#ff7185}
+#content .missing-number-list button.missing-number.selected{
+ color:#ffffff!important;-webkit-text-fill-color:#ffffff;
+ background:#cf3654;border-color:#ff8296;
+ box-shadow:inset 0 0 0 1px #ff9bab;
+}
+/* La barra non sposta la griglia quando viene selezionato il primo volume. */
+.missing-batch:not([hidden]){
+ position:fixed;top:auto;bottom:23px;right:23px;left:auto;
+ width:min(575px,calc(100vw - 46px));margin:0;z-index:25;
+}
+@media(max-width:800px){
+ .missing-batch:not([hidden]){bottom:calc(75px + env(safe-area-inset-bottom));left:12px;right:12px;width:auto}
+}
+.main:has(.missing-batch:not([hidden])){padding-bottom:195px}
+#content .missing-number-list.dragging,
+#content .missing-number-list.dragging button.missing-number{cursor:crosshair;user-select:none;-webkit-user-select:none}
+
+/* v7.1 — Pressione prolungata su Mancolista, con normale scroll prima dell’attivazione. */
+#content .missing-number-list button.missing-number{-webkit-touch-callout:none;touch-action:auto}
+#content .missing-number-list.dragging button.missing-number{outline-offset:2px}
+
+/* v6.4 — Numerazione della collezione sempre leggibile sui pulsanti scuri. */
+#content .volume-grid button.volume{color:#f8f8fb;-webkit-text-fill-color:#f8f8fb}
+#content .volume-grid button.volume .volume-number{color:#ffffff;-webkit-text-fill-color:#ffffff;font-weight:900}
+#content .volume-grid button.volume.owned{color:#ffffff;-webkit-text-fill-color:#ffffff}
+#content .volume-grid button.volume:not(.owned) small{color:#c3c4cd;-webkit-text-fill-color:#c3c4cd}
+#content .volume-grid button.volume.owned small{color:#ffb4bf;-webkit-text-fill-color:#ffb4bf}
+
+/* v7 • cruscotto e statistiche progettati per dati reali */
+.dash-kicker{font-size:12px;color:#c9a5b0;letter-spacing:1.2px;text-transform:uppercase;font-weight:800}
+.dashboard-top{display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px;flex-wrap:wrap}
+.dashboard-top .heading{margin:2px 0 4px}
+.dashboard-intro{margin:0;color:#a2a3af;font-size:13px;line-height:1.5}
+.dashboard-hero{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:26px 30px;background:radial-gradient(ellipse at 92% 10%,#5e2336 0,transparent 44%),linear-gradient(125deg,#281921,#15161c 65%);border:1px solid #673141;border-radius:20px}
+.dashboard-hero:before{content:'';position:absolute;z-index:-1;inset:0;opacity:.19;background:repeating-linear-gradient(112deg,transparent 0 18px,#fff 19px,transparent 20px 43px);mask-image:linear-gradient(90deg,transparent 40%,black)}
+.dashboard-hero h2{font-size:clamp(23px,3.5vw,34px);line-height:1.09;letter-spacing:-.7px;margin:8px 0 11px}
+.dashboard-hero p{color:#c7c3cb;font-size:13px;max-width:460px;line-height:1.55;margin:0 0 19px}
+.dashboard-hero .hero-buttons{display:flex;gap:8px;flex-wrap:wrap}
+.hero-ring{flex:0 0 154px;width:154px;height:154px;display:grid;place-items:center;border-radius:50%;background:conic-gradient(#fb455e var(--pct),#35313b 0);box-shadow:0 10px 45px #0005;position:relative}
+.hero-ring:before{content:'';position:absolute;inset:12px;background:#18171e;border-radius:50%}
+.hero-ring-content{position:relative;display:flex;flex-direction:column;text-align:center}
+.hero-ring strong{font-size:35px;line-height:1;font-weight:950;color:#fff}
+.hero-ring small{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#b1a3ab;margin-top:7px}
+.dashboard-metrics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:15px}
+.metric-tile{min-width:0;background:linear-gradient(145deg,#1e2028,#17181e);border:1px solid #31323e;border-radius:15px;padding:16px;display:flex;align-items:center;gap:12px}
+.metric-icon{flex:0 0 39px;width:39px;height:39px;border-radius:11px;background:#47212e;color:#ff6076;display:grid;place-items:center;font-size:21px;font-weight:900}
+.metric-tile:nth-child(2) .metric-icon{background:#21382e;color:#8bdeb1}.metric-tile:nth-child(3) .metric-icon{background:#202d40;color:#92b3f6}.metric-tile:nth-child(4) .metric-icon{background:#352743;color:#cba0ff}
+.metric-number{font-size:26px;line-height:1.06;font-weight:950;color:#fff;overflow-wrap:anywhere}
+.metric-caption{font-size:11px;color:#a4a5b2;margin-top:5px}
+.dashboard-columns{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,1fr);gap:15px;margin-top:19px}
+.dashboard-panel{background:#18191f;border:1px solid #30323b;border-radius:17px;padding:20px;min-width:0}
+.dashboard-panel h3{margin:0;font-size:17px;letter-spacing:-.2px}
+.dashboard-panel .sub{color:#a1a2ae;font-size:12px;margin:5px 0 0;line-height:1.5}
+.panel-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
+.panel-head .btn{white-space:nowrap}
+.overall-progress{height:12px;background:#35363e;border-radius:100px;overflow:hidden;margin:15px 0 9px}
+.overall-progress>i{display:block;height:100%;background:linear-gradient(90deg,#f23650,#ff7990);border-radius:100px}
+.progress-pair{display:flex;justify-content:space-between;gap:14px;color:#b8b8c2;font-size:12px;margin:7px 0}
+.progress-pair strong{color:#fff}
+.status-track{display:flex;height:13px;background:#31323b;border-radius:100px;overflow:hidden;margin:14px 0 14px}
+.status-track .complete{background:#fe4c64}.status-track .started{background:#9b5370}.status-track .unstarted{background:#52545f}
+.status-legend{display:flex;gap:12px;flex-wrap:wrap;font-size:11px;color:#bfc0ca}
+.status-legend b{color:#fff;font-weight:800}
+.status-legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:5px;background:#fe4c64}
+.status-legend .start i{background:#9b5370}.status-legend .none i{background:#52545f}
+.dashboard-links{display:grid;gap:9px}
+.dashboard-link{border:1px solid #34353e;background:#202129;border-radius:11px;padding:11px 12px;color:#fff;text-align:left;display:flex;gap:12px;align-items:center;width:100%}
+.dashboard-link:hover,.dashboard-link:focus-visible{border-color:#fa6378;background:#29212b;outline:none}
+.dash-cover{display:grid;place-items:center;width:43px;height:55px;border-radius:5px;background:linear-gradient(135deg,#673044,#261d28);font-weight:950;color:#ff8fa0;font-size:13px;flex-shrink:0}
+.dash-link-main{min-width:0;flex:1}.dash-link-title{font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}.dash-link-meta{font-size:11px;color:#9fa0ae;margin-top:5px}.dash-link-right{color:#ff6b7f;font-weight:850;font-size:13px;white-space:nowrap}
+.dash-mini-progress{height:5px;background:#34353e;overflow:hidden;border-radius:12px;margin-top:8px}
+.dash-mini-progress i{height:100%;background:#f64b64;display:block;border-radius:12px}
+.activity-list{display:grid;gap:9px}
+.activity-item{display:flex;gap:11px;align-items:center;border-bottom:1px solid #30313a;padding:4px 0 12px}.activity-item:last-child{border:0;padding-bottom:0}
+.activity-symbol{display:grid;place-items:center;width:32px;height:32px;border-radius:10px;background:#2b2330;color:#ff8496;flex-shrink:0}
+.activity-title{font-weight:750;font-size:13px;line-height:1.4}.activity-date{font-size:11px;color:#9697a5;margin-top:3px}
+.section-link{border:0;background:transparent;color:#ff8191;font-size:12px;font-weight:800;padding:5px 0;cursor:pointer}
+.stats-feature{display:grid;grid-template-columns:200px 1fr;align-items:center;gap:26px}
+.stats-donut{width:175px;height:175px;border-radius:50%;position:relative;background:conic-gradient(#f44760 var(--pct),#3b3d47 0);display:grid;place-items:center;margin:auto}
+.stats-donut:before{content:'';position:absolute;inset:24px;border-radius:50%;background:#18191f}
+.stats-donut-center{position:relative;text-align:center}.stats-donut-center strong{display:block;font-weight:950;font-size:31px}.stats-donut-center small{display:block;font-size:11px;color:#a8a9b5}
+.publisher-chart{display:grid;gap:18px}
+.publisher-row{display:grid;grid-template-columns:minmax(75px,1.2fr) minmax(70px,3fr) auto;align-items:center;gap:14px}
+.publisher-name{font-size:12px;color:#e1e1e6;overflow-wrap:anywhere}
+.publisher-track{height:11px;background:#393a44;border-radius:99px;overflow:hidden;display:flex}
+.publisher-track i{display:block;background:#fb526a;height:100%}.publisher-track em{display:block;background:#66515d;height:100%;font-style:normal}
+.publisher-total{font-size:11px;color:#afb0bb;white-space:nowrap;text-align:right}
+.stats-divider{height:1px;background:#30313b;margin:19px 0}
+.dash-empty{padding:16px;background:#202128;border:1px dashed #454650;border-radius:12px;font-size:13px;color:#a7a8b4;line-height:1.55}
+.stats-subheading{font-size:17px;font-weight:850;margin:0 0 13px}
+@media(max-width:1120px){.dashboard-metrics{grid-template-columns:repeat(2,minmax(0,1fr))}.dashboard-columns{grid-template-columns:1fr}}
+@media(max-width:640px){.dashboard-top{align-items:flex-start}.dashboard-hero{padding:20px 17px;gap:14px}.dashboard-hero h2{font-size:23px}.hero-ring{width:105px;height:105px;flex-basis:105px}.hero-ring:before{inset:9px}.hero-ring strong{font-size:26px}.hero-ring small{font-size:8px}.hero-buttons .btn{font-size:12px;padding:10px}.dashboard-metrics{gap:9px}.metric-tile{padding:12px 10px;gap:9px}.metric-icon{width:33px;height:33px;flex-basis:33px;font-size:17px}.metric-number{font-size:23px}.metric-caption{font-size:10px}.dashboard-panel{padding:16px}.stats-feature{grid-template-columns:1fr;gap:14px}.stats-donut{width:148px;height:148px}.stats-donut:before{inset:21px}.publisher-row{grid-template-columns:minmax(60px,1.05fr) minmax(80px,2fr) auto;gap:8px}.status-legend{gap:8px}}
+@media(max-width:370px){.hero-ring{width:92px;height:92px;flex-basis:92px}.hero-ring strong{font-size:22px}.dashboard-hero{gap:6px}.dashboard-hero h2{font-size:21px}.metric-tile{display:block}.metric-icon{margin-bottom:8px}}
+
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+background:
+ radial-gradient(circle at 12% 10%, rgba(239,61,81,.08), transparent 22%),
+ radial-gradient(circle at 88% 12%, rgba(255,255,255,.03), transparent 24%),
+ linear-gradient(180deg, rgba(255,255,255,.015), rgba(255,255,255,0)),
+ url('data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNjAwIDYwMCI+CiAgPGRlZnM+CiAgICA8cGF0dGVybiBpZD0iaGF0Y2giIHdpZHRoPSIxNCIgaGVpZ2h0PSIxNCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDI2KSI+CiAgICAgIDxsaW5lIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxNCIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEiIG9wYWNpdHk9Ii4xMSIvPgogICAgPC9wYXR0ZXJuPgogICAgPHBhdHRlcm4gaWQ9ImRvdHMiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxjaXJjbGUgY3g9IjIuNSIgY3k9IjIuNSIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjE2Ii8+CiAgICA8L3BhdHRlcm4+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI2MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJ1cmwoI2hhdGNoKSIvPgogIDxjaXJjbGUgY3g9IjQ1MCIgY3k9IjE0MCIgcj0iMTUwIiBmaWxsPSIjZWYzZDUxIiBvcGFjaXR5PSIuMTgiLz4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNjAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0idXJsKCNkb3RzKSIgb3BhY2l0eT0iLjI1Ii8+Cjwvc3ZnPgo=');
+ opacity:.8}
+.app,.main,.sidebar{position:relative;z-index:1}
+
+.dashboard-hero{background:
+ linear-gradient(120deg,rgba(18,20,27,.96),rgba(20,21,27,.86) 54%,rgba(19,20,26,.8)),
+ url('data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTIwMCA3MDAiPgogIDxkZWZzPgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJiZyIgeDE9IjAiIHkxPSIwIiB4Mj0iMSIgeTI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiMxOTFiMjIiLz4KICAgICAgPHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMGYxMTE2Ii8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogICAgPGxpbmVhckdyYWRpZW50IGlkPSJzaGVsZiIgeDE9IjAiIHgyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjMmMyZjM5Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE5MWIyMiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxwYXR0ZXJuIGlkPSJoYWxmdG9uZSIgd2lkdGg9IjE0IiBoZWlnaHQ9IjE0IiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj4KICAgICAgPGNpcmNsZSBjeD0iMyIgY3k9IjMiIHI9IjEuMiIgZmlsbD0iI2ZmZmZmZiIgb3BhY2l0eT0iLjEyIi8+CiAgICA8L3BhdHRlcm4+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSIxMjAwIiBoZWlnaHQ9IjcwMCIgZmlsbD0idXJsKCNiZykiLz4KICA8cmVjdCB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI3MDAiIGZpbGw9InVybCgjaGFsZnRvbmUpIiBvcGFjaXR5PSIuNTUiLz4KICA8ZyBvcGFjaXR5PSIuMTIiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIj4KICAgIDxwYXRoIGQ9Ik03NjAgMCBMMTIwMCAxMjAiIHN0cm9rZS13aWR0aD0iMyIvPgogICAgPHBhdGggZD0iTTcwMCAwIEwxMjAwIDE4MCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNODMwIDIwIEwxMjAwIDIzMCIgc3Ryb2tlLXdpZHRoPSIyIi8+CiAgICA8cGF0aCBkPSJNODcwIDAgTDEyMDAgOTAiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHBhdGggZD0iTTcyMCAzMCBMMTIwMCAyODAiIHN0cm9rZS13aWR0aD0iMS44Ii8+CiAgPC9nPgogIDxwYXRoIGQ9Ik03NDggNTYwIEM4ODUgNDg3LCA5ODEgNTAzLCAxMTEyIDQ1MiBDMTE0NCA0MzksIDExNzMgNDE5LCAxMjAwIDQwMSBMMTIwMCA0NzYgQzExNDQgNTE5LCAxMDQzIDU1NiwgOTczIDU3MCBDODk3IDU4NSwgODI5IDU4MSwgNzQ4IDU2MCBaIiBmaWxsPSIjZTYzYTRmIiBvcGFjaXR5PSIuOTUiLz4KICA8cGF0aCBkPSJNOTEyIDYxNiBDMTAxNSA2MDQsIDEwOTAgNTgxLCAxMjAwIDUzNiBMMTIwMCA1NzUgQzEwOTYgNjI0LCA5OTkgNjQ5LCA4OTYgNjU4IFoiIGZpbGw9IiM5ZDIwMzAiIG9wYWNpdHk9Ii45Ii8+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoNjc1IDc1KSI+CiAgICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNDUwIiBoZWlnaHQ9IjUxMCIgcng9IjE4IiBmaWxsPSIjMTExMzE5IiBzdHJva2U9IiM1MjU3NjQiIHN0cm9rZS13aWR0aD0iMyIvPgogICAgPHJlY3QgeD0iMTgiIHk9IjE4IiB3aWR0aD0iNDE0IiBoZWlnaHQ9IjQ3NCIgcng9IjEwIiBmaWxsPSIjMTcxYTIxIiBzdHJva2U9IiMyYTJlMzkiIHN0cm9rZS13aWR0aD0iMiIvPgogICAgPHJlY3QgeD0iMjQiIHk9IjE1NCIgd2lkdGg9IjQwMiIgaGVpZ2h0PSIxNiIgcng9IjgiIGZpbGw9InVybCgjc2hlbGYpIi8+CiAgICA8cmVjdCB4PSIyNCIgeT0iMzA2IiB3aWR0aD0iNDAyIiBoZWlnaHQ9IjE2IiByeD0iOCIgZmlsbD0idXJsKCNzaGVsZikiLz4KICAgIDxyZWN0IHg9IjI0IiB5PSI0NTgiIHdpZHRoPSI0MDIiIGhlaWdodD0iMTYiIHJ4PSI4IiBmaWxsPSJ1cmwoI3NoZWxmKSIvPgogICAgPHJlY3QgeD0iMjQiIHk9IjI0IiB3aWR0aD0iNDAyIiBoZWlnaHQ9IjQ1MCIgcng9IjgiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLW9wYWNpdHk9Ii4wNiIvPgogICAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMzQsMzYpIj4KICAgICAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjI4IiBoZWlnaHQ9IjExMCIgcng9IjQiIGZpbGw9IiNmMGYwZjAiLz4KICAgICAgPHJlY3QgeD0iMzMiIHk9IjUiIHdpZHRoPSIyNCIgaGVpZ2h0PSIxMDUiIHJ4PSI0IiBmaWxsPSIjMmQzMTNjIi8+CiAgICAgIDxyZWN0IHg9IjYxIiB5PSIxMCIgd2lkdGg9IjIwIiBoZWlnaHQ9IjEwMCIgcng9IjQiIGZpbGw9IiNlNjNhNGYiLz4KICAgICAgPHJlY3QgeD0iODUiIHk9Ii0yIiB3aWR0aD0iMzQiIGhlaWdodD0iMTEyIiByeD0iNCIgZmlsbD0iI2NmZDJkNyIvPgogICAgICA8cmVjdCB4PSIxMjQiIHk9IjgiIHdpZHRoPSIyMCIgaGVpZ2h0PSIxMDIiIHJ4PSI0IiBmaWxsPSIjMjEyNDJkIi8+CiAgICAgIDxyZWN0IHg9IjE0OSIgeT0iMCIgd2lkdGg9IjI3IiBoZWlnaHQ9IjExMCIgcng9IjQiIGZpbGw9IiNmNGY0ZjQiLz4KICAgICAgPHJlY3QgeD0iMTgxIiB5PSIxMiIgd2lkdGg9IjE5IiBoZWlnaHQ9Ijk4IiByeD0iNCIgZmlsbD0iIzlkYTNhZiIvPgogICAgICA8cmVjdCB4PSIyMDQiIHk9IjQiIHdpZHRoPSIzMyIgaGVpZ2h0PSIxMDYiIHJ4PSI0IiBmaWxsPSIjMjgyYzM1Ii8+CiAgICAgIDxyZWN0IHg9IjI0MiIgeT0iMTYiIHdpZHRoPSIyMCIgaGVpZ2h0PSI5NCIgcng9IjQiIGZpbGw9IiNlNjNhNGYiLz4KICAgICAgPHJlY3QgeD0iMjY3IiB5PSIyIiB3aWR0aD0iMjkiIGhlaWdodD0iMTA4IiByeD0iNCIgZmlsbD0iI2Q4ZGNlMSIvPgogICAgICA8cmVjdCB4PSIzMDAiIHk9Ii0xIiB3aWR0aD0iMjIiIGhlaWdodD0iMTExIiByeD0iNCIgZmlsbD0iIzFhMWQyNCIvPgogICAgICA8cmVjdCB4PSIzMjYiIHk9IjYiIHdpZHRoPSIyOCIgaGVpZ2h0PSIxMDQiIHJ4PSI0IiBmaWxsPSIjZjRmNGY0Ii8+CiAgICAgIDxyZWN0IHg9IjM1OSIgeT0iOSIgd2lkdGg9IjIyIiBoZWlnaHQ9IjEwMSIgcng9IjQiIGZpbGw9IiM0MzQ5NTgiLz4KICAgIDwvZz4KICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDM0LDE4OCkiPgogICAgICA8cmVjdCB4PSIwIiB5PSI2IiB3aWR0aD0iMjMiIGhlaWdodD0iMTA0IiByeD0iNCIgZmlsbD0iIzIzMjYyZiIvPgogICAgICA8cmVjdCB4PSIyNyIgeT0iLTEiIHdpZHRoPSIzMCIgaGVpZ2h0PSIxMTEiIHJ4PSI0IiBmaWxsPSIjZjFmMWYxIi8+CiAgICAgIDxyZWN0IHg9IjYxIiB5PSI4IiB3aWR0aD0iMjAiIGhlaWdodD0iMTAyIiByeD0iNCIgZmlsbD0iI2U2M2E0ZiIvPgogICAgICA8cmVjdCB4PSI4NiIgeT0iMiIgd2lkdGg9IjI2IiBoZWlnaHQ9IjEwOCIgcng9IjQiIGZpbGw9IiNjZmQzZDkiLz4KICAgICAgPHJlY3QgeD0iMTE2IiB5PSIxMiIgd2lkdGg9IjE5IiBoZWlnaHQ9Ijk4IiByeD0iNCIgZmlsbD0iIzJhMmYzOSIvPgogICAgICA8cmVjdCB4PSIxMzkiIHk9IjAiIHdpZHRoPSIzMyIgaGVpZ2h0PSIxMTAiIHJ4PSI0IiBmaWxsPSIjZjBmMGYwIi8+CiAgICAgIDxyZWN0IHg9IjE3NyIgeT0iMTQiIHdpZHRoPSIxOCIgaGVpZ2h0PSI5NiIgcng9IjQiIGZpbGw9IiM1YzYyNzAiLz4KICAgICAgPHJlY3QgeD0iMTk5IiB5PSI0IiB3aWR0aD0iMjYiIGhlaWdodD0iMTA2IiByeD0iNCIgZmlsbD0iIzI2MmEzMyIvPgogICAgICA8cmVjdCB4PSIyMjkiIHk9IjEiIHdpZHRoPSIzMiIgaGVpZ2h0PSIxMDkiIHJ4PSI0IiBmaWxsPSIjZTYzYTRmIi8+CiAgICAgIDxyZWN0IHg9IjI2NiIgeT0iMTAiIHdpZHRoPSIyMSIgaGVpZ2h0PSIxMDAiIHJ4PSI0IiBmaWxsPSIjZDZkOWRlIi8+CiAgICAgIDxyZWN0IHg9IjI5MiIgeT0iNCIgd2lkdGg9IjE4IiBoZWlnaHQ9IjEwNiIgcng9IjQiIGZpbGw9IiMyMDI0MmQiLz4KICAgICAgPHJlY3QgeD0iMzE1IiB5PSItMiIgd2lkdGg9IjMxIiBoZWlnaHQ9IjExMiIgcng9IjQiIGZpbGw9IiNmNGY0ZjQiLz4KICAgICAgPHJlY3QgeD0iMzUxIiB5PSI4IiB3aWR0aD0iMjQiIGhlaWdodD0iMTAyIiByeD0iNCIgZmlsbD0iIzM0Mzk0NiIvPgogICAgICA8cmVjdCB4PSIzNzkiIHk9IjE3IiB3aWR0aD0iMTQiIGhlaWdodD0iOTMiIHJ4PSI0IiBmaWxsPSIjZTYzYTRmIi8+CiAgICA8L2c+CiAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgzNCwzNDApIj4KICAgICAgPHJlY3QgeD0iMCIgeT0iNSIgd2lkdGg9IjI1IiBoZWlnaHQ9IjEwNSIgcng9IjQiIGZpbGw9IiNmMWYxZjEiLz4KICAgICAgPHJlY3QgeD0iMzAiIHk9IjAiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxMTAiIHJ4PSI0IiBmaWxsPSIjZTYzYTRmIi8+CiAgICAgIDxyZWN0IHg9IjUzIiB5PSIxNCIgd2lkdGg9IjIwIiBoZWlnaHQ9Ijk2IiByeD0iNCIgZmlsbD0iIzI3MmIzNCIvPgogICAgICA8cmVjdCB4PSI3OCIgeT0iMiIgd2lkdGg9IjI5IiBoZWlnaHQ9IjEwOCIgcng9IjQiIGZpbGw9IiNkN2RiZTAiLz4KICAgICAgPHJlY3QgeD0iMTExIiB5PSIxMCIgd2lkdGg9IjE2IiBoZWlnaHQ9IjEwMCIgcng9IjQiIGZpbGw9IiM0MDQ2NTQiLz4KICAgICAgPHJlY3QgeD0iMTMyIiB5PSItMSIgd2lkdGg9IjMxIiBoZWlnaHQ9IjExMSIgcng9IjQiIGZpbGw9IiNmMmYyZjIiLz4KICAgICAgPHJlY3QgeD0iMTY3IiB5PSI2IiB3aWR0aD0iMjIiIGhlaWdodD0iMTA0IiByeD0iNCIgZmlsbD0iIzI1MjkzMiIvPgogICAgICA8cmVjdCB4PSIxOTQiIHk9IjExIiB3aWR0aD0iMTgiIGhlaWdodD0iOTkiIHJ4PSI0IiBmaWxsPSIjZTYzYTRmIi8+CiAgICAgIDxyZWN0IHg9IjIxNiIgeT0iMCIgd2lkdGg9IjI2IiBoZWlnaHQ9IjExMCIgcng9IjQiIGZpbGw9IiNmMGYwZjAiLz4KICAgICAgPHJlY3QgeD0iMjQ2IiB5PSIxNSIgd2lkdGg9IjE4IiBoZWlnaHQ9Ijk1IiByeD0iNCIgZmlsbD0iIzU5NWY2YyIvPgogICAgICA8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgyODIsNDgpIj4KICAgICAgICA8cmVjdCB4PSIwIiB5PSI0NiIgd2lkdGg9IjEwMCIgaGVpZ2h0PSIxOCIgcng9IjYiIGZpbGw9IiNkYmRlZTIiLz4KICAgICAgICA8cmVjdCB4PSI2IiB5PSIyOCIgd2lkdGg9Ijk1IiBoZWlnaHQ9IjE4IiByeD0iNiIgZmlsbD0iIzI3MmIzNCIvPgogICAgICAgIDxyZWN0IHg9IjEwIiB5PSIxMCIgd2lkdGg9IjkwIiBoZWlnaHQ9IjE4IiByeD0iNiIgZmlsbD0iI2U2M2E0ZiIvPgogICAgICAgIDxyZWN0IHg9IjE4IiB5PSItOCIgd2lkdGg9Ijg0IiBoZWlnaHQ9IjE4IiByeD0iNiIgZmlsbD0iI2YzZjNmMyIvPgogICAgICA8L2c+CiAgICA8L2c+CiAgPC9nPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI3NDAiIGhlaWdodD0iNzAwIiBmaWxsPSJ1cmwoI2JnKSIgb3BhY2l0eT0iLjU4Ii8+Cjwvc3ZnPgo=') right center / cover no-repeat !important;
+ box-shadow:0 18px 44px rgba(0,0,0,.28)}
+.dashboard-hero:before{display:none !important}
+.dashboard-hero:after{content:'';position:absolute;inset:0;pointer-events:none;background:
+ linear-gradient(0deg, rgba(255,255,255,.03), rgba(255,255,255,0)),
+ linear-gradient(100deg, transparent 0 34%, rgba(255,255,255,.06) 34.4%, transparent 35.2% 100%);
+ opacity:.9}
+
+.dashboard-panel,.panel,.series,.wishlist-card,.missing-series,.collection-list-item,.buy-volume-card,.detail-hero,.hero{position:relative;overflow:hidden}
+.dashboard-panel::before,.panel::before,.series::before,.wishlist-card::before,.missing-series::before,.collection-list-item::before,.buy-volume-card::before,.detail-hero::before,.hero::before{
+ content:'';position:absolute;inset:0;pointer-events:none;opacity:.18;
+ background:
+ linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0) 45%),
+ url('data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTAwMCA3MDAiPgogIDxkZWZzPgogICAgPHBhdHRlcm4gaWQ9ImRvdHMiIHdpZHRoPSIxNiIgaGVpZ2h0PSIxNiIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxjaXJjbGUgY3g9IjMiIGN5PSIzIiByPSIxLjIiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii4yIi8+CiAgICA8L3BhdHRlcm4+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9InNsYXNoIiB4MT0iMCIgeDI9IjEiPgogICAgICA8c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iMCIvPgogICAgICA8c3RvcCBvZmZzZXQ9IjAuNDUiIHN0b3AtY29sb3I9IiNmZmYiIHN0b3Atb3BhY2l0eT0iLjE2Ii8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iI2ZmZiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8L2xpbmVhckdyYWRpZW50PgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTAwMCIgaGVpZ2h0PSI3MDAiIGZpbGw9InVybCgjZG90cykiIG9wYWNpdHk9Ii41NSIvPgogIDxnIG9wYWNpdHk9Ii45NSI+CiAgICA8cGF0aCBkPSJNLTgwIDUxMEwzMjAgMjQwIiBzdHJva2U9InVybCgjc2xhc2gpIiBzdHJva2Utd2lkdGg9IjU0Ii8+CiAgICA8cGF0aCBkPSJNNzAgNjcwTDUxMCAzMzAiIHN0cm9rZT0idXJsKCNzbGFzaCkiIHN0cm9rZS13aWR0aD0iNDQiLz4KICAgIDxwYXRoIGQ9Ik02NDAgMTIwTDk4MCAyMCIgc3Ryb2tlPSIjZWY0MzU4IiBzdHJva2Utd2lkdGg9IjE4IiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9Ii42Ii8+CiAgICA8cGF0aCBkPSJNNzIwIDE3MEw5ODAgOTUiIHN0cm9rZT0iI2VmNDM1OCIgc3Ryb2tlLXdpZHRoPSI5IiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9Ii44Ii8+CiAgICA8cGF0aCBkPSJNNjQwIDI0MEw5NjAgMTQ1IiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIuNCIvPgogIDwvZz4KPC9zdmc+Cg==') center/cover no-repeat;
+ mix-blend-mode:screen}
+.dashboard-panel>*,.panel>*,.series>*,.wishlist-card>*,.missing-series>*,.collection-list-item>*,.buy-volume-card>*,.detail-hero>*,.hero>*{position:relative;z-index:1}
+
+.detail-hero{background:
+ linear-gradient(120deg,rgba(23,24,31,.96),rgba(20,21,27,.88) 65%),
+ url('data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgMTIwMCA2MDAiPgogIDxkZWZzPgogICAgPHBhdHRlcm4gaWQ9ImRvdHMiIHdpZHRoPSIxOCIgaGVpZ2h0PSIxOCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxjaXJjbGUgY3g9IjMiIGN5PSIzIiByPSIxLjQiIGZpbGw9IiNmZmYiIG9wYWNpdHk9Ii4xNiIvPgogICAgPC9wYXR0ZXJuPgogIDwvZGVmcz4KICA8cmVjdCB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI2MDAiIGZpbGw9InVybCgjZG90cykiIG9wYWNpdHk9Ii40MiIvPgogIDxnIG9wYWNpdHk9Ii45Ij4KICAgIDxwYXRoIGQ9Ik04NjAgOTJjLTM2LTktOTIgMi0xMzIgMjctNTEgMzMtNzcgNzktODIgMTQ4LTcgOTkgMjkgMTY4IDExMCAyMTEgNTQgMjkgMTU0IDI5IDIxNSAxIDYxLTI4IDEyMy05NSAxMzctMTQ4IDIyLTc5LTItMTYyLTYyLTIxMi00OS00MC0xMjYtNTYtMTg2LTI3eiIgZmlsbD0iIzE3MTkyMCIvPgogICAgPHBhdGggZD0iTTcxMyAxMzZjNTgtNDEgMTMxLTUwIDE5Ny0yMyAyNiAxMCA3MCA0NCA3MCA1MyAwIDItMjYgMS01Ny0yLTMyLTMtOTYtNC0xNDMtMi03NCAyLTkzIDYtMTQ2IDMzLTM0IDE3LTYzIDMwLTY1IDI4LTUtNSA0Ni02MSA3Ni04NyAxNS0xMyA0NS0zMyA2OC00NHoiIGZpbGw9IiNmM2YzZjMiIG9wYWNpdHk9Ii45MyIvPgogICAgPHBhdGggZD0iTTY4NSAzMDBjNDMtMjggOTQtNDQgMTQ5LTQ0IDc0IDAgMTI3IDIyIDE2NyA2OSAyOCAzMyAzMSA0MiAyNiA4Mi04IDY5LTYxIDEyOS0xMzggMTU1LTUzIDE5LTEzMiAxNy0xOTAtNC01MS0xOC0xMDktNzEtMTA5LTk4IDAtMTYgMi0xNiAzNiAwIDgzIDQwIDE5MCAyOCAyNjUtMjggNjItNDcgNzgtMTAyIDQyLTE0NS00Ni01NC0xNzAtNTktMjQ5LTktMzMgMjEtMzkgMjItMzkgOCAwLTI0IDE5LTcwIDQwLTEwMHoiIGZpbGw9IiMwZDBmMTQiLz4KICAgIDxwYXRoIGQ9Ik04MjkgNjRsMTI1IDI2IDU4IDY5LTExNS0xNHoiIGZpbGw9IiNlZjQwNTQiIG9wYWNpdHk9Ii45NSIvPgogICAgPHBhdGggZD0iTTkxMSA0MjJsMTY2IDM5LTQ1IDQyLTE3OS00NHoiIGZpbGw9IiNlZjQwNTQiIG9wYWNpdHk9Ii45NSIvPgogICAgPHBhdGggZD0iTTYxNCAxNzVsODcgMjBNNTkzIDIxNmwxMTUgMTJNNTg2IDI1NmwxMjQgMTUiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiIG9wYWNpdHk9Ii44Ii8+CiAgPC9nPgo8L3N2Zz4K') right center / cover no-repeat !important;
+ box-shadow:0 18px 44px rgba(0,0,0,.28)}
+
+.cover,.detail-cover,.mini-cover{background-image:
+ linear-gradient(145deg, rgba(62,34,44,.8), rgba(24,25,34,.9)),
+ url('data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNDAwIDU2MCI+CiAgPGRlZnM+CiAgICA8bGluZWFyR3JhZGllbnQgaWQ9ImciIHgxPSIwIiB4Mj0iMSIgeTE9IjAiIHkyPSIxIj4KICAgICAgPHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjNDQyMTJiIi8+CiAgICAgIDxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzE2MTcxZiIvPgogICAgPC9saW5lYXJHcmFkaWVudD4KICAgIDxwYXR0ZXJuIGlkPSJkb3RzIiB3aWR0aD0iMTIiIGhlaWdodD0iMTIiIHBhdHRlcm5Vbml0cz0idXNlclNwYWNlT25Vc2UiPgogICAgICA8Y2lyY2xlIGN4PSIzIiBjeT0iMyIgcj0iMS4xNSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjIiLz4KICAgIDwvcGF0dGVybj4KICA8L2RlZnM+CiAgPHJlY3Qgd2lkdGg9IjQwMCIgaGVpZ2h0PSI1NjAiIHJ4PSIxOCIgZmlsbD0idXJsKCNnKSIvPgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSI0MDAiIGhlaWdodD0iNTYwIiBmaWxsPSJ1cmwoI2RvdHMpIiBvcGFjaXR5PSIuNCIvPgogIDxwYXRoIGQ9Ik0zNSA0NzBMMjY1IDkwIiBzdHJva2U9IiNmZmZmZmYiIHN0cm9rZS1vcGFjaXR5PSIuMTgiIHN0cm9rZS13aWR0aD0iNTIiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgogIDxwYXRoIGQ9Ik0yMTUgNTIwTDM3MCAzOTAiIHN0cm9rZT0iI2VmNDA1NCIgc3Ryb2tlLXdpZHRoPSIzNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBvcGFjaXR5PSIuOSIvPgogIDxwYXRoIGQ9Ik0yNjAgMTMwYzE5LTMyIDUzLTU1IDkxLTU1IDE0IDAgMzYgNSA0OCAxMi0xMSA2LTI0IDE3LTMwIDI0LTcgOC0xNSAxNC0xOSAxNC00IDAtMjAgMTgtMzYgNDAtMjMgMzMtMzYgNDItNjkgNTAtMzcgMTAtMzkgOS0zNC04IDExLTM1IDI4LTU5IDQ5LTc3eiIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjg4Ii8+CiAgPHBhdGggZD0iTTE5OSAxODZjMTgtMTAgNDQtMTYgNzItMTYgNTIgMCA4OCAxMyAxMTUgNDMgMTQgMTYgMTUgMjIgNiA0Ni0xMyAzNC01NiA3NS05MiA4OC0zMiAxMS05MSA4LTEyMC04LTM2LTE4LTY5LTY1LTU2LTc4IDMtNCAxNS0xIDI1IDYgNDEgMjUgMTA3IDEzIDE0NS0yNSAyMy0yMyAyOC0zNCAyNC01NS00LTIzLTEwLTI4LTQ1LTM3LTQzLTExLTkyLTItMTI4IDIzLTI1IDE4LTI2IDE3LTEyLTE2IDExLTI4IDI3LTQ1IDY2LTcxeiIgZmlsbD0iIzE3MTkyMCIvPgo8L3N2Zz4K') !important;
+ background-size:cover;
+ background-position:center}
+.cover::before{content:'';position:absolute;inset:0;background:
+ linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,0) 28%),
+ linear-gradient(140deg, transparent 0 68%, rgba(239,61,81,.25) 68% 74%, transparent 74% 100%);
+ pointer-events:none}
+.cover strong,.cover small,.cover .cover-mark{position:relative;z-index:1;text-shadow:0 2px 8px rgba(0,0,0,.35)}
+.cover .cover-mark{color:rgba(255,255,255,.23)}
+.mini-cover{color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.08)}
+
+.sidebar{background:
+ linear-gradient(180deg, rgba(18,19,24,.98), rgba(16,17,22,.98)),
+ url('data:image/svg+xml;base64,CjxzdmcgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB2aWV3Qm94PSIwIDAgNjAwIDYwMCI+CiAgPGRlZnM+CiAgICA8cGF0dGVybiBpZD0iaGF0Y2giIHdpZHRoPSIxNCIgaGVpZ2h0PSIxNCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgcGF0dGVyblRyYW5zZm9ybT0icm90YXRlKDI2KSI+CiAgICAgIDxsaW5lIHgxPSIwIiB5MT0iMCIgeDI9IjAiIHkyPSIxNCIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjEiIG9wYWNpdHk9Ii4xMSIvPgogICAgPC9wYXR0ZXJuPgogICAgPHBhdHRlcm4gaWQ9ImRvdHMiIHdpZHRoPSIxMCIgaGVpZ2h0PSIxMCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+CiAgICAgIDxjaXJjbGUgY3g9IjIuNSIgY3k9IjIuNSIgcj0iMSIgZmlsbD0iI2ZmZiIgb3BhY2l0eT0iLjE2Ii8+CiAgICA8L3BhdHRlcm4+CiAgPC9kZWZzPgogIDxyZWN0IHdpZHRoPSI2MDAiIGhlaWdodD0iNjAwIiBmaWxsPSJ1cmwoI2hhdGNoKSIvPgogIDxjaXJjbGUgY3g9IjQ1MCIgY3k9IjE0MCIgcj0iMTUwIiBmaWxsPSIjZWYzZDUxIiBvcGFjaXR5PSIuMTgiLz4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iNjAwIiBoZWlnaHQ9IjYwMCIgZmlsbD0idXJsKCNkb3RzKSIgb3BhY2l0eT0iLjI1Ii8+Cjwvc3ZnPgo=') center/cover no-repeat}
+.logo{text-shadow:0 5px 20px rgba(241,67,83,.14)}
+
+.publisher-track, .status-track, .overall-progress, .progress{box-shadow:inset 0 0 0 1px rgba(255,255,255,.03)}
+.missing-intro,.helper-note,.note{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);border-radius:14px;padding:14px 16px}
+@media (max-width: 720px){
+  .dashboard-hero{background-position:72% center !important}
+  .detail-hero{background-position:72% center !important}
+}
+
+
+/* v8 advanced management */
+.btn-row{display:flex;gap:10px;flex-wrap:wrap}
+.advanced-panel,.advanced-note{
+  margin:18px 0 22px;
+  background:rgba(21,22,28,.92);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 14px 34px rgba(0,0,0,.18);
+}
+.advanced-panel h3,.advanced-note h3{margin:0 0 6px}
+.advanced-note p{margin:0;color:#d7d9de;line-height:1.6}
+.quick-actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px}
+.quick-actions .btn{min-height:42px}
+.inline-actions{display:flex;gap:10px;flex-wrap:wrap}
+.small-note{font-size:12px;color:#aeb3bd;margin-top:10px}
+.btn[disabled]{opacity:.5;cursor:not-allowed}
+
+
+/* MangaLog v8.2 — leggibilità e usabilità */
+:root{--mt-accent:#ff5369;--mt-focus:#ff98a7;--mt-panel:#1c1e26}
+button,input,select,textarea{-webkit-tap-highlight-color:transparent}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[role="button"]:focus-visible,summary:focus-visible{outline:3px solid var(--mt-focus)!important;outline-offset:3px}
+.btn,.view-btn,.chip,.nav,.missing-number,.volume{transition:background-color .15s ease,border-color .15s ease,filter .15s ease,transform .15s ease}
+.btn{min-height:42px;line-height:1.25;border-color:#4b4e5a;background:#23252d}
+.btn.primary{background:#ec3d53;border-color:#ff6277;color:#fff}
+.btn.small{min-height:39px;padding:9px 13px;font-size:12px}
+.btn:active:not(:disabled),.chip:active,.volume:active,.missing-number:active{transform:scale(.98)}
+.top{gap:18px;flex-wrap:wrap;align-items:flex-end}
+.top>.inline-actions{margin-left:auto}
+.heading{line-height:1.12;letter-spacing:-1.1px}
+.eyebrow{color:#ff7287}
+.muted,.dashboard-intro{color:#b7bac5}
+.dashboard-panel,.advanced-panel,.advanced-note,.detail-hero{border-color:#3b3e49}
+.advanced-panel{padding:20px;border-radius:17px;margin-top:20px}
+.advanced-panel .panel-head{margin-bottom:5px}
+.advanced-panel .sub{color:#b6bac4;line-height:1.5}
+.quick-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}
+.quick-actions .btn{text-align:center;white-space:normal;min-height:44px}
+.small-note{line-height:1.55;color:#b8bac4}
+.detail-meta>div{background:rgba(10,11,16,.26);border:1px solid #353944;border-radius:11px;padding:11px 12px}
+.detail-meta strong{display:block;overflow-wrap:anywhere}
+.detail-meta small{color:#abb1bd}
+.detail-actions{margin-top:14px}
+.detail-actions .btn{min-height:41px}
+.volume-grid{gap:10px}
+.volume{border-color:#474b59!important;background:#272a34;color:#fff!important}
+.volume-number{color:#fff!important;font-weight:900;font-variant-numeric:tabular-nums}
+.volume.owned{border-color:#fa657b!important;background:linear-gradient(135deg,#693044,#39212b)}
+.volume small{color:#c7cbd2}
+.volume.owned small{color:#ffd7df}
+.missing-number{color:#fff!important;border-color:#4d515e;background:#262932;font-variant-numeric:tabular-nums}
+.missing-number.selected{color:#fff!important;background:#b52f49}
+.missing-number:focus-visible,.volume:focus-visible{outline:3px solid #ff98a7!important}
+.collection-controls{margin-top:8px}
+.toolbar{align-items:stretch}
+.toolbar .input{border-color:#555967;background:#22242c;color:#f9f9fa}
+.search-wrap{display:flex;gap:8px;flex:1;min-width:220px}
+.search-wrap .input{flex:1;min-width:0;width:100%}
+.search-clear{flex-shrink:0;min-width:66px}
+.search-clear:disabled{visibility:hidden}
+.results-count{color:#c6c8d1}
+.modal{border-color:#595e6b;box-shadow:0 30px 80px #000a}
+.form-grid .field label{color:#d6d7dd}
+@media(max-width:800px){
+ .main{padding:20px 16px calc(112px + env(safe-area-inset-bottom));}
+ .mobile-nav{border-top-color:#50515c;box-shadow:0 -12px 35px #0008;background:rgba(21,22,29,.96)}
+ .mobile-nav button{min-width:0;flex:1;min-height:52px;color:#c8c8d0}
+ .mobile-nav button.active{color:#ff657b;font-weight:800}
+ .top>.inline-actions{width:100%;margin-left:0}
+ .top>.inline-actions .btn{flex:1}
+ .detail-meta{gap:8px}
+ .detail-meta>div{padding:10px}
+ .quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .quick-actions .btn{padding:10px 7px;font-size:12px}
+ .advanced-panel{padding:15px}
+ .search-wrap{width:100%}
+}
+@media(max-width:380px){
+ .quick-actions{grid-template-columns:1fr 1fr}
+ .heading{font-size:27px}
+ .detail-meta{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(prefers-reduced-motion:reduce){.btn,.view-btn,.chip,.nav,.missing-number,.volume{transition:none!important}}
+
+/* MangaLog v8.3 — quick purchase and order lookup */
+.buy-volume[hidden],.buy-series[hidden]{display:none!important}
+.buy-finder{background:#17191f;border:1px solid #383b45;border-radius:16px;padding:16px;margin:14px 0 20px}
+.buy-finder-label{display:block;font-size:13px;font-weight:750;color:#e7e8ed;margin-bottom:9px}
+.buy-finder-row{display:flex;gap:9px;align-items:center}
+.buy-finder-row input{flex:1;min-width:0}
+.buy-status-filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.order-tag{display:inline-flex;align-items:center;border-radius:30px;padding:5px 9px;font-size:11px;font-weight:800;color:#bec5d0;background:#2c3038}
+.order-tag.order-progress{color:#ffe1b4;background:#674524}
+.buy-volume-head{flex-wrap:wrap;gap:7px}
+@media(max-width:520px){.buy-finder{padding:12px}.buy-finder-row .btn{padding:10px}}
+
+</style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b><span style="display:block;font-size:10px;color:#777782;letter-spacing:3px;margin-top:5px">DARK EDITION</span></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · PWA v9.2</div></aside><main class="main" id="content"></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script>
+(()=>{'use strict';const KEY='mangatrack_v3_dark';const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uid=()=>typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();let data={series:[],wishlist:[],activity:[]},page='home',selected=null,query='',sort='title',view=localStorage.getItem('mangatrack_view')==='list'?'list':'grid',filter='all';let undoStack=[],lastSavedJSON='',restoringHistory=false;const priorityLabels={alta:'Alta',media:'Media',bassa:'Bassa'};
+const orderLabels={da_ordinare:'Da ordinare',in_corso:'Ordine in corso'};
+const safeOrderStatus=v=>v==='in_corso'?'in_corso':'da_ordinare';
+const priorityRank={alta:0,media:1,bassa:2};
+const safePriority=v=>Object.hasOwn(priorityLabels,String(v))?String(v):'media';
+function parsePrice(raw){
+ if(raw===null||raw===undefined||String(raw).trim()==='')return null;
+ const value=String(raw).trim().replace(',','.');
+ if(!/^\d{1,6}(?:\.\d{1,2})?$/.test(value))return null;
+ const n=Number(value);
+ return Number.isFinite(n)&&n>=0&&n<=999999?Math.round(n*100)/100:null;
+}
+const euros=n=>n===null||n===undefined?'Da definire':new Intl.NumberFormat('it-IT',{style:'currency',currency:'EUR'}).format(n);
+function normalizeWishlistItem(w){
+ return {id:String(w.id||uid()),title:String(w.title||'').slice(0,120),notes:String(w.notes||'').slice(0,300),priority:safePriority(w.priority),price:parsePrice(w.price)};
+}
+function norm(o){
+ const total=Math.max(1,Math.min(2000,Math.floor(Number(o.total)||1)));
+ const owned=[...new Set((Array.isArray(o.owned)?o.owned:[]).map(Number).filter(n=>Number.isInteger(n)&&n>0&&n<=total))].sort((a,b)=>a-b);
+ const purchasePlans={};
+ if(o.purchasePlans&&typeof o.purchasePlans==='object'&&!Array.isArray(o.purchasePlans)){
+  for(const [k,p] of Object.entries(o.purchasePlans)){
+   const n=Number(k);
+   if(!Number.isInteger(n)||n<1||n>total||owned.includes(n)||!p||typeof p!=='object')continue;
+   purchasePlans[n]={priority:safePriority(p.priority),price:parsePrice(p.price),note:String(p.note||'').slice(0,250),status:safeOrderStatus(p.status)};
+  }
+ }
+ return {id:String(o.id||uid()),title:String(o.title||'Senza titolo').slice(0,120),edition:String(o.edition||'Edizione regolare').slice(0,100),publisher:String(o.publisher||'Non specificato').slice(0,100),author:String(o.author||'').slice(0,100),total,owned,purchasePlans,notes:String(o.notes||'').slice(0,1200),created:Number(o.created)||Date.now()};
+}
+
+function safeActivity(list){
+ if(!Array.isArray(list))return [];
+ return list.slice(-150).filter(a=>a&&typeof a.seriesId==='string'&&Number.isInteger(Number(a.volume))&&Number(a.volume)>0&&Number(a.volume)<=2000&&Number.isFinite(Number(a.at))).map(a=>({seriesId:String(a.seriesId).slice(0,200),volume:Number(a.volume),at:Number(a.at)})).sort((a,b)=>b.at-a.at).slice(0,120);
+}
+function registeredVolume(id,n){
+ if(!data.activity)data.activity=[];
+ data.activity=data.activity.filter(a=>!(a.seriesId===id&&a.volume===n));
+ data.activity.unshift({seriesId:id,volume:n,at:Date.now()});
+ data.activity=data.activity.slice(0,120);
+}
+function unregisteredVolume(id,n){if(data.activity)data.activity=data.activity.filter(a=>!(a.seriesId===id&&a.volume===n))}
+function recentRecordedVolumes(limit=5){
+ return (data.activity||[]).map(a=>({...a,series:data.series.find(s=>s.id===a.seriesId)}))
+   .filter(a=>a.series&&a.series.owned.includes(a.volume)).slice(0,limit);
+}
+function overviewTotals(){
+ const volumes=data.series.reduce((v,s)=>v+s.total,0);
+ const owned=count(),all=data.series.length,complete=completed();
+ const inProgress=data.series.filter(s=>s.owned.length>0&&s.owned.length<s.total).length;
+ return {volumes,owned,missing:Math.max(0,volumes-owned),all,complete,inProgress,notStarted:all-complete-inProgress,percent:volumes?Math.round(owned/volumes*100):0};
+}
+function overviewMetric(icon,number,label){return `<div class="metric-tile"><span class="metric-icon" aria-hidden="true">${icon}</span><div><div class="metric-number">${number}</div><div class="metric-caption">${label}</div></div></div>`}
+function seriesNearCompletion(limit=4){
+ return [...data.series].filter(s=>s.owned.length>0&&s.owned.length<s.total).sort((a,b)=>(a.total-a.owned.length)-(b.total-b.owned.length)||a.title.localeCompare(b.title,'it')).slice(0,limit);
+}
+function progressSeriesList(series){
+ return series.length?`<div class="dashboard-links">${series.map(s=>{
+ const percent=Math.round(s.owned.length/s.total*100),remaining=s.total-s.owned.length;
+ return `<button type="button" class="dashboard-link" data-series="${esc(s.id)}"><span class="dash-cover" aria-hidden="true">ML</span><span class="dash-link-main"><span class="dash-link-title" style="display:block">${esc(s.title)}</span><span class="dash-link-meta" style="display:block">${remaining} ${remaining===1?'volume mancante':'volumi mancanti'} · ${esc(s.edition)}</span><span class="dash-mini-progress" style="display:block"><i style="width:${percent}%"></i></span></span><span class="dash-link-right">${percent}%</span></button>`;
+ }).join('')}</div>`:`<div class="dash-empty">Non ci sono ancora serie iniziate da completare. Registra i volumi posseduti nella tua Collezione.</div>`;
+}
+function formattedActivityDate(timestamp){
+ try{return new Intl.DateTimeFormat('it-IT',{day:'numeric',month:'short',year:'numeric'}).format(new Date(timestamp))}catch(_){return ''}
+}
+function recentVolumePanel(limit=5){
+ const entries=recentRecordedVolumes(limit);
+ return entries.length?`<div class="activity-list">${entries.map(x=>`<div class="activity-item"><span class="activity-symbol" aria-hidden="true">✓</span><div class="grow"><div class="activity-title">${esc(x.series.title)} · Volume ${x.volume}</div><div class="activity-date">Registrato il ${formattedActivityDate(x.at)}</div></div><button class="section-link" data-series="${esc(x.seriesId)}" aria-label="Apri ${esc(x.series.title)}">Apri →</button></div>`).join('')}</div>`:`<div class="dash-empty">I volumi già registrati nelle versioni precedenti restano nella collezione. Qui compariranno i prossimi volumi che aggiungerai.</div>`;
+}
+function plannedCount(){return data.series.reduce((n,s)=>n+Object.keys(s.purchasePlans||{}).length,0)}
+function plannedBudget(){let sum=0,priced=0;for(const s of data.series){for(const p of Object.values(s.purchasePlans||{})){if(p.price!==null){sum+=p.price;priced++}}}return {sum,priced}}
+let missingView='simple',openMissingGroups=new Set();
+let buySearch='',buyOrderFilter='tutti';
+// I numeri toccati in fumetteria restano provvisori fino alla conferma.
+const missingSelection=new Map();
+let lastMissingSuccess='';
+function selectedMissingFor(id){return missingSelection.get(id)||new Set()}
+function pendingMissingCount(){let n=0;for(const set of missingSelection.values())n+=set.size;return n}
+function toggleMissingPick(id,n){
+ const series=data.series.find(s=>s.id===id);
+ if(!series||!Number.isInteger(n)||n<1||n>series.total||series.owned.includes(n))return;
+ let set=missingSelection.get(id);
+ if(!set){set=new Set();missingSelection.set(id,set)}
+ if(set.has(n))set.delete(n);else set.add(n);
+ if(!set.size)missingSelection.delete(id);
+ lastMissingSuccess='';
+}
+function updateMissingPickUI(){
+ const count=pendingMissingCount();
+ const bar=document.getElementById('missingBatch');
+ if(bar){bar.hidden=count===0;
+   const summary=bar.querySelector('[data-selected-count]');if(summary)summary.textContent=count+' '+(count===1?'volume selezionato':'volumi selezionati');
+   const confirmBtn=bar.querySelector('[data-missing-commit]');if(confirmBtn)confirmBtn.textContent='✓ Aggiungi alla collezione ('+count+')';
+ }
+ document.querySelectorAll('[data-missing-pick]').forEach(btn=>{
+  const on=selectedMissingFor(btn.dataset.msid).has(Number(btn.dataset.mnum));
+  btn.classList.toggle('selected',on);btn.setAttribute('aria-pressed',String(on));
+  btn.setAttribute('aria-label','Volume '+btn.dataset.mnum+(on?', selezionato per aggiunta':', mancante')+'. '+(on?'Tocca per deselezionarlo':'Tocca per selezionarlo'));
+ });
+ const note=document.getElementById('missingSuccess');if(note&&!lastMissingSuccess){note.remove()}
+}
+function commitMissingPicks(){
+ let added=0;
+ for(const [id,nums] of missingSelection){
+  const series=data.series.find(s=>s.id===id);if(!series)continue;
+  const owned=new Set(series.owned);
+  for(const n of nums){
+   if(Number.isInteger(n)&&n>=1&&n<=series.total&&!owned.has(n)){
+    owned.add(n);delete series.purchasePlans?.[n];registeredVolume(series.id,n);added++;
+   }
+  }
+  series.owned=[...owned].sort((a,b)=>a-b);
+ }
+ missingSelection.clear();
+ lastMissingSuccess=added===1?'1 volume aggiunto alla collezione.':added+' volumi aggiunti alla collezione.';
+ if(added)save();else render();
+}
+
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&Array.isArray(v.series)){data.series=v.series.map(norm);data.wishlist=Array.isArray(v.wishlist)?v.wishlist.filter(x=>x&&typeof x.title==='string').map(normalizeWishlistItem):[];data.activity=safeActivity(v.activity)}}catch(e){console.warn(e)}}const starter=[{title:'Naruto',author:'Masashi Kishimoto',publisher:'Planet Manga (Panini Comics)',edition:'Edizione standard — da verificare',total:72},{title:'One Piece',author:'Eiichiro Oda',publisher:'Star Comics',edition:'Edizione regolare',total:114},{title:'Dragon Ball',author:'Akira Toriyama',publisher:'Star Comics',edition:'Serie originale — edizione da verificare',total:42},{title:'Bleach',author:'Tite Kubo',publisher:'Planet Manga (Panini Comics)',edition:'Edizione standard — da verificare',total:74}];function addStarter(){let added=0;for(const item of starter){if(!data.series.some(x=>x.title.toLowerCase()===item.title.toLowerCase()&&x.edition===item.edition)){data.series.push(norm({...item,id:uid(),owned:[],notes:'Dati iniziali della serie. Verifica l’edizione italiana in tuo possesso prima di segnare i volumi.',created:Date.now()}));added++}}save();alert(added?added+' serie aggiunte. I volumi posseduti sono ancora da indicare.':'Le quattro serie sono già presenti con queste edizioni.')}function restoreSnapshot(raw){
+ try{
+  const v=JSON.parse(raw);
+  if(v&&Array.isArray(v.series)){
+   data.series=v.series.map(norm);
+   data.wishlist=Array.isArray(v.wishlist)?v.wishlist.filter(x=>x&&typeof x.title==='string').map(normalizeWishlistItem):[];
+   data.activity=safeActivity(v.activity);
+  }
+ }catch(e){console.warn(e)}
+}
+function undoLabel(){return undoStack.length?`↶ Annulla (${undoStack.length})`:'↶ Annulla'}
+function save(){
+ const raw=JSON.stringify(data);
+ if(!restoringHistory&&lastSavedJSON&&raw!==lastSavedJSON){
+  undoStack.push(lastSavedJSON);
+  if(undoStack.length>30)undoStack.shift();
+ }
+ lastSavedJSON=raw;
+ try{localStorage.setItem(KEY,raw)}catch(e){alert('Salvataggio locale non disponibile: esporta un backup.')}
+ render()
+}
+function undoLastChange(){
+ if(!undoStack.length){alert('Nessuna modifica da annullare.');return}
+ const raw=undoStack.pop();
+ restoringHistory=true;
+ restoreSnapshot(raw);
+ lastSavedJSON=JSON.stringify(data);
+ try{localStorage.setItem(KEY,lastSavedJSON)}catch(e){console.warn(e)}
+ restoringHistory=false;
+ render();
+}
+function selectedSeriesItem(){return data.series.find(x=>x.id===selected)||null}
+function markOwnedRange(series,from,to,makeOwned){
+ let changed=0;
+ const set=new Set(series.owned);
+ for(let n=from;n<=to;n++){
+  if(makeOwned){
+   if(!set.has(n)){set.add(n);registeredVolume(series.id,n);changed++}
+   if(series.purchasePlans)delete series.purchasePlans[n];
+  }else{
+   if(set.has(n)){set.delete(n);unregisteredVolume(series.id,n);changed++}
+  }
+ }
+ series.owned=[...set].sort((a,b)=>a-b);
+ return changed;
+}
+function quickOwnUntil(){
+ const s=selectedSeriesItem(); if(!s)return;
+ const raw=prompt(`Segna come posseduti tutti i volumi da 1 fino a quale numero?\nSerie: ${s.title} (max ${s.total})`, String(Math.max(1, s.owned.length||1)));
+ if(raw===null)return;
+ const n=Number(raw);
+ if(!Number.isInteger(n)||n<1||n>s.total){alert('Inserisci un numero valido.');return}
+ const changed=markOwnedRange(s,1,n,true);
+ changed?save():render();
+}
+function quickRemoveFrom(){
+ const s=selectedSeriesItem(); if(!s)return;
+ const raw=prompt(`Rimuovi dai posseduti a partire da quale volume?\nSerie: ${s.title} (1-${s.total})`, String(Math.max(1, s.total)));
+ if(raw===null)return;
+ const n=Number(raw);
+ if(!Number.isInteger(n)||n<1||n>s.total){alert('Inserisci un numero valido.');return}
+ const changed=markOwnedRange(s,n,s.total,false);
+ changed?save():render();
+}
+function quickCompleteSeries(){
+ const s=selectedSeriesItem(); if(!s)return;
+ if(!confirm(`Segnare come posseduti tutti i volumi mancanti di ${s.title}?`))return;
+ const changed=markOwnedRange(s,1,s.total,true);
+ changed?save():render();
+}
+function cloneEdition(){
+ const s=selectedSeriesItem(); if(!s)return;
+ const edition=prompt('Nome della nuova edizione da creare', s.edition?`${s.edition} — altra edizione`:'Nuova edizione');
+ if(edition===null)return;
+ const clean=String(edition).trim();
+ if(!clean)return alert('Inserisci un nome per l’edizione.');
+ const copy=norm({
+  id:uid(),
+  title:s.title,
+  edition:clean,
+  publisher:s.publisher,
+  author:s.author,
+  total:s.total,
+  owned:[],
+  purchasePlans:{},
+  notes:(s.notes?`Duplicata da "${s.edition}".\n\n${s.notes}`:`Duplicata da "${s.edition}".`),
+  created:Date.now()
+ });
+ data.series.push(copy);
+ selected=copy.id;
+ page='detail';
+ save();
+}
+const nav=[['home','⌂','Home'],['collection','▦','Collezione'],['missing','☷','Mancolista'],['wishlist','♡','Wishlist'],['stats','▥','Statistiche'],['settings','⚙','Impostazioni']];function navigate(p,id){page=p;selected=id||null;query='';if(p!=='missing'){lastMissingSuccess='';buySearch='';buyOrderFilter='tutti'}if(p==='missing')missingView='simple';render();window.scrollTo(0,0)}function navRender(){ $('#desktopNav').innerHTML=nav.map(([id,ico,label])=>`<button class="nav ${page===id?'active':''}" data-nav="${id}"><span style="font-size:19px">${ico}</span>${label}</button>`).join('');$('#mobileNav').innerHTML=nav.slice(0,5).map(([id,ico,label])=>`<button class="${page===id?'active':''}" data-nav="${id}"><span>${ico}</span>${label}</button>`).join('')}function count(){return data.series.reduce((n,s)=>n+s.owned.length,0)}function missing(){return data.series.reduce((n,s)=>n+s.total-s.owned.length,0)}function completed(){return data.series.filter(s=>s.owned.length===s.total).length}function stat(label,n,accent=false){return `<div class="stat"><div class="label">${label}</div><div class="num ${accent?'accent':''}">${n}</div></div>`}function header(k,title,action=''){return `<div class="top"><div><div class="eyebrow">${k}</div><h1 class="heading">${title}</h1></div>${action}</div>`}function cover(s,cls=''){return `<div class="cover ${cls}"><div class="cover-mark">ML</div><strong>${esc(s.title)}</strong><small>MANGA</small></div>`}function seriesCard(s){let pct=Math.round(s.owned.length/s.total*100);return `<article class="series" data-series="${esc(s.id)}">${cover(s)}<div class="series-body"><div class="series-title">${esc(s.title)}</div><div class="series-sub">${esc(s.edition)} · ${esc(s.publisher)}</div><div class="progress"><i style="width:${pct}%"></i></div><div class="progress-info"><span>${s.owned.length}/${s.total} volumi</span><span>${pct}%</span></div></div></article>`}function seriesListCard(s){const pct=Math.round(s.owned.length/s.total*100);return `<article class="collection-list-item" data-series="${esc(s.id)}" tabindex="0" role="button" aria-label="Apri ${esc(s.title)}"><div class="mini-cover">ML</div><div class="grow"><div class="list-title">${esc(s.title)}</div><div class="list-sub">${esc(s.edition)} · ${esc(s.publisher)}</div><div class="progress list-progress"><i style="width:${pct}%"></i></div></div><div class="list-count">${s.owned.length} / ${s.total}<small>${pct}%</small></div><span class="chevron">›</span></article>`}
+function resultCards(arr){return arr.length?(view==='grid'?`<div class="series-grid">${arr.map(seriesCard).join('')}</div>`:`<div class="collection-list">${arr.map(seriesListCard).join('')}</div>`):empty('Nessun risultato','Modifica la ricerca o il filtro.','add')}
+function filteredSeries(){let arr=data.series.filter(s=>(s.title+' '+s.publisher+' '+s.edition).toLowerCase().includes(query.toLowerCase()));if(filter==='complete')arr=arr.filter(s=>s.owned.length===s.total);if(filter==='progress')arr=arr.filter(s=>s.owned.length<s.total);arr.sort((a,b)=>sort==='new'?b.created-a.created:sort==='progress'?b.owned.length/b.total-a.owned.length/a.total:a.title.localeCompare(b.title,'it'));return arr}
+function empty(msg,desc,button=''){return `<div class="empty"><strong>${msg}</strong><div>${desc}</div>${button?`<button class="btn primary" style="margin-top:18px" data-action="${button}">+ Aggiungi serie</button>`:''}</div>`}function home(){
+ const t=overviewTotals(),recent=[...data.series].sort((a,b)=>b.created-a.created).slice(0,4);
+ const fullPct=t.percent+'%';
+ return `<div class="dashboard-top"><div><div class="dash-kicker">MangaLog · Dark Edition v8</div><h1 class="heading">La tua collezione</h1><p class="dashboard-intro">La tua libreria manga, con un’identità visiva ancora più forte.</p></div><button class="btn" data-nav="settings">⚙ Impostazioni</button></div>
+ <section class="dashboard-hero" aria-label="Panoramica collezione"><div><div class="eyebrow">IL TUO MONDO MANGA</div><h2>Ogni volume conta.</h2><p>Organizza le tue serie, segna i volumi posseduti e porta la Mancolista con te in fumetteria, con una libreria manga illustrata sullo sfondo.</p><div class="hero-buttons"><button class="btn primary" data-nav="collection">Apri la collezione →</button><button class="btn" data-nav="missing">Vai alla Mancolista</button></div></div><div class="hero-ring" style="--pct:${fullPct}" role="img" aria-label="Completamento totale ${fullPct}"><span class="hero-ring-content"><strong>${fullPct}</strong><small>Completata</small></span></div></section>
+ <div class="dashboard-metrics">${overviewMetric('▣',t.owned,'Volumi posseduti')}${overviewMetric('✓',t.complete,'Serie complete')}${overviewMetric('◫',t.inProgress,'Serie in corso')}${overviewMetric('♡',data.wishlist.length,'In wishlist')}</div>
+ <div class="dashboard-columns"><section class="dashboard-panel"><div class="panel-head"><div><h3>Avanzamento della collezione</h3><p class="sub">Percentuale calcolata sui volumi indicati nelle tue serie.</p></div></div><div class="progress-pair"><span>Volumi posseduti</span><strong>${t.owned} di ${t.volumes}</strong></div><div class="overall-progress" role="progressbar" aria-label="Volumi posseduti" aria-valuenow="${t.owned}" aria-valuemin="0" aria-valuemax="${Math.max(1,t.volumes)}"><i style="width:${fullPct}"></i></div><div class="progress-pair"><span>${t.missing} mancanti</span><strong>${fullPct}</strong></div><div class="stats-divider"></div><h3 style="font-size:14px">Stato delle serie</h3><div class="status-track" role="img" aria-label="${t.complete} complete, ${t.inProgress} in corso, ${t.notStarted} da iniziare"><span class="complete" style="width:${t.all?t.complete/t.all*100:0}%"></span><span class="started" style="width:${t.all?t.inProgress/t.all*100:0}%"></span><span class="unstarted" style="width:${t.all?t.notStarted/t.all*100:0}%"></span></div><div class="status-legend"><span><i></i>Complete <b>${t.complete}</b></span><span class="start"><i></i>In corso <b>${t.inProgress}</b></span><span class="none"><i></i>Da iniziare <b>${t.notStarted}</b></span></div></section>
+ <section class="dashboard-panel"><div class="panel-head"><div><h3>Vicino al completamento</h3><p class="sub">Le serie avviate con meno volumi mancanti.</p></div><button class="section-link" data-nav="collection">Vedi tutte →</button></div>${progressSeriesList(seriesNearCompletion(3))}</section></div>
+ <div class="dashboard-columns"><section class="dashboard-panel"><div class="panel-head"><div><h3>Ultimi volumi registrati</h3><p class="sub">Le nuove aggiunte, da questa versione in avanti.</p></div></div>${recentVolumePanel(5)}</section><section class="dashboard-panel"><div class="panel-head"><div><h3>Serie aggiunte di recente</h3><p class="sub">Le ultime serie inserite nel tuo archivio.</p></div><button class="section-link" data-nav="collection">Collezione →</button></div>${recent.length?`<div class="dashboard-links">${recent.map(s=>`<button type="button" class="dashboard-link" data-series="${esc(s.id)}"><span class="dash-cover">ML</span><span class="dash-link-main"><span class="dash-link-title" style="display:block">${esc(s.title)}</span><span class="dash-link-meta" style="display:block">${esc(s.publisher)} · ${s.owned.length}/${s.total} volumi</span></span><span class="dash-link-right">›</span></button>`).join('')}</div>`:`<div class="dash-empty">Aggiungi la tua prima serie per iniziare a costruire la libreria.</div>`}</section></div>`;
+}
+function missingRows(limit=Infinity){const arr=data.series.filter(s=>s.owned.length<s.total).sort((a,b)=>b.total-b.owned.length-(a.total-a.owned.length)).slice(0,limit);return arr.length?arr.map(s=>{let nums=Array.from({length:s.total},(_,i)=>i+1).filter(n=>!s.owned.includes(n));return `<div class="list-row"><div class="mini-cover">ML</div><div class="grow"><div class="list-title">${esc(s.title)}</div><div class="list-sub">${esc(s.edition)} · Mancano: ${nums.slice(0,12).join(', ')}${nums.length>12?'…':''}</div></div><span class="pill">${nums.length} mancanti</span><button class="btn small" data-series="${esc(s.id)}">Apri</button></div>`}).join(''):empty('Tutto in ordine!','Non hai volumi mancanti nelle serie registrate.')}function collection(){const arr=filteredSeries();return header('ARCHIVIO PERSONALE','La mia collezione',`<div class="inline-actions"><button class="btn" data-action="undo" ${undoStack.length?'':'disabled'}>${undoLabel()}</button><button class="btn primary" data-action="add">+ Nuova serie</button></div>`)+`<div class="toolbar"><div class="search-wrap"><input class="input" id="search" aria-label="Cerca nella collezione" placeholder="Cerca titolo, edizione, editore…" value="${esc(query)}"><button class="btn small search-clear" type="button" data-action="clearsearch" ${query?'':'disabled'}>Pulisci</button></div><select class="input" id="sort" aria-label="Ordina"><option value="title" ${sort==='title'?'selected':''}>Ordina per titolo</option><option value="new" ${sort==='new'?'selected':''}>Aggiunte recenti</option><option value="progress" ${sort==='progress'?'selected':''}>Completamento</option></select></div><div class="collection-controls"><div class="filter-chips"><button class="chip ${filter==='all'?'selected':''}" data-filter="all">Tutti</button><button class="chip ${filter==='progress'?'selected':''}" data-filter="progress">In corso</button><button class="chip ${filter==='complete'?'selected':''}" data-filter="complete">Completate</button></div><div class="view-switch" aria-label="Visualizzazione collezione"><button class="view-btn ${view==='grid'?'selected':''}" data-view="grid" aria-label="Visualizzazione griglia" aria-pressed="${view==='grid'}" title="Griglia">▦</button><button class="view-btn ${view==='list'?'selected':''}" data-view="list" aria-label="Visualizzazione elenco" aria-pressed="${view==='list'}" title="Elenco">☷</button></div></div><div class="results-count">${arr.length} ${arr.length===1?'serie':'serie'} · Vista ${view==='grid'?'griglia':'elenco'}</div><div id="seriesResults">${resultCards(arr)}</div>`}
+function missingPage(){
+ const missingSeries=data.series.filter(s=>s.owned.length<s.total);
+ const bySimple=missingView==='simple';
+ const byPlan=missingView==='planned';
+ const budget=plannedBudget();
+ const countPlanned=plannedCount();
+ const ordersInProgress=data.series.reduce((sum,s)=>sum+Object.values(s.purchasePlans||{}).filter(p=>p.status==='in_corso').length,0);
+ const groups=missingSeries.map(s=>({s,nums:Array.from({length:s.total},(_,i)=>i+1).filter(n=>!s.owned.includes(n)&&(byPlan?Boolean(s.purchasePlans?.[n]):true))})).filter(x=>x.nums.length);
+ if(bySimple){
+  const markup=groups.map(({s,nums},index)=>{
+   const open=openMissingGroups.has(s.id)||(!openMissingGroups.size&&index===0);
+   return `<details class="missing-series" data-missing-group="${esc(s.id)}" ${open?'open':''}><summary><div class="mini-cover">ML</div><div class="grow"><div class="list-title">${esc(s.title)}</div><div class="missing-edition">${esc(s.edition)}</div></div><span class="missing-count">${nums.length} mancanti</span></summary><div class="missing-number-list" aria-label="Numeri dei volumi mancanti di ${esc(s.title)}">${nums.map(n=>`<button type="button" class="missing-number ${selectedMissingFor(s.id).has(n)?'selected':''}" data-missing-pick data-msid="${esc(s.id)}" data-mnum="${n}" aria-pressed="${selectedMissingFor(s.id).has(n)}" aria-label="Volume ${n}, ${selectedMissingFor(s.id).has(n)?'selezionato per aggiunta':'mancante'}">${n}</button>`).join('')}</div></details>`;
+  }).join('');
+  const count=pendingMissingCount();
+  return header('VOLUMI DA RECUPERARE','Mancolista')+
+   `<div class="missing-intro"><p>Apri una serie e seleziona i volumi che stai prendendo. Da PC trascina con il mouse; su cellulare tieni premuto 1 secondo e poi trascina sui numeri.</p><button class="btn small missing-subtle-btn" data-missing-view="all">Gestisci acquisti →</button></div>`+
+   (lastMissingSuccess?`<div class="missing-success" id="missingSuccess" role="status">✓ ${esc(lastMissingSuccess)}</div>`:'')+
+   `<div class="missing-batch" id="missingBatch" ${count?'':'hidden'} aria-live="polite"><div class="missing-batch-copy"><span data-selected-count>${count} ${count===1?'volume selezionato':'volumi selezionati'}</span><small>Non ancora aggiunti alla collezione</small></div><div class="missing-batch-actions"><button type="button" class="btn small missing-subtle-btn" data-missing-clear>Annulla</button><button type="button" class="btn primary" data-missing-commit>✓ Aggiungi alla collezione (${count})</button></div></div>`+
+   `<p class="missing-hint">Tocca o clicca un numero per selezionarlo. Da PC trascina con il mouse; sul cellulare tieni premuto 1 secondo e trascina. Conferma solo quando hai finito.</p>`+
+   (markup||empty('Nessun volume mancante','Hai già segnato come posseduti tutti i volumi della tua collezione.'));
+ }
+ // La gestione acquisti rimane disponibile, ma separata dalla Mancolista semplice.
+ const markup=groups.map(({s,nums},index)=>{
+  if(byPlan)nums.sort((a,b)=>priorityRank[s.purchasePlans[a].priority]-priorityRank[s.purchasePlans[b].priority]||a-b);
+  const open=openMissingGroups.has(s.id)||(!openMissingGroups.size&&index===0);
+  const buying=Object.keys(s.purchasePlans||{}).length;
+  return `<details class="buy-series" data-buy-series-search="${esc((s.title+' '+s.edition+' '+s.publisher).toLowerCase())}" data-missing-group="${esc(s.id)}" ${open?'open':''}><summary><div class="mini-cover">ML</div><div class="grow"><div class="list-title">${esc(s.title)}</div><div class="list-sub">${esc(s.edition)} · ${s.total-s.owned.length} mancanti · ${buying} in lista acquisti</div></div></summary><div class="buy-series-content"><div class="buy-volume-grid">${nums.map(n=>{
+   const plan=s.purchasePlans?.[n];
+   const flag=Boolean(plan);
+   const extra=flag?`<span class="priority-tag ${plan.priority==='alta'?'high':plan.priority==='bassa'?'low':''}">${priorityLabels[plan.priority]}</span><span class="order-tag ${plan.status==='in_corso'?'order-progress':''}">${orderLabels[safeOrderStatus(plan.status)]}</span>`:'';
+   return `<div class="buy-volume ${flag?'queued':''}" data-buy-volume="${n}" data-buy-status="${flag?safeOrderStatus(plan.status):'non_pianificato'}"><div class="buy-volume-head"><span class="buy-vol-num">Volume ${n}</span>${extra}</div><div class="buy-meta">${flag?(plan.price===null?'Prezzo non indicato':euros(plan.price)):'Non ancora in lista'}${flag&&plan.note?'<div>'+esc(plan.note)+'</div>':''}</div><div class="buy-actions"><button class="btn ${flag?'':'primary'}" data-plan-toggle data-pid="${esc(s.id)}" data-pnum="${n}">${flag?'− Rimuovi lista':'+ In lista'}</button>${flag?`<button class="btn" data-plan-edit data-pid="${esc(s.id)}" data-pnum="${n}">Dettagli</button>`:''}<button class="btn buy-check" data-acquired data-pid="${esc(s.id)}" data-pnum="${n}">✓ Acquistato</button></div></div>`;
+  }).join('')}</div></div></details>`;
+ }).join('');
+ return header('ACQUISTI FUTURI','Gestione acquisti','<button class="btn small" data-missing-view="simple">← Mancolista</button>')+
+ `<p class="helper-note">Questa sezione è separata dalla Mancolista: puoi pianificare gli acquisti senza cambiare i volumi posseduti.</p>`+
+ `<div class="buy-summary">${stat('Volumi mancanti',missing())}${stat('In lista acquisti',countPlanned,true)}${stat('Budget indicativo',budget.priced?euros(budget.sum):'—')}</div>`+
+ `<div class="buy-finder"><label for="buySearch" class="buy-finder-label">Cerca nella gestione acquisti</label><div class="buy-finder-row"><input class="input" type="search" id="buySearch" autocomplete="off" placeholder="Cerca manga, edizione o volume…" value="${esc(buySearch)}"><button type="button" class="btn small" data-buy-clear ${buySearch?'':'disabled'}>Pulisci</button></div><div class="filter-chips buy-status-filters"><button class="chip ${buyOrderFilter==='tutti'?'selected':''}" data-buy-order="tutti">Tutti</button><button class="chip ${buyOrderFilter==='da_ordinare'?'selected':''}" data-buy-order="da_ordinare">Da ordinare</button><button class="chip ${buyOrderFilter==='in_corso'?'selected':''}" data-buy-order="in_corso">Ordini in corso (${ordersInProgress})</button></div><p id="buyResultCount" class="small-note" aria-live="polite"></p></div>`+
+ `<div class="collection-controls"><div class="filter-chips"><button class="chip ${!byPlan?'selected':''}" data-missing-view="all">Volumi da pianificare (${missing()})</button><button class="chip ${byPlan?'selected':''}" data-missing-view="planned">La mia lista acquisti (${countPlanned})</button></div></div>`+
+ (markup||empty(byPlan?'Lista acquisti vuota':'Nessun volume mancante',byPlan?'Apri “Volumi da pianificare” per aggiungere volumi alla lista.':'Hai segnato come posseduti tutti i volumi delle tue serie.'));
+}
+
+function wishlistPage(){
+ const arr=[...data.wishlist].sort((a,b)=>priorityRank[a.priority]-priorityRank[b.priority]||a.title.localeCompare(b.title,'it'));
+ const priced=arr.filter(x=>x.price!==null);
+ const sum=priced.reduce((t,w)=>t+w.price,0);
+ return header('SERIE CHE VORRESTI INIZIARE','Wishlist','<button class="btn primary" data-action="wishadd">+ Nuovo desiderio</button>')+
+ `<p class="helper-note">La Wishlist contiene <strong>serie o edizioni che non fanno ancora parte della tua collezione</strong>. I volumi mancanti di serie già aggiunte si gestiscono nella Mancolista.</p>`+
+ `<div class="buy-summary">${stat('Serie desiderate',arr.length)}${stat('Priorità alta',arr.filter(x=>x.priority==='alta').length,true)}${stat('Budget indicativo',priced.length?euros(sum):'—')}</div>`+
+ (arr.length?`<div class="series-grid">${arr.map(w=>`<article class="wishlist-card"><div class="buy-volume-head"><div class="eyebrow">DESIDERIO</div><span class="priority-tag ${w.priority==='alta'?'high':w.priority==='bassa'?'low':''}">${priorityLabels[w.priority]}</span></div><h3>${esc(w.title)}</h3><div class="wish-price">${euros(w.price)}</div><p class="muted" style="font-size:13px;flex:1;white-space:pre-wrap">${esc(w.notes||'Nessuna nota aggiunta.')}</p><div class="wish-tools"><button class="btn" data-wishedit="${esc(w.id)}">Modifica</button><button class="btn primary" data-wishconvert="${esc(w.id)}">+ In collezione</button><button class="btn" data-wishdel="${esc(w.id)}">Elimina</button></div></article>`).join('')}</div>`:empty('Wishlist vuota','Aggiungi una serie che ti piacerebbe iniziare.'));
+}
+function statsPage(){
+ const t=overviewTotals(),pct=t.percent+'%',pub=new Map();
+ for(const s of data.series){const key=s.publisher||'Editore non indicato';if(!pub.has(key))pub.set(key,{owned:0,total:0});const item=pub.get(key);item.owned+=s.owned.length;item.total+=s.total}
+ const entries=[...pub].sort((a,b)=>b[1].owned-a[1].owned||b[1].total-a[1].total);
+ const maxPublisher=Math.max(1,...entries.map(e=>e[1].total));
+ const publisherHtml=entries.length?`<div class="publisher-chart">${entries.map(([name,x])=>`<div class="publisher-row"><div class="publisher-name" title="${esc(name)}">${esc(name)}</div><div class="publisher-track" role="img" aria-label="${x.owned} posseduti su ${x.total} volumi previsti"><i style="width:${x.owned/maxPublisher*100}%"></i><em style="width:${(x.total-x.owned)/maxPublisher*100}%"></em></div><div class="publisher-total">${x.owned} / ${x.total}</div></div>`).join('')}</div>`:`<div class="dash-empty">Non hai ancora serie nella collezione.</div>`;
+ return `<div class="dashboard-top"><div><div class="dash-kicker">LA TUA LIBRERIA IN NUMERI</div><h1 class="heading">Statistiche</h1><p class="dashboard-intro">Dati reali ricavati dalle serie e dai volumi registrati.</p></div></div>
+ <div class="dashboard-metrics">${overviewMetric('▣',t.owned,'Volumi posseduti')}${overviewMetric('−',t.missing,'Volumi mancanti')}${overviewMetric('✓',t.complete,'Serie complete')}${overviewMetric('↗',pct,'Completamento')}</div>
+ <div class="dashboard-columns"><section class="dashboard-panel"><div class="panel-head"><div><h3>Panoramica volumi</h3><p class="sub">Quanti volumi hai rispetto a quelli indicati nelle serie.</p></div></div><div class="stats-feature"><div class="stats-donut" style="--pct:${pct}" role="img" aria-label="${t.owned} volumi posseduti su ${t.volumes}; ${pct}"><div class="stats-donut-center"><strong>${pct}</strong><small>completamento</small></div></div><div><div class="progress-pair"><span><b style="color:#fb526a">●</b> Volumi posseduti</span><strong>${t.owned}</strong></div><div class="progress-pair"><span><b style="color:#a2a3b0">●</b> Volumi mancanti</span><strong>${t.missing}</strong></div><div class="stats-divider"></div><div class="progress-pair"><span>Totale dei volumi indicati</span><strong>${t.volumes}</strong></div><div class="progress-pair"><span>Serie in collezione</span><strong>${t.all}</strong></div></div></div></section>
+ <section class="dashboard-panel"><div class="panel-head"><div><h3>Stato delle serie</h3><p class="sub">Complete, iniziate e ancora da iniziare.</p></div></div><div class="status-track" role="img" aria-label="${t.complete} serie complete, ${t.inProgress} in corso, ${t.notStarted} da iniziare"><span class="complete" style="width:${t.all?t.complete/t.all*100:0}%"></span><span class="started" style="width:${t.all?t.inProgress/t.all*100:0}%"></span><span class="unstarted" style="width:${t.all?t.notStarted/t.all*100:0}%"></span></div><div class="status-legend"><span><i></i>Complete <b>${t.complete}</b></span><span class="start"><i></i>In corso <b>${t.inProgress}</b></span><span class="none"><i></i>Da iniziare <b>${t.notStarted}</b></span></div><div class="stats-divider"></div><div class="progress-pair"><span>Serie complessive</span><strong>${t.all}</strong></div><div class="progress-pair"><span>In wishlist (separate dalla collezione)</span><strong>${data.wishlist.length}</strong></div><div class="progress-pair"><span>Volumi nella lista acquisti</span><strong>${plannedCount()}</strong></div></section></div>
+ <div class="dashboard-columns"><section class="dashboard-panel"><div class="panel-head"><div><h3>Volumi per editore</h3><p class="sub">Rosso: posseduti · Grigio: mancanti. Valori inseriti da te.</p></div></div>${publisherHtml}</section><section class="dashboard-panel"><div class="panel-head"><div><h3>Serie più vicine al traguardo</h3><p class="sub">Le serie avviate con meno volumi mancanti.</p></div></div>${progressSeriesList(seriesNearCompletion(5))}</section></div>
+ <p class="note" style="margin-top:15px">Le statistiche riflettono la numerazione totale indicata per ciascuna edizione. Quando usciranno nuovi volumi, potrai aggiornare il totale nella scheda della serie.</p>`;
+}
+function settingsPage(){return header('PERSONALIZZA','Impostazioni')+`<div class="panel"><h2>Novità della v8.2</h2><p class="muted">Questa versione migliora la leggibilità, gli spazi e i comandi da smartphone. Restano disponibili annulla ultima modifica, azioni rapide e gestione delle diverse edizioni.</p><div class="toolbar"><button class="btn" data-action="undo" ${undoStack.length?'':'disabled'}>${undoLabel()}</button></div></div><div class="panel"><h2>Backup della collezione</h2><p class="muted">I dati sono salvati solo in questo browser. Esporta un file per non perderli e per spostarli su un altro dispositivo.</p><div class="toolbar"><button class="btn primary" data-action="export">↓ Esporta backup</button><button class="btn" data-action="import">↑ Importa backup</button><input type="file" id="importFile" accept=".json,application/json" class="hide"></div><p class="note">La lista acquisti, la wishlist e il registro degli ultimi volumi aggiunti sono inclusi nel backup. La sincronizzazione cloud sarà sviluppata in seguito. Le copertine sono segnaposto, non immagini ufficiali.</p></div><div class="section-head"><h2>Informazioni</h2></div><div class="panel"><div class="list-title">MangaLog — Dark Edition v8.3</div><p class="muted">Prototipo gratuito e offline. Visual rinnovato con illustrazioni originali in stile manga. Ricerca ISBN e copertine ufficiali rimandate a una fase successiva.</p></div>`}function detail(){const s=data.series.find(s=>s.id===selected);if(!s)return collection();const pct=Math.round(s.owned.length/s.total*100),missing=s.total-s.owned.length;return `<button class="btn small" data-nav="collection" style="margin-bottom:20px">← Torna alla collezione</button><div class="detail-hero"><div class="detail-head">${cover(s,'detail-cover')}<div class="grow"><div class="eyebrow">LA TUA SERIE</div><h1 class="heading">${esc(s.title)}</h1><div class="muted">${esc(s.edition)}</div><div class="detail-meta"><div><small>Autore</small><strong>${esc(s.author||'Non indicato')}</strong></div><div><small>Editore</small><strong>${esc(s.publisher||'Non indicato')}</strong></div><div><small>Volumi posseduti</small><strong>${s.owned.length} di ${s.total}</strong></div><div><small>Volumi mancanti</small><strong>${missing}</strong></div></div><div class="detail-actions"><button class="btn" data-action="edit">✎ Modifica dati</button><button class="btn small" data-action="delete">Elimina serie</button></div></div></div><div class="detail-progress"><div class="detail-progress-top"><strong>Completamento della serie</strong><strong class="accent-text">${pct}%</strong></div><div class="progress"><i style="width:${pct}%"></i></div><div class="muted detail-hint">${missing===0?'Hai registrato tutti i volumi!':'Ti mancano '+missing+' volumi per completare la serie.'}</div></div></div><div class="section-head"><h2>I tuoi volumi</h2><span class="pill">${s.owned.length} / ${s.total}</span></div><div class="volume-legend"><span><i class="legend-dot legend-owned"></i> Posseduto</span><span><i class="legend-dot"></i> Mancante</span></div><p class="muted" style="font-size:13px;margin-top:10px">Tocca un volume per cambiarne lo stato. Con il mouse trascina subito; sul cellulare tieni il dito fermo 1 secondo su un volume, poi trascina per selezionare più volumi. Puoi scorrere normalmente la pagina prima dell’attivazione.</p><button class="btn small detail-quicklink" data-action="seeplan">🛒 Lista acquisti: ${Object.keys(s.purchasePlans||{}).length} volumi →</button><div class="volume-grid">${Array.from({length:s.total},(_,i)=>{const n=i+1,owned=s.owned.includes(n);return `<button class="volume ${owned?'owned':''}" data-volume="${n}" aria-pressed="${owned}" aria-label="Volume ${n}: ${owned?'posseduto':'mancante'}"><span class="volume-number">${n}</span><small>${owned?'✓ Posseduto':(s.purchasePlans?.[n]?'🛒 In lista':'Mancante')}</small></button>`}).join('')}</div><div class="advanced-panel"><div class="panel-head"><div><h3>Gestione avanzata</h3><p class="sub">Strumenti rapidi per aggiornare la serie e gestire altre edizioni.</p></div></div><div class="quick-actions"><button class="btn small" data-action="quickown">Segna fino a…</button><button class="btn small" data-action="quickremove">Rimuovi da…</button><button class="btn small" data-action="quickfill">Completa la serie</button><button class="btn small" data-action="cloneedition">Nuova edizione</button><button class="btn small" data-action="undo" ${undoStack.length?'':'disabled'}>${undoLabel()}</button></div><div class="small-note">“Segna fino a…” è utile quando hai già i primi volumi consecutivi. “Nuova edizione” duplica la scheda senza copiare i volumi posseduti.</div></div>${s.notes?`<div class="advanced-note"><h3>Note della serie</h3><p>${esc(s.notes).replace(/\n/g,'<br>')}</p></div>`:''}`}
+function applyBuyFilters(){
+ const input=document.getElementById('buySearch');
+ if(!input)return;
+ const term=buySearch.trim().toLocaleLowerCase('it');
+ let visibleTotal=0,visibleSeries=0;
+ document.querySelectorAll('.buy-series').forEach(group=>{
+  const seriesText=group.dataset.buySeriesSearch||'';
+  let inGroup=0;
+  group.querySelectorAll('.buy-volume').forEach(card=>{
+   const num=card.dataset.buyVolume||'';
+   const status=card.dataset.buyStatus||'non_pianificato';
+   const searchMatch=!term||seriesText.includes(term)||num===term||('volume '+num).includes(term)||('vol '+num).includes(term);
+   const statusMatch=buyOrderFilter==='tutti'||(buyOrderFilter==='da_ordinare'?status==='da_ordinare':status==='in_corso');
+   const visible=searchMatch&&statusMatch;
+   card.hidden=!visible;
+   if(visible)inGroup++;
+  });
+  group.hidden=inGroup===0;
+  if(inGroup){visibleSeries++;visibleTotal++;}
+ });
+ const counter=document.getElementById('buyResultCount');
+ if(counter)counter.textContent=visibleTotal?visibleSeries+' serie trovate':'Nessun risultato. Prova un altro titolo o filtro.';
+ const clear=document.querySelector('[data-buy-clear]');
+ if(clear)clear.disabled=!buySearch;
+}
+function render(){navRender();$('#content').innerHTML=page==='home'?home():page==='collection'?collection():page==='missing'?missingPage():page==='wishlist'?wishlistPage():page==='stats'?statsPage():page==='settings'?settingsPage():detail();if(page==='missing'&&missingView!=='simple'){applyBuyFilters();const bi=$('#buySearch');if(bi){bi.addEventListener('input',e=>{buySearch=e.target.value;applyBuyFilters()})}}const inp=$('#search');if(inp){inp.addEventListener('input',e=>{query=e.target.value;const arr=filteredSeries();$('#seriesResults').innerHTML=resultCards(arr);const n=$('.results-count');if(n)n.textContent=arr.length+' serie · Vista '+(view==='grid'?'griglia':'elenco');const clear=$('.search-clear');if(clear)clear.disabled=!query});$('#sort').onchange=e=>{sort=e.target.value;render();$('#search').focus()}}}
+function close(){ $('#modalBack').classList.remove('show')}function modal(html){$('#modalContent').innerHTML=html;$('#modalBack').classList.add('show')}function edit(id,fromWishlist=null){const s=data.series.find(x=>x.id===id);modal(`<h2>${s?'Modifica serie':'Nuova serie'}</h2><p class="muted">Inserisci i dati della tua edizione italiana.</p><form id="seriesForm"><div class="form-grid"><div class="field full"><label>Titolo della serie *</label><input class="input" name="title" maxlength="120" required value="${esc(s?.title||fromWishlist?.title||'')}" placeholder="Es. One Piece"></div><div class="field"><label>Edizione</label><input class="input" name="edition" maxlength="100" value="${esc(s?.edition||'Edizione regolare')}"></div><div class="field"><label>Editore</label><input class="input" name="publisher" maxlength="100" value="${esc(s?.publisher||'')}"></div><div class="field"><label>Autore</label><input class="input" name="author" maxlength="100" value="${esc(s?.author||'')}"></div><div class="field"><label>Volumi pubblicati / previsti *</label><input class="input" type="number" name="total" min="1" max="2000" required value="${s?.total||1}"></div><div class="field full"><label>Note</label><textarea class="input" name="notes" rows="3" maxlength="1200">${esc(s?.notes||fromWishlist?.notes||'')}</textarea></div></div><div class="actions"><button class="btn" type="button" data-action="close">Annulla</button><button class="btn primary" type="submit">Salva serie</button></div></form>`);$('#seriesForm').onsubmit=e=>{e.preventDefault();const f=new FormData(e.target);const title=String(f.get('title')).trim(),total=Number(f.get('total'));if(!title||!Number.isInteger(total)||total<1||total>2000)return alert('Inserisci un titolo e un numero valido di volumi.');const obj=norm({id:s?.id||uid(),title,total,edition:String(f.get('edition')).trim(),publisher:String(f.get('publisher')).trim(),author:String(f.get('author')).trim(),notes:String(f.get('notes')).trim(),owned:s?.owned||[],purchasePlans:s?.purchasePlans||{},created:s?.created||Date.now()});if(s)data.series[data.series.indexOf(s)]=obj;else data.series.push(obj);if(fromWishlist)data.wishlist=data.wishlist.filter(w=>w.id!==fromWishlist.id);close();page='detail';selected=obj.id;save()}}
+function wishAdd(id=null){
+ const w=data.wishlist.find(x=>x.id===id)||null;
+ modal(`<h2>${w?'Modifica desiderio':'Nuovo desiderio'}</h2><p class="helper-note">Organizza le serie che vorresti iniziare. I prezzi sono facoltativi e vengono inseriti da te.</p><form id="wishForm"><div class="form-grid"><div class="field full"><label>Serie / edizione desiderata *</label><input class="input" name="title" required maxlength="120" value="${esc(w?.title||'')}" placeholder="Es. Naruto Deluxe"></div><div class="field"><label>Priorità</label><select class="input" name="priority">${['alta','media','bassa'].map(p=>`<option value="${p}" ${w?.priority===p?'selected':''}>${priorityLabels[p]}</option>`).join('')}</select></div><div class="field"><label>Prezzo indicativo (€)</label><input class="input" name="price" inputmode="decimal" placeholder="Es. 49,90" value="${w?.price===null||w?.price===undefined?'':esc(String(w.price).replace('.',','))}"></div><div class="field full"><label>Note</label><textarea class="input" name="notes" rows="3" maxlength="300" placeholder="Edizione, volumi che vorresti, negozio…">${esc(w?.notes||'')}</textarea></div></div><div class="actions"><button type="button" class="btn" data-action="close">Annulla</button><button class="btn primary" type="submit">Salva desiderio</button></div></form>`);
+ $('#wishForm').onsubmit=e=>{
+  e.preventDefault();const f=new FormData(e.target);
+  const title=String(f.get('title')).trim();if(!title)return;
+  const raw=String(f.get('price')).trim(),price=parsePrice(raw);
+  if(raw&&price===null)return alert('Prezzo non valido. Usa un importo come 5,90 oppure lascia il campo vuoto.');
+  const obj=normalizeWishlistItem({id:w?.id||uid(),title,notes:String(f.get('notes')).trim(),priority:f.get('priority'),price});
+  if(w)data.wishlist[data.wishlist.indexOf(w)]=obj;else data.wishlist.push(obj);
+  close();save();
+ };
+}
+function planEdit(id,num){
+ const s=data.series.find(x=>x.id===id),n=Number(num);
+ if(!s||!Number.isInteger(n)||n<1||n>s.total||s.owned.includes(n))return;
+ const p=s.purchasePlans?.[n]||{priority:'media',price:null,note:'',status:'da_ordinare'};
+ modal(`<h2>${esc(s.title)} · Vol. ${n}</h2><p class="helper-note">Personalizza questo volume nella lista acquisti. I prezzi sono indicativi, non dati di negozio.</p><form id="planForm"><div class="form-grid"><div class="field"><label>Priorità d’acquisto</label><select class="input" name="priority">${['alta','media','bassa'].map(v=>`<option value="${v}" ${p.priority===v?'selected':''}>${priorityLabels[v]}</option>`).join('')}</select></div><div class="field"><label>Prezzo indicativo (€)</label><input class="input" name="price" inputmode="decimal" value="${p.price===null?'':esc(String(p.price).replace('.',','))}" placeholder="Es. 5,90"></div><div class="field full"><label>Stato dell’ordine</label><select class="input" name="status"><option value="da_ordinare" ${safeOrderStatus(p.status)==='da_ordinare'?'selected':''}>Da ordinare</option><option value="in_corso" ${safeOrderStatus(p.status)==='in_corso'?'selected':''}>Ordine in corso</option></select></div><div class="field full"><label>Note</label><textarea class="input" name="note" rows="3" maxlength="250" placeholder="Es. Controllare disponibilità in fumetteria">${esc(p.note||'')}</textarea></div></div><div class="actions"><button type="button" class="btn" data-action="close">Annulla</button><button type="submit" class="btn primary">Salva dettagli</button></div></form>`);
+ $('#planForm').onsubmit=e=>{
+  e.preventDefault();const f=new FormData(e.target),raw=String(f.get('price')).trim(),price=parsePrice(raw);
+  if(raw&&price===null)return alert('Prezzo non valido. Es. 5,90.');
+  s.purchasePlans=s.purchasePlans||{};
+  s.purchasePlans[n]={priority:safePriority(f.get('priority')),price,note:String(f.get('note')||'').trim().slice(0,250),status:safeOrderStatus(f.get('status'))};
+  openMissingGroups.add(s.id);close();save();
+ };
+}
+function exportData(){let b=new Blob([JSON.stringify({version:7,exportedAt:new Date().toISOString(),...data},null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='MangaLog_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}function importData(file){if(!file||file.size>5e6)return alert('File troppo grande o non valido.');const reader=new FileReader();reader.onload=()=>{try{let v=JSON.parse(reader.result);if(!v||!Array.isArray(v.series)||v.series.length>10000||!Array.isArray(v.wishlist||[]))throw Error();if(!confirm('Sostituire la collezione attuale con quella del backup?'))return;missingSelection.clear();lastMissingSuccess='';data={series:v.series.map(norm),wishlist:(v.wishlist||[]).slice(0,10000).filter(x=>x&&typeof x.title==='string').map(normalizeWishlistItem),activity:safeActivity(v.activity)};save();alert('Backup importato.')}catch(e){alert('Backup non valido.')}};reader.readAsText(file)}
+let dragSelection=null,suppressVolumeClick=false;
+function paintVolumeButton(button,owned){
+ button.classList.toggle('owned',owned);
+ button.setAttribute('aria-pressed',String(owned));
+ const n=button.dataset.volume;
+ button.setAttribute('aria-label','Volume '+n+': '+(owned?'posseduto':'mancante'));
+ const small=button.querySelector('small');if(small)small.textContent=owned?'✓ Posseduto':'Mancante';
+}
+function dragVisit(button){
+ if(!dragSelection||!button||!button.matches('[data-volume]'))return;
+ const n=Number(button.dataset.volume);
+ if(dragSelection.visited.has(n))return;
+ dragSelection.visited.add(n);
+ paintVolumeButton(button,dragSelection.makeOwned);
+}
+document.addEventListener('pointerdown',e=>{
+ if(e.button!==0||e.pointerType==='touch')return;
+ const button=e.target.closest('.volume-grid [data-volume]');
+ if(!button)return;
+ const grid=button.closest('.volume-grid');
+ dragSelection={grid,pointerId:e.pointerId,startX:e.clientX,startY:e.clientY,makeOwned:!button.classList.contains('owned'),visited:new Set(),moved:false};
+ dragVisit(button);
+ // Capture on the grid so movement continues across volume buttons.
+ try{grid.setPointerCapture(e.pointerId)}catch(_){}
+ grid.classList.add('dragging');
+ e.preventDefault();
+});
+document.addEventListener('pointermove',e=>{
+ const d=dragSelection;if(!d||d.pointerId===null||e.pointerId!==d.pointerId)return;
+ if(Math.hypot(e.clientX-d.startX,e.clientY-d.startY)>5)d.moved=true;
+ const el=document.elementFromPoint(e.clientX,e.clientY);
+ const button=el?.closest('.volume-grid [data-volume]');
+ if(button&&button.closest('.volume-grid')===d.grid)dragVisit(button);
+});
+function saveDraggedVolumes(d){
+ if(!d)return;
+ d.grid.classList.remove('dragging');
+ const item=data.series.find(x=>x.id===selected);
+ if(item&&d.visited.size){
+  const set=new Set(item.owned);
+  for(const n of d.visited){if(d.makeOwned){if(!set.has(n))registeredVolume(item.id,n);set.add(n)}else{set.delete(n);unregisteredVolume(item.id,n)}}
+  item.owned=[...set].sort((a,b)=>a-b);
+  if(d.makeOwned){for(const n of d.visited)delete item.purchasePlans?.[n]}
+  save();
+ }
+ // Evita che il click sintetico successivo annulli la selezione.
+ suppressVolumeClick=true;
+ setTimeout(()=>{suppressVolumeClick=false},420);
+}
+function finishVolumeDrag(e){
+ const d=dragSelection;if(!d||d.pointerId===null||e.pointerId!==d.pointerId)return;
+ dragSelection=null;
+ try{if(d.grid.hasPointerCapture(e.pointerId))d.grid.releasePointerCapture(e.pointerId)}catch(_){}
+ saveDraggedVolumes(d);
+}
+// Su telefono lo scorrimento rimane libero finché non si tiene fermo il dito per 1 secondo.
+let pendingTouch=null;
+const TOUCH_HOLD_MS=1000,TOUCH_MOVE_TOLERANCE=12;
+function cancelPendingTouch(){
+ if(pendingTouch){clearTimeout(pendingTouch.timer);pendingTouch=null}
+}
+document.addEventListener('touchstart',e=>{
+ if(e.touches.length!==1){cancelPendingTouch();return}
+ const button=e.target.closest('.volume-grid [data-volume]');
+ if(!button)return;
+ cancelPendingTouch();
+ const touch=e.touches[0],grid=button.closest('.volume-grid');
+ const state={id:touch.identifier,grid,button,x:touch.clientX,y:touch.clientY,active:false,timer:null};
+ pendingTouch=state;
+ state.timer=setTimeout(()=>{
+  if(pendingTouch!==state)return;
+  state.active=true;
+  dragSelection={grid,pointerId:null,makeOwned:!button.classList.contains('owned'),visited:new Set()};
+  grid.classList.add('dragging');
+  dragVisit(button);
+ },TOUCH_HOLD_MS);
+},{passive:true});
+document.addEventListener('touchmove',e=>{
+ const state=pendingTouch;
+ if(!state)return;
+ const touch=Array.from(e.touches).find(t=>t.identifier===state.id);
+ if(!touch){cancelPendingTouch();return}
+ if(!state.active){
+  if(Math.hypot(touch.clientX-state.x,touch.clientY-state.y)>TOUCH_MOVE_TOLERANCE)cancelPendingTouch();
+  return; // Scorrimento verticale normale finché la selezione non è attiva.
+ }
+ if(e.cancelable)e.preventDefault();
+ const button=document.elementFromPoint(touch.clientX,touch.clientY)?.closest('.volume-grid [data-volume]');
+ if(button&&button.closest('.volume-grid')===state.grid)dragVisit(button);
+},{passive:false});
+document.addEventListener('touchend',e=>{
+ const state=pendingTouch;if(!state)return;
+ if(!Array.from(e.changedTouches).some(t=>t.identifier===state.id))return;
+ cancelPendingTouch();
+ if(state.active){
+  if(e.cancelable)e.preventDefault();
+  const d=dragSelection;dragSelection=null;
+  saveDraggedVolumes(d);
+ }
+},{passive:false});
+document.addEventListener('touchcancel',e=>{
+ const state=pendingTouch;if(!state)return;
+ if(!Array.from(e.changedTouches).some(t=>t.identifier===state.id))return;
+ cancelPendingTouch();
+ if(state.active){
+  const d=dragSelection;dragSelection=null;
+  saveDraggedVolumes(d);
+ }
+},{passive:true});
+document.addEventListener('contextmenu',e=>{
+ if(e.target.closest('.volume-grid [data-volume]'))e.preventDefault();
+});
+document.addEventListener('click',e=>{if(suppressVolumeClick&&e.target.closest('[data-volume]')){e.preventDefault();e.stopImmediatePropagation()}},true);
+document.addEventListener('pointerup',finishVolumeDrag);
+document.addEventListener('pointercancel',finishVolumeDrag);
+
+// Selezione multipla da computer: tutto resta provvisorio fino al pulsante di conferma.
+// Su smartphone restano i normali tocchi singoli (non si interferisce con lo scorrimento).
+let missingMouseDrag=null;
+let suppressMissingClick=false;
+let releaseMissingClickTimer=null;
+function setMissingPickState(id,n,shouldSelect){
+ const series=data.series.find(s=>s.id===id);
+ if(!series||!Number.isInteger(n)||n<1||n>series.total||series.owned.includes(n))return;
+ let set=missingSelection.get(id);
+ if(!set){set=new Set();missingSelection.set(id,set)}
+ if(shouldSelect)set.add(n);else set.delete(n);
+ if(!set.size)missingSelection.delete(id);
+ lastMissingSuccess='';
+}
+function mousePickVisit(button){
+ const d=missingMouseDrag;
+ if(!d||!button||!button.matches('[data-missing-pick]')||!d.grid.contains(button))return;
+ const n=Number(button.dataset.mnum),id=button.dataset.msid,key=id+':'+n;
+ if(d.visited.has(key))return;
+ d.visited.add(key);
+ setMissingPickState(id,n,d.makeSelected);
+ updateMissingPickUI();
+}
+document.addEventListener('pointerdown',e=>{
+ if(e.pointerType!=='mouse'||e.button!==0)return;
+ const button=e.target.closest('.missing-number-list [data-missing-pick]');
+ if(!button)return;
+ const grid=button.closest('.missing-number-list');
+ if(!grid)return;
+ clearTimeout(releaseMissingClickTimer);
+ suppressMissingClick=true;
+ missingMouseDrag={grid,pointerId:e.pointerId,makeSelected:!button.classList.contains('selected'),visited:new Set()};
+ grid.classList.add('dragging');
+ mousePickVisit(button);
+ try{grid.setPointerCapture(e.pointerId)}catch(_){}
+ e.preventDefault();
+});
+document.addEventListener('pointermove',e=>{
+ const d=missingMouseDrag;
+ if(!d||e.pointerId!==d.pointerId)return;
+ const target=document.elementFromPoint(e.clientX,e.clientY);
+ const button=target?.closest('.missing-number-list [data-missing-pick]');
+ if(button&&d.grid.contains(button))mousePickVisit(button);
+});
+function endMissingMouseDrag(e){
+ const d=missingMouseDrag;
+ if(!d||d.pointerId!==e.pointerId)return;
+ // Include anche il volume su cui il mouse viene rilasciato.
+ const target=document.elementFromPoint(e.clientX,e.clientY);
+ const button=target?.closest('.missing-number-list [data-missing-pick]');
+ if(button&&d.grid.contains(button))mousePickVisit(button);
+ missingMouseDrag=null;
+ d.grid.classList.remove('dragging');
+ try{if(d.grid.hasPointerCapture(e.pointerId))d.grid.releasePointerCapture(e.pointerId)}catch(_){}
+ releaseMissingClickTimer=setTimeout(()=>{suppressMissingClick=false},430);
+}
+// Su smartphone: tocco normale = un numero; pressione di 1 secondo + trascinamento = selezione multipla.
+// La selezione rimane provvisoria finché non si conferma "Aggiungi alla collezione".
+let pendingMissingTouch=null;
+const MISSING_TOUCH_HOLD_MS=1000,MISSING_TOUCH_MOVE_TOLERANCE=12;
+function clearPendingMissingTouch(){
+ if(pendingMissingTouch){clearTimeout(pendingMissingTouch.timer);pendingMissingTouch=null}
+}
+function missingTouchVisit(button,state){
+ if(!state||!button||!button.matches('[data-missing-pick]')||!state.grid.contains(button))return;
+ const id=button.dataset.msid,n=Number(button.dataset.mnum),key=id+':'+n;
+ if(state.visited.has(key))return;
+ state.visited.add(key);
+ setMissingPickState(id,n,state.makeSelected);
+ updateMissingPickUI();
+}
+document.addEventListener('touchstart',e=>{
+ if(e.touches.length!==1){clearPendingMissingTouch();return}
+ const button=e.target.closest('.missing-number-list [data-missing-pick]');
+ if(!button)return;
+ clearPendingMissingTouch();
+ const touch=e.touches[0],grid=button.closest('.missing-number-list');
+ const state={id:touch.identifier,button,grid,x:touch.clientX,y:touch.clientY,active:false,visited:new Set(),makeSelected:!button.classList.contains('selected'),timer:null};
+ pendingMissingTouch=state;
+ state.timer=setTimeout(()=>{
+  if(pendingMissingTouch!==state)return;
+  state.active=true;
+  clearTimeout(releaseMissingClickTimer);
+  suppressMissingClick=true;
+  grid.classList.add('dragging');
+  missingTouchVisit(button,state);
+ },MISSING_TOUCH_HOLD_MS);
+},{passive:true});
+document.addEventListener('touchmove',e=>{
+ const state=pendingMissingTouch;
+ if(!state)return;
+ const touch=Array.from(e.touches).find(t=>t.identifier===state.id);
+ if(!touch){clearPendingMissingTouch();return}
+ if(!state.active){
+  if(Math.hypot(touch.clientX-state.x,touch.clientY-state.y)>MISSING_TOUCH_MOVE_TOLERANCE)clearPendingMissingTouch();
+  return; // Prima di 1 secondo la pagina può scorrere normalmente.
+ }
+ if(e.cancelable)e.preventDefault();
+ const button=document.elementFromPoint(touch.clientX,touch.clientY)?.closest('.missing-number-list [data-missing-pick]');
+ if(button)missingTouchVisit(button,state);
+},{passive:false});
+function finishMissingTouch(e){
+ const state=pendingMissingTouch;
+ if(!state||!Array.from(e.changedTouches).some(t=>t.identifier===state.id))return;
+ if(state.active){
+  if(e.cancelable)e.preventDefault();
+  const touch=Array.from(e.changedTouches).find(t=>t.identifier===state.id);
+  const target=document.elementFromPoint(touch.clientX,touch.clientY)?.closest('.missing-number-list [data-missing-pick]');
+  if(target)missingTouchVisit(target,state);
+  state.grid.classList.remove('dragging');
+  clearTimeout(releaseMissingClickTimer);
+  releaseMissingClickTimer=setTimeout(()=>{suppressMissingClick=false},500);
+ }
+ clearPendingMissingTouch();
+}
+document.addEventListener('touchend',finishMissingTouch,{passive:false});
+document.addEventListener('touchcancel',finishMissingTouch,{passive:false});
+document.addEventListener('contextmenu',e=>{
+ if(e.target.closest('.missing-number-list [data-missing-pick]'))e.preventDefault();
+});
+document.addEventListener('pointerup',endMissingMouseDrag);
+document.addEventListener('pointercancel',endMissingMouseDrag);
+document.addEventListener('click',e=>{
+ if(suppressMissingClick&&e.target.closest('[data-missing-pick]')){
+  e.preventDefault();e.stopImmediatePropagation();
+ }
+},true);
+document.addEventListener('click',e=>{const bc=e.target.closest('[data-buy-clear]');if(bc){buySearch='';const bi=$('#buySearch');if(bi){bi.value='';bi.focus()}applyBuyFilters();return}const bf=e.target.closest('[data-buy-order]');if(bf){buyOrderFilter=bf.dataset.buyOrder;render();return}const pick=e.target.closest('[data-missing-pick]');if(pick){toggleMissingPick(pick.dataset.msid,Number(pick.dataset.mnum));updateMissingPickUI();return}if(e.target.closest('[data-missing-clear]')){missingSelection.clear();lastMissingSuccess='';updateMissingPickUI();return}if(e.target.closest('[data-missing-commit]')){commitMissingPicks();return}const vw=e.target.closest('[data-view]');if(vw){view=vw.dataset.view;try{localStorage.setItem('mangatrack_view',view)}catch(_){}render();return}const mf=e.target.closest('[data-missing-view]');if(mf){missingView=mf.dataset.missingView;openMissingGroups.clear();render();return}const planToggle=e.target.closest('[data-plan-toggle]');if(planToggle){const item=data.series.find(x=>x.id===planToggle.dataset.pid),n=Number(planToggle.dataset.pnum);if(item&&!item.owned.includes(n)&&n>=1&&n<=item.total){item.purchasePlans=item.purchasePlans||{};if(item.purchasePlans[n])delete item.purchasePlans[n];else item.purchasePlans[n]={priority:'media',price:null,note:''};openMissingGroups.add(item.id);save()}return}const planEditBtn=e.target.closest('[data-plan-edit]');if(planEditBtn){planEdit(planEditBtn.dataset.pid,planEditBtn.dataset.pnum);return}const acquired=e.target.closest('[data-acquired]');if(acquired){const item=data.series.find(x=>x.id===acquired.dataset.pid),n=Number(acquired.dataset.pnum);if(item&&!item.owned.includes(n)&&n>=1&&n<=item.total){item.owned.push(n);item.owned.sort((a,b)=>a-b);registeredVolume(item.id,n);delete item.purchasePlans?.[n];openMissingGroups.add(item.id);save()}return}const wishedit=e.target.closest('[data-wishedit]');if(wishedit){wishAdd(wishedit.dataset.wishedit);return}const wishconvert=e.target.closest('[data-wishconvert]');if(wishconvert){const wish=data.wishlist.find(w=>w.id===wishconvert.dataset.wishconvert);if(wish)edit(null,wish);return}const fl=e.target.closest('[data-filter]');if(fl){filter=fl.dataset.filter;render();return}const n=e.target.closest('[data-nav]');if(n){navigate(n.dataset.nav);return}const s=e.target.closest('[data-series]');if(s){navigate('detail',s.dataset.series);return}const v=e.target.closest('[data-volume]');if(v&&suppressVolumeClick){e.preventDefault();e.stopPropagation();return}if(v){let item=data.series.find(x=>x.id===selected),num=Number(v.dataset.volume);if(!item)return;const wasOwned=item.owned.includes(num);item.owned=wasOwned?item.owned.filter(x=>x!==num):[...item.owned,num].sort((a,b)=>a-b);if(wasOwned)unregisteredVolume(item.id,num);else{registeredVolume(item.id,num);delete item.purchasePlans?.[num]}save();return}const wd=e.target.closest('[data-wishdel]');if(wd){if(confirm('Eliminare questo desiderio dalla Wishlist?')){data.wishlist=data.wishlist.filter(x=>x.id!==wd.dataset.wishdel);save()}return}const a=e.target.closest('[data-action]');if(!a)return;switch(a.dataset.action){case'add':edit(null);break;case'edit':edit(selected);break;case'delete':if(confirm('Eliminare questa serie e tutti i volumi registrati?')){data.series=data.series.filter(x=>x.id!==selected);data.activity=(data.activity||[]).filter(x=>x.seriesId!==selected);page='collection';save()}break;case'wishadd':wishAdd();break;case'seeplan':navigate('missing');missingView='planned';render();break;case'quickown':quickOwnUntil();break;case'quickremove':quickRemoveFrom();break;case'quickfill':quickCompleteSeries();break;case'cloneedition':cloneEdition();break;case'undo':undoLastChange();break;case'clearsearch':query='';render();$('#search')?.focus();break;case'close':close();break;case'export':exportData();break;case'import':$('#importFile').click();break}});$('#modalBack').addEventListener('click',e=>{if(e.target===$('#modalBack'))close()});document.addEventListener('toggle',e=>{const d=e.target;if(d.matches?.('[data-missing-group]')){if(d.open)openMissingGroups.add(d.dataset.missingGroup);else openMissingGroups.delete(d.dataset.missingGroup)}},true);document.addEventListener('change',e=>{if(e.target.id==='importFile')importData(e.target.files[0])});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();if((e.key==='Enter'||e.key===' ')&&e.target.matches('.collection-list-item')){e.preventDefault();navigate('detail',e.target.dataset.series)}});load();lastSavedJSON=JSON.stringify(data);render();})();
+</script><script>
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+ window.addEventListener('load', () => {
+  navigator.serviceWorker.register('./service-worker.js').catch(err => console.warn('Service worker:', err));
+ });
+}
+</script></body></html>
