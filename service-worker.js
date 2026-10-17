@@ -1,6 +1,6 @@
-// MangaLog v9.2: app shell only. User data is stored in localStorage, not the cache.
-const CACHE = 'mangalog-v9-2-clean-2';
-const SHELL = ['./', './index.html', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
+// MangaLog v10: app shell only; Supabase is network-only; user data is never stored in SW cache.
+const CACHE = 'mangalog-v10-cloud-1';
+const SHELL = ['./', './index.html', './manifest.webmanifest', './cloud-config.js', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
 });
