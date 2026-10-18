@@ -1,5 +1,5 @@
-// MangaLog v12.5: app shell only; Supabase is network-only; user data is never stored in SW cache.
-const CACHE = 'mangalog-v12-5-password-reset';
+// MangaLog v12.6: app shell only; Supabase is network-only; user data is never stored in SW cache.
+const CACHE = 'mangalog-v12-6-five-themes';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './cloud-config.js', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
