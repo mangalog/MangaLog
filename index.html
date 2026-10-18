@@ -1,4 +1,9 @@
-<!doctype html><html lang="it"><head><meta name="theme-color" content="#121318"><meta name="description" content="MangaLog: organizza la tua collezione manga, i volumi mancanti e gli acquisti."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" sizes="192x192" href="./icons/icon-192.png"><link rel="apple-touch-icon" href="./icons/apple-touch-icon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MangaLog v12.2</title><style>
+<!doctype html><html lang="it"><head><meta name="theme-color" content="#121318"><meta name="description" content="MangaLog: organizza la tua collezione manga, i volumi mancanti e gli acquisti."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" sizes="192x192" href="./icons/icon-192.png"><link rel="apple-touch-icon" href="./icons/apple-touch-icon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MangaLog v12.3</title><script>
+/* La preferenza di aspetto e separata dai dati della collezione e da Supabase. */
+try{const savedTheme=localStorage.getItem('mangalog_appearance_v1');
+ if(savedTheme==='light')document.documentElement.setAttribute('data-theme','light');
+}catch(_){/* Navigazione privata/restrizioni di storage: tema scuro predefinito */}
+</script><style>
 :root{font-family:Inter,system-ui,-apple-system,sans-serif;color:#f6f4f5;background:#0c0d11;font-synthesis:none}*{box-sizing:border-box}body{margin:0}button,input,select,textarea{font:inherit}button{cursor:pointer}button:disabled{opacity:.4;cursor:not-allowed}.app{display:flex;min-height:100vh}.sidebar{width:240px;background:#121318;border-right:1px solid #292a30;padding:27px 16px;position:sticky;top:0;height:100vh;flex-shrink:0}.logo{font-size:25px;font-weight:950;letter-spacing:-1.3px;padding:0 12px 32px}.logo b{color:#f14353}.nav{width:100%;display:flex;align-items:center;gap:13px;text-align:left;border:0;background:none;color:#aaaab3;padding:13px 15px;border-radius:11px;margin:4px 0;font-weight:650}.nav.active,.nav:hover{background:#2b181f;color:#fff}.nav.active:before{content:'';width:4px;height:20px;border-radius:3px;background:#ff4255;margin-left:-9px}.sidefoot{position:absolute;bottom:22px;left:24px;color:#777782;font-size:12px}.main{max-width:1380px;width:100%;margin:auto;padding:30px 38px 100px}.top{display:flex;justify-content:space-between;align-items:center;gap:15px;margin-bottom:26px}.eyebrow{color:#f14a5b;text-transform:uppercase;font-weight:850;font-size:11px;letter-spacing:2px}.heading{font-size:clamp(27px,4vw,40px);font-weight:900;letter-spacing:-1.5px;margin:5px 0}.muted{color:#9899a5}.btn{border:1px solid #343640;background:#202127;color:#fff;border-radius:10px;padding:11px 15px;font-weight:750}.btn.primary{background:#ef3d51;border-color:#ef3d51}.btn:hover{filter:brightness(1.13)}.btn.small{padding:7px 10px;font-size:12px}.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:13px}.stat,.panel,.series,.volume,.wishlist-card{background:#17181e;border:1px solid #2a2c35;border-radius:15px}.stat{padding:19px}.stat .num{font-size:31px;font-weight:900;margin-top:13px}.stat .label{font-size:12px;color:#aaaab3}.stat .accent{color:#f14a5b}.hero{padding:28px;background:linear-gradient(115deg,#311923,#181920 68%);border:1px solid #57303b;border-radius:18px;margin-bottom:20px;display:flex;justify-content:space-between;gap:15px;align-items:center}.hero h2{margin:7px 0;font-size:27px}.hero p{max-width:560px;color:#c8b6bd;font-size:14px}.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:30px 0 16px}.section-head h2{margin:0;font-size:20px}.series-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(188px,1fr));gap:17px}.series{overflow:hidden;transition:transform .15s;cursor:pointer}.series:hover{transform:translateY(-3px);border-color:#a84453}.cover{height:218px;background:linear-gradient(145deg,#3b222b,#1b1b26);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:8px;position:relative;text-align:center;padding:16px}.cover:after{content:'';position:absolute;inset:9px;border:1px solid #ffffff18;pointer-events:none}.cover .cover-mark{font-size:42px;letter-spacing:-4px;font-weight:900;color:#ffffff25;line-height:1}.cover strong{font-size:16px;max-width:100%;overflow-wrap:anywhere;z-index:1}.cover small{color:#f56c7c;letter-spacing:2px;font-weight:850;z-index:1}.series-body{padding:14px}.series-title{font-size:15px;font-weight:850;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.series-sub{font-size:12px;color:#999aa5;margin:6px 0 13px}.progress{height:6px;background:#34343c;border-radius:9px;overflow:hidden}.progress i{display:block;background:#f04457;height:100%;border-radius:9px}.progress-info{display:flex;justify-content:space-between;color:#aaaab3;font-size:11px;margin-top:7px}.toolbar{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0 23px}.input{background:#1a1b22;border:1px solid #393b45;border-radius:10px;color:white;padding:12px 13px;min-width:0}.toolbar .input{flex:1;min-width:180px}.toolbar select{max-width:220px}.panel{padding:21px}.list-row{display:flex;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid #2c2e36}.list-row:last-child{border:0}.mini-cover{width:48px;height:62px;border-radius:6px;background:#45242d;color:#f26b7c;display:grid;place-items:center;font-size:15px;letter-spacing:-1px;font-weight:900;flex-shrink:0}.grow{flex:1;min-width:0}.list-title{font-weight:800}.list-sub{color:#999aa5;font-size:12px;margin-top:5px}.pill{border-radius:50px;background:#38252d;color:#ff8998;padding:6px 10px;font-size:12px;font-weight:750}.volume-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:10px;margin-top:18px}.volume{padding:16px 5px;text-align:center;font-weight:900}.volume.owned{background:#34232b;border-color:#ef3d51;color:#ff6679}.volume small{display:block;font-size:10px;margin-top:5px;color:#aaaab3;font-weight:500}.detail-head{display:flex;gap:24px;align-items:center}.detail-cover{width:170px;min-width:170px;height:220px;border-radius:12px}.detail-cover .cover-mark{font-size:60px}.detail-meta{display:grid;grid-template-columns:repeat(2,minmax(100px,1fr));gap:15px;margin:18px 0}.detail-meta small{display:block;color:#999aa5;margin-bottom:4px}.empty{padding:38px;text-align:center;border:1px dashed #454650;border-radius:15px;color:#999aa5}.empty strong{color:#fff;display:block;margin-bottom:7px}.modal-back{position:fixed;inset:0;background:#000b;display:none;align-items:center;justify-content:center;z-index:20;padding:15px}.modal-back.show{display:flex}.modal{background:#1b1c23;border:1px solid #42434d;border-radius:18px;width:min(560px,100%);padding:24px;max-height:92vh;overflow:auto}.modal h2{margin:0 0 5px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;margin:20px 0}.field{display:flex;flex-direction:column;gap:6px}.field.full{grid-column:1/-1}.field label{color:#bbbcc6;font-size:12px;font-weight:750}.field input,.field select,.field textarea{width:100%}.actions{display:flex;gap:9px;justify-content:flex-end;flex-wrap:wrap}.mobile-nav{display:none}.hide{display:none!important}.chart-bar{height:13px;background:#33343c;border-radius:8px;overflow:hidden;flex:1}.chart-bar i{display:block;background:#ee4256;height:100%}.chart-line{display:flex;align-items:center;gap:14px;margin:16px 0}.chart-line span{width:105px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}.chart-line small{width:35px;text-align:right}.wishlist-card{padding:17px}.wishlist-card h3{margin:0 0 8px}.note{font-size:12px;color:#858693;margin-top:14px}@media(max-width:800px){.sidebar{display:none}.main{padding:22px 17px 95px}.mobile-nav{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:10;background:#17181eee;border-top:1px solid #33343e;justify-content:space-around;padding:9px 4px max(9px,env(safe-area-inset-bottom));backdrop-filter:blur(15px)}.mobile-nav button{border:0;background:none;color:#999aa5;font-size:10px;padding:6px 2px;min-width:58px}.mobile-nav button.active{color:#ff5366}.mobile-nav span{display:block;font-size:19px;margin-bottom:3px}.stats{grid-template-columns:repeat(2,1fr)}.hero{padding:20px}.hero h2{font-size:22px}.detail-head{align-items:flex-start}.detail-cover{width:110px;min-width:110px;height:158px}.detail-cover .cover-mark{font-size:38px}.detail-head .heading{font-size:25px}}@media(max-width:420px){.series-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:11px}.cover{height:175px}.cover strong{font-size:14px}.stats{gap:9px}.stat{padding:14px}.stat .num{font-size:25px}.detail-head{gap:13px}.detail-meta{grid-template-columns:1fr 1fr}.form-grid{grid-template-columns:1fr}}
 
 .collection-controls{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 13px}.filter-chips{display:flex;gap:8px;flex-wrap:wrap}.chip{border:1px solid #363841;background:#1b1c22;color:#c2c2ca;border-radius:40px;padding:9px 15px;font-size:12px;font-weight:700}.chip.selected{background:#ed3e52;border-color:#ed3e52;color:white}.view-switch{display:flex;gap:4px;padding:4px;background:#17181d;border:1px solid #33343c;border-radius:12px}.view-btn{width:39px;height:34px;border:0;border-radius:8px;background:transparent;color:#9a9ba5;font-size:22px;line-height:1}.view-btn.selected{background:#ef3d51;color:#fff}.results-count{color:#92939e;font-size:12px;margin:0 0 15px}.collection-list{background:#17181e;border:1px solid #2a2c35;border-radius:16px;overflow:hidden}.collection-list-item{display:flex;align-items:center;gap:16px;padding:15px 18px;border-bottom:1px solid #2c2e36;cursor:pointer;transition:background .15s}.collection-list-item:last-child{border-bottom:0}.collection-list-item:hover,.collection-list-item:focus-visible{background:#252029;outline:none}.collection-list-item .mini-cover{width:54px;height:73px}.list-progress{max-width:320px;margin-top:12px}.list-count{font-size:14px;font-weight:850;white-space:nowrap;text-align:right}.list-count small{display:block;color:#a2a3ad;font-weight:500;font-size:11px;margin-top:5px}.chevron{font-size:27px;color:#f14a5b}.view-btn:focus-visible,.chip:focus-visible{outline:2px solid white;outline-offset:2px}@media(max-width:500px){.collection-list-item{padding:12px;gap:10px}.collection-list-item .mini-cover{width:42px;height:60px}.list-count{font-size:12px}.chevron{font-size:20px}.chip{padding:8px 11px}.toolbar select{max-width:none}.toolbar .input{width:100%}}
@@ -398,11 +403,319 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .owned-row-arrow{font-size:24px;color:#ff8295}
 @media(max-width:520px){.special-edit-row{grid-template-columns:77px minmax(0,1fr)}.special-panel{padding:12px}.special-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.special-edit-row [data-special-remove]{justify-self:start}}
 
-</style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.2</div></aside><main class="main" id="content"></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script>
+
+/* MangaLog v12.3 | Light Wave. Il tema Dark originale non viene modificato. */
+:root{color-scheme:dark}
+:root[data-theme="light"]{
+ color-scheme:light;
+ --mt-accent:#1675bd;
+ --mt-focus:#176fba;
+ --mt-panel:#ffffff;
+ color:#102940;
+ background:#f2f7fc;
+}
+:root[data-theme="light"] body{background:#f2f7fc;color:#102940}
+:root[data-theme="light"] body::before{
+ background:radial-gradient(circle at 8% 2%,rgba(36,148,223,.11),transparent 26%),
+            radial-gradient(circle at 88% 7%,rgba(224,50,63,.055),transparent 24%);
+ opacity:1;
+}
+:root[data-theme="light"] .sidebar{
+ background:linear-gradient(178deg,#fff 0%,#f2f8ff 88%);
+ border-color:#d7e6f1;
+ box-shadow:3px 0 20px rgba(25,75,112,.035);
+}
+:root[data-theme="light"] .sidefoot{color:#637b91}
+:root[data-theme="light"] .logo{color:#102940;text-shadow:none}
+:root[data-theme="light"] .logo b{color:#176fba}
+:root[data-theme="light"] .nav{color:#48627b}
+:root[data-theme="light"] .nav:hover,
+:root[data-theme="light"] .nav.active{background:#deeffc;color:#084a83}
+:root[data-theme="light"] .nav.active::before{background:#178bd6}
+:root[data-theme="light"] .mobile-nav{
+ background:rgba(255,255,255,.97);
+ border-top-color:#cfdfed;
+ box-shadow:0 -9px 24px rgba(28,72,105,.10);
+}
+:root[data-theme="light"] .mobile-nav button{color:#506b83}
+:root[data-theme="light"] .mobile-nav button.active{color:#096ab1}
+:root[data-theme="light"] .muted,
+:root[data-theme="light"] .dashboard-intro,
+:root[data-theme="light"] .small-note,
+:root[data-theme="light"] .note,
+:root[data-theme="light"] .helper-note,
+:root[data-theme="light"] .missing-hint,
+:root[data-theme="light"] .missing-intro p,
+:root[data-theme="light"] .results-count,
+:root[data-theme="light"] .cloud-help,
+:root[data-theme="light"] .advanced-panel .sub,
+:root[data-theme="light"] .dashboard-panel .sub,
+:root[data-theme="light"] .drag-tip,
+:root[data-theme="light"] .special-panel .muted{color:#58728a}
+:root[data-theme="light"] .eyebrow,
+:root[data-theme="light"] .dash-kicker,
+:root[data-theme="light"] .accent-text,
+:root[data-theme="light"] .stat .accent,
+:root[data-theme="light"] .highlight-amount,
+:root[data-theme="light"] .section-link,
+:root[data-theme="light"] .chevron,
+:root[data-theme="light"] .owned-row-arrow{color:#086cae}
+:root[data-theme="light"] .stat,
+:root[data-theme="light"] .panel,
+:root[data-theme="light"] .series,
+:root[data-theme="light"] .wishlist-card,
+:root[data-theme="light"] .dashboard-panel,
+:root[data-theme="light"] .metric-tile,
+:root[data-theme="light"] .collection-list,
+:root[data-theme="light"] .missing-series,
+:root[data-theme="light"] .buy-series,
+:root[data-theme="light"] .buy-volume,
+:root[data-theme="light"] .buy-finder,
+:root[data-theme="light"] .cloud-panel,
+:root[data-theme="light"] .admin-metric,
+:root[data-theme="light"] .admin-hint,
+:root[data-theme="light"] .special-panel,
+:root[data-theme="light"] .advanced-panel,
+:root[data-theme="light"] .advanced-note,
+:root[data-theme="light"] .missing-search-box,
+:root[data-theme="light"] .variant-new,
+:root[data-theme="light"] .variant-manage-row,
+:root[data-theme="light"] .special-editor,
+:root[data-theme="light"] .dash-empty,
+:root[data-theme="light"] .note,
+:root[data-theme="light"] .missing-intro,
+:root[data-theme="light"] .helper-note{
+ background:#ffffff;
+ border-color:#d8e6f2;
+ color:#102940;
+ box-shadow:0 4px 18px rgba(34,89,135,.045);
+}
+:root[data-theme="light"] .panel::before,
+:root[data-theme="light"] .series::before,
+:root[data-theme="light"] .wishlist-card::before,
+:root[data-theme="light"] .dashboard-panel::before,
+:root[data-theme="light"] .missing-series::before,
+:root[data-theme="light"] .collection-list-item::before,
+:root[data-theme="light"] .detail-hero::before,
+:root[data-theme="light"] .hero::before{display:none}
+:root[data-theme="light"] .dashboard-hero,
+:root[data-theme="light"] .hero,
+:root[data-theme="light"] .detail-hero{
+ background:linear-gradient(115deg,#fafdff,#e6f4ff 70%,#dcedf9) !important;
+ border-color:#bfdcf0;
+ color:#12334e;
+ box-shadow:0 8px 30px rgba(30,93,139,.07);
+}
+:root[data-theme="light"] .dashboard-hero::after{opacity:.23}
+:root[data-theme="light"] .dashboard-hero p,
+:root[data-theme="light"] .hero p{color:#4d6a80}
+:root[data-theme="light"] .hero-ring{background:conic-gradient(#188bd3 var(--pct),#d1e4f3 0);box-shadow:0 5px 20px rgba(44,113,173,.10)}
+:root[data-theme="light"] .hero-ring::before{background:#fff}
+:root[data-theme="light"] .hero-ring strong,
+:root[data-theme="light"] .metric-number,
+:root[data-theme="light"] .progress-pair strong,
+:root[data-theme="light"] .status-legend b,
+:root[data-theme="light"] .empty strong,
+:root[data-theme="light"] .admin-metric strong,
+:root[data-theme="light"] .variant-desc strong{color:#112e48}
+:root[data-theme="light"] .hero-ring small,
+:root[data-theme="light"] .metric-caption,
+:root[data-theme="light"] .stat .label,
+:root[data-theme="light"] .series-sub,
+:root[data-theme="light"] .list-sub,
+:root[data-theme="light"] .detail-meta small,
+:root[data-theme="light"] .progress-pair,
+:root[data-theme="light"] .status-legend,
+:root[data-theme="light"] .dash-link-meta,
+:root[data-theme="light"] .activity-date,
+:root[data-theme="light"] .stats-donut-center small,
+:root[data-theme="light"] .publisher-total,
+:root[data-theme="light"] .list-count small,
+:root[data-theme="light"] .special-volume small,
+:root[data-theme="light"] .variant-desc small,
+:root[data-theme="light"] .admin-metric span,
+:root[data-theme="light"] .admin-hint,
+:root[data-theme="light"] .buy-meta,
+:root[data-theme="light"] .progress-info,
+:root[data-theme="light"] .missing-series .missing-edition{color:#547189}
+:root[data-theme="light"] .btn,
+:root[data-theme="light"] .chip,
+:root[data-theme="light"] .view-switch,
+:root[data-theme="light"] .input,
+:root[data-theme="light"] .variant-new,
+:root[data-theme="light"] .special-editor{
+ background:#f5faff;
+ border-color:#c5d9e8;
+ color:#18384f;
+}
+:root[data-theme="light"] .btn:hover:not(:disabled),
+:root[data-theme="light"] .chip:hover,
+:root[data-theme="light"] .dashboard-link:hover,
+:root[data-theme="light"] .collection-list-item:hover{background:#e7f4ff;border-color:#82b8dc;filter:none}
+:root[data-theme="light"] .btn.primary,
+:root[data-theme="light"] .chip.selected,
+:root[data-theme="light"] .view-btn.selected{background:#1179bf;border-color:#1179bf;color:#fff}
+:root[data-theme="light"] .btn.primary:hover:not(:disabled){background:#075f9f;border-color:#075f9f}
+:root[data-theme="light"] .view-btn{color:#50748c}
+:root[data-theme="light"] .input::placeholder{color:#7990a3}
+:root[data-theme="light"] .field label,
+:root[data-theme="light"] .form-grid .field label,
+:root[data-theme="light"] .buy-finder-label{color:#294b66}
+:root[data-theme="light"] .list-row,
+:root[data-theme="light"] .collection-list-item,
+:root[data-theme="light"] .buy-series-content,
+:root[data-theme="light"] .owned-row,
+:root[data-theme="light"] .special-edit-row,
+:root[data-theme="light"] .activity-item,
+:root[data-theme="light"] .detail-progress,
+:root[data-theme="light"] .missing-number-list{border-color:#d9e7f2}
+:root[data-theme="light"] .list-row:last-child{border-bottom:0}
+:root[data-theme="light"] .collection-list-item{background:#fff}
+:root[data-theme="light"] .collection-list-item:hover,
+:root[data-theme="light"] .missing-series summary:hover,
+:root[data-theme="light"] .buy-series summary:hover,
+:root[data-theme="light"] .owned-row:hover{background:#edf7ff}
+:root[data-theme="light"] .pill,
+:root[data-theme="light"] .priority-tag,
+:root[data-theme="light"] .order-tag,
+:root[data-theme="light"] .cloud-indicator{background:#e4f3ff;color:#176298;border-color:#c1def2}
+:root[data-theme="light"] .cloud-indicator.ok,
+:root[data-theme="light"] .missing-success{background:#e4f8ed;border-color:#b9e4c8;color:#196343}
+:root[data-theme="light"] .cloud-indicator.error{background:#fff0ef;border-color:#f4c3c1;color:#a63137}
+:root[data-theme="light"] .cloud-account{color:#163a54}
+:root[data-theme="light"] .volume{
+ background:#f5faff;
+ border-color:#bfd8e8 !important;
+ color:#17405c !important;
+}
+:root[data-theme="light"] .volume-number,
+:root[data-theme="light"] #content .volume-grid button.volume,
+:root[data-theme="light"] #content .volume-grid button.volume .volume-number{color:#164064 !important;-webkit-text-fill-color:#164064 !important}
+:root[data-theme="light"] .volume small,
+:root[data-theme="light"] #content .volume-grid button.volume:not(.owned) small{color:#57768c !important;-webkit-text-fill-color:#57768c !important}
+:root[data-theme="light"] .volume.owned{background:#d5edff;border-color:#1682c6 !important;color:#084e82 !important}
+:root[data-theme="light"] #content .volume-grid button.volume.owned,
+:root[data-theme="light"] #content .volume-grid button.volume.owned .volume-number{color:#084e82 !important;-webkit-text-fill-color:#084e82 !important}
+:root[data-theme="light"] #content .volume-grid button.volume.owned small{color:#075a95 !important;-webkit-text-fill-color:#075a95 !important}
+:root[data-theme="light"] #content .missing-number-list button.missing-number,
+:root[data-theme="light"] .missing-number{
+ background:#eff8ff;
+ border-color:#a9cbe4;
+ color:#164c74 !important;-webkit-text-fill-color:#164c74 !important;
+}
+:root[data-theme="light"] #content .missing-number-list button.missing-number:hover{background:#d6ecfc;border-color:#4b9dce}
+:root[data-theme="light"] #content .missing-number-list button.missing-number.selected,
+:root[data-theme="light"] .missing-number.selected{
+ background:#1479bb;border-color:#08639d;
+ color:#fff !important;-webkit-text-fill-color:#fff !important;
+ box-shadow:inset 0 0 0 1px #77b6dd;
+}
+:root[data-theme="light"] .missing-subtle-btn{background:#edf7ff!important;border-color:#bbd8e9!important;color:#184766!important}
+:root[data-theme="light"] .missing-batch{background:#e9f5ff;border-color:#80bada;box-shadow:0 12px 36px #173b6126}
+:root[data-theme="light"] .missing-batch-copy{color:#123b5c}
+:root[data-theme="light"] .missing-batch-copy small{color:#4b7087}
+:root[data-theme="light"] .missing-search-box small,
+:root[data-theme="light"] .special-empty{color:#5b768c}
+:root[data-theme="light"] .buy-volume.queued{background:#fff8ed;border-color:#e0bd89}
+:root[data-theme="light"] .buy-actions .btn.buy-check{background:#e6f6ed;border-color:#a5d9bb;color:#166045}
+:root[data-theme="light"] .priority-tag.high{background:#fff0ec;border-color:#e8c0b7;color:#a04437}
+:root[data-theme="light"] .priority-tag.low{background:#f2f5f8;border-color:#d4e1ea;color:#536d82}
+:root[data-theme="light"] .order-tag.order-progress{background:#fff0d7;color:#87541d}
+:root[data-theme="light"] .special-volume{background:#f6faff;border-color:#bdD6e6;color:#163d59}
+:root[data-theme="light"] .special-volume.owned{background:#d9eefc;border-color:#1684c5;color:#084f82}
+:root[data-theme="light"] .special-volume.owned small{color:#0b608e}
+:root[data-theme="light"] .special-owned-check,
+:root[data-theme="light"] .variant-check,
+:root[data-theme="light"] .owned-row{color:#173d5c}
+:root[data-theme="light"] .owned-list{background:#fff}
+:root[data-theme="light"] .metric-link:hover{background:#e7f4ff;border-color:#8cbede}
+:root[data-theme="light"] .metric-link::after{color:#1786cc}
+:root[data-theme="light"] .dashboard-link{background:#f7fbff;border-color:#d0e2ef;color:#183b57}
+:root[data-theme="light"] .dash-cover,
+:root[data-theme="light"] .mini-cover,
+:root[data-theme="light"] .cover,
+:root[data-theme="light"] .detail-cover{
+ background-image:linear-gradient(145deg,rgba(218,239,255,.62),rgba(161,210,243,.53)),
+ linear-gradient(125deg,#e4f4ff,#bbdff6) !important;
+ color:#075f9f;
+ border-color:#b8d9ee;
+}
+:root[data-theme="light"] .cover strong{color:#174464;text-shadow:none}
+:root[data-theme="light"] .cover small{color:#075e9f;text-shadow:none}
+:root[data-theme="light"] .cover .cover-mark{color:#0b79bc38;text-shadow:none}
+:root[data-theme="light"] .cover::before{background:linear-gradient(140deg,transparent 0 78%,rgba(224,65,76,.14) 78% 85%,transparent 85%)}
+:root[data-theme="light"] .stats-donut{background:conic-gradient(#1684cb var(--pct),#d3e5f2 0)}
+:root[data-theme="light"] .stats-donut::before{background:#fff}
+:root[data-theme="light"] .publisher-name{color:#1b445f}
+:root[data-theme="light"] .publisher-track,
+:root[data-theme="light"] .overall-progress,
+:root[data-theme="light"] .status-track,
+:root[data-theme="light"] .progress,
+:root[data-theme="light"] .chart-bar,
+:root[data-theme="light"] .dash-mini-progress{background:#dcebf5}
+:root[data-theme="light"] .progress i,
+:root[data-theme="light"] .overall-progress>i,
+:root[data-theme="light"] .publisher-track i,
+:root[data-theme="light"] .chart-bar i,
+:root[data-theme="light"] .dash-mini-progress i{background:#1684c7}
+:root[data-theme="light"] .status-track .complete{background:#1684c7}
+:root[data-theme="light"] .status-track .started{background:#62acd7}
+:root[data-theme="light"] .status-track .unstarted{background:#c3dae9}
+:root[data-theme="light"] .status-legend i{background:#1684c7}
+:root[data-theme="light"] .status-legend .start i{background:#62acd7}
+:root[data-theme="light"] .status-legend .none i{background:#c3dae9}
+:root[data-theme="light"] .publisher-track em{background:#bcd9eb}
+:root[data-theme="light"] .dash-empty{color:#5a7187}
+:root[data-theme="light"] .stats-divider{background:#d6e5ee}
+:root[data-theme="light"] .detail-meta>div{background:#ffffffae;border-color:#ccdeeb}
+:root[data-theme="light"] .modal-back{background:rgba(9,31,53,.52)}
+:root[data-theme="light"] .modal{background:#fff;color:#163751;border-color:#c4deed;box-shadow:0 25px 60px #183e5f45}
+:root[data-theme="light"] .admin-hint{background:#f4faff}
+:root[data-theme="light"] .admin-metric{background:#fff}
+:root[data-theme="light"] .activity-symbol{background:#e7f2fd;color:#156eb0}
+:root[data-theme="light"] .dash-link-right,
+:root[data-theme="light"] .missing-series .missing-count{color:#0e72b4}
+:root[data-theme="light"] .missing-series .missing-count{border-color:#bfd9eb;background:#f1f9ff}
+:root[data-theme="light"] .variant-manage-row{background:#f8fbff}
+:root[data-theme="light"] .legend-dot{background:#e6eff6;border-color:#9db9ce}
+:root[data-theme="light"] .legend-owned{background:#1381c7;border-color:#1381c7}
+:root[data-theme="light"] .list-progress,.theme-selector{max-width:100%}
+/* La scelta è volutamente indipendente dai dati MangaLog e dal cloud. */
+.theme-selector{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:16px 0 10px}
+.theme-option{display:flex;gap:12px;align-items:center;text-align:left;min-width:0;border:2px solid #404655;background:#23262e;color:#f4f5f9;border-radius:14px;padding:12px;cursor:pointer;transition:border-color .15s ease,transform .15s ease}
+.theme-option:hover{transform:translateY(-1px)}
+.theme-option[aria-pressed="true"]{border-color:#ee4a63;box-shadow:0 0 0 2px #d9455f24}
+.theme-option strong,.theme-option small{display:block}
+.theme-option strong{font-size:14px}
+.theme-option small{font-size:11px;font-weight:500;margin-top:4px;opacity:.78}
+.theme-swatch{flex-shrink:0;width:44px;height:44px;border-radius:11px;display:grid;place-items:center;font-size:20px}
+.theme-swatch.dark{background:linear-gradient(135deg,#10121b,#383043);color:#f47a89;border:1px solid #66505a}
+.theme-swatch.light{background:linear-gradient(135deg,#fff,#cceaff);color:#086ba9;border:1px solid #89c4ea}
+:root[data-theme="light"] .theme-option{background:#f7fbff;border-color:#c9dfec;color:#123a58}
+:root[data-theme="light"] .theme-option[aria-pressed="true"]{border-color:#167fc1;box-shadow:0 0 0 2px #167fc11f}
+@media(max-width:460px){.theme-selector{gap:8px}.theme-option{padding:9px;gap:8px}.theme-swatch{width:34px;height:38px}.theme-option small{font-size:10px}}
+
+
+/* Leggibilità dei piccoli testi della griglia nel tema chiaro */
+:root[data-theme="light"] .volume-legend{color:#4e6b83}
+:root[data-theme="light"] .volume-legend .legend-dot:not(.legend-owned){background:#e5f0fa}
+</style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.3</div></aside><main class="main" id="content"></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (()=>{'use strict';const KEY='mangatrack_v3_dark';const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uid=()=>typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();let data={series:[],wishlist:[],activity:[]},page='home',selected=null,query='',sort='title',view=localStorage.getItem('mangatrack_view')==='list'?'list':'grid',filter='all';let undoStack=[],lastSavedJSON='',restoringHistory=false;let cloudClient=null,cloudUser=null,cloudRevision=null,cloudReady=false,cloudBlocked=false,cloudState='offline',cloudMessage='Modalità locale',cloudTimer=null,cloudSerial=Promise.resolve(),cloudLoadingUserId=null;let cloudIsAdmin=false,adminMetrics=null,adminError='',adminLoading=false;const priorityLabels={alta:'Alta',media:'Media',bassa:'Bassa'};
 const orderLabels={da_ordinare:'Da ordinare',in_corso:'Ordine in corso'};
+const THEME_KEY='mangalog_appearance_v1';
+function currentTheme(){return document.documentElement.getAttribute('data-theme')==='light'?'light':'dark'}
+function setTheme(value){
+ const theme=value==='light'?'light':'dark';
+ if(theme==='light')document.documentElement.setAttribute('data-theme','light');
+ else document.documentElement.removeAttribute('data-theme');
+ const meta=document.querySelector('meta[name="theme-color"]');
+ if(meta)meta.setAttribute('content',theme==='light'?'#f2f7fc':'#121318');
+ try{localStorage.setItem(THEME_KEY,theme)}catch(_){}
+ if(page==='settings')render();
+}
+
 const safeOrderStatus=v=>v==='in_corso'?'in_corso':'da_ordinare';
 const priorityRank={alta:0,media:1,bassa:2};
 const safePriority=v=>Object.hasOwn(priorityLabels,String(v))?String(v):'media';
@@ -780,11 +1093,13 @@ async function adminRefresh(){
  }finally{adminLoading=false;if(cloudUser?.id===targetId)render()}
 }
 function settingsPage(){
- return header('PERSONALIZZA','Impostazioni')+cloudSettingsPanel()+
+ return header('PERSONALIZZA','Impostazioni')+
+ `<section class="panel"><h2>🎨 Aspetto dell'app</h2><p class="muted">Scegli il tema che preferisci. Puoi usare quello chiaro sul PC e quello scuro sul telefono: la scelta rimane salvata su questo dispositivo e non modifica la collezione.</p><div class="theme-selector" role="group" aria-label="Tema MangaLog"><button type="button" class="theme-option" data-theme-select="dark" aria-pressed="${currentTheme()==='dark'}"><span class="theme-swatch dark" aria-hidden="true">☾</span><span><strong>Scuro</strong><small>Dark Manga originale</small></span></button><button type="button" class="theme-option" data-theme-select="light" aria-pressed="${currentTheme()==='light'}"><span class="theme-swatch light" aria-hidden="true">☀</span><span><strong>Chiaro</strong><small>Bianco e blu onda</small></span></button></div><p class="small-note">Il cambio è immediato e puoi tornare al tema precedente quando vuoi.</p></section>`+
+ cloudSettingsPanel()+
  (cloudIsAdmin?`<section class="panel"><h2>Dashboard Admin</h2><p class="muted">Statistiche aggregate riservate al tuo account.</p><button class="btn primary" data-nav="admin">Apri Dashboard Admin →</button></section>`:'')+
- `<div class="panel"><h2>Novità della v12.2</h2><p class="muted">Mancolista alfabetica A–Z con ricerca a scomparsa, gestione manuale di variant ed edizioni speciali, riepiloghi della Home apribili e lista alfabetica dei volumi posseduti. Dashboard Admin e MangaLog Cloud restano disponibili.</p><div class="toolbar"><button class="btn" data-action="undo" ${undoStack.length?'':'disabled'}>${undoLabel()}</button></div></div>`+
+ `<div class="panel"><h2>Novità della v12.3</h2><p class="muted">Tema chiaro ispirato al logo, con cambio dalle Impostazioni. Mancolista alfabetica A–Z con ricerca a scomparsa, gestione manuale di variant ed edizioni speciali, riepiloghi della Home apribili e lista alfabetica dei volumi posseduti. Dashboard Admin e MangaLog Cloud restano disponibili.</p><div class="toolbar"><button class="btn" data-action="undo" ${undoStack.length?'':'disabled'}>${undoLabel()}</button></div></div>`+
  `<div class="panel"><h2>Backup della collezione</h2><p class="muted">Il backup JSON include anche variant, edizioni speciali, wishlist e lista acquisti. Esportalo prima di modifiche importanti o cambi di account.</p><div class="toolbar"><button class="btn primary" data-action="export">↓ Esporta backup</button><button class="btn" data-action="import">↑ Importa backup</button><input type="file" id="importFile" accept=".json,application/json" class="hide"></div><p class="note">La sincronizzazione cloud continua a funzionare quando accedi al tuo account. Le copertine attuali sono segnaposto, non immagini ufficiali.</p></div>`+
- `<div class="section-head"><h2>Informazioni</h2></div><div class="panel"><div class="list-title">MangaLog v12.2 · Mancolista alfabetica</div><p class="muted">Applicazione gratuita per catalogare i manga, sincronizzare la collezione e gestire i volumi speciali. Ricerca ISBN e copertine ufficiali sono previste in una fase futura.</p></div>`;
+ `<div class="section-head"><h2>Informazioni</h2></div><div class="panel"><div class="list-title">MangaLog v12.3 · Tema chiaro e scuro</div><p class="muted">Applicazione gratuita per catalogare i manga, sincronizzare la collezione e gestire i volumi speciali. Ricerca ISBN e copertine ufficiali sono previste in una fase futura.</p></div>`;
 }
 function detail(){const s=data.series.find(s=>s.id===selected);if(!s)return collection();const pct=Math.round(s.owned.length/s.total*100),missing=s.total-s.owned.length;return `<button class="btn small" data-nav="collection" style="margin-bottom:20px">← Torna alla collezione</button><div class="detail-hero"><div class="detail-head">${cover(s,'detail-cover')}<div class="grow"><div class="eyebrow">LA TUA SERIE</div><h1 class="heading">${esc(s.title)}</h1><div class="muted">${esc(s.edition)}</div><div class="detail-meta"><div><small>Autore</small><strong>${esc(s.author||'Non indicato')}</strong></div><div><small>Editore</small><strong>${esc(s.publisher||'Non indicato')}</strong></div><div><small>Volumi posseduti</small><strong>${s.owned.length} di ${s.total}</strong></div><div><small>Volumi mancanti</small><strong>${missing}</strong></div></div><div class="detail-actions"><button class="btn" data-action="edit">✎ Modifica dati</button><button class="btn" data-action="variants">＋ Aggiungi variant</button><button class="btn small" data-action="delete">Elimina serie</button></div></div></div><div class="detail-progress"><div class="detail-progress-top"><strong>Completamento della serie</strong><strong class="accent-text">${pct}%</strong></div><div class="progress"><i style="width:${pct}%"></i></div><div class="muted detail-hint">${missing===0?'Hai registrato tutti i volumi!':'Ti mancano '+missing+' volumi per completare la serie.'}</div></div></div><div class="section-head"><h2>I tuoi volumi</h2><span class="pill">${s.owned.length} / ${s.total}</span></div><div class="volume-legend"><span><i class="legend-dot legend-owned"></i> Posseduto</span><span><i class="legend-dot"></i> Mancante</span></div><p class="muted" style="font-size:13px;margin-top:10px">Tocca un volume per cambiarne lo stato. Con il mouse trascina subito; sul cellulare tieni il dito fermo 1 secondo su un volume, poi trascina per selezionare più volumi. Puoi scorrere normalmente la pagina prima dell’attivazione.</p><button class="btn small detail-quicklink" data-action="seeplan">🛒 Lista acquisti: ${Object.keys(s.purchasePlans||{}).length} volumi →</button><div class="volume-grid">${Array.from({length:s.total},(_,i)=>{const n=i+1,owned=s.owned.includes(n);return `<button class="volume ${owned?'owned':''}" data-volume="${n}" aria-pressed="${owned}" aria-label="Volume ${n}: ${owned?'posseduto':'mancante'}"><span class="volume-number">${n}</span><small>${owned?'✓ Posseduto':(s.purchasePlans?.[n]?'🛒 In lista':'Mancante')}</small></button>` }).join('')}</div>${(s.specialVolumes||[]).length?`<section class="special-panel"><div class="section-head"><h2>Variant ed edizioni speciali</h2></div><p class="muted">Volumi aggiuntivi: non cambiano il completamento della serie regolare.</p><div class="special-grid">${s.specialVolumes.map(v=>`<button type="button" class="special-volume ${v.owned?'owned':''}" data-special-toggle="${esc(v.id)}" aria-pressed="${v.owned}" aria-label="Volume ${v.number} ${esc(v.label)}: ${v.owned?'posseduto':'non posseduto'}"><strong>${v.number} · ${esc(v.label)}</strong><small>${v.owned?'✓ Posseduto':'○ Non posseduto'}</small></button>`).join('')}</div></section>`:''}<div class="advanced-panel"><div class="panel-head"><div><h3>Gestione avanzata</h3><p class="sub">Strumenti rapidi per aggiornare la serie e gestire altre edizioni.</p></div></div><div class="quick-actions"><button class="btn small" data-action="quickown">Segna fino a…</button><button class="btn small" data-action="quickremove">Rimuovi da…</button><button class="btn small" data-action="quickfill">Completa la serie</button><button class="btn small" data-action="cloneedition">Nuova edizione</button><button class="btn small" data-action="undo" ${undoStack.length?'':'disabled'}>${undoLabel()}</button></div><div class="small-note">“Segna fino a…” è utile quando hai già i primi volumi consecutivi. “Nuova edizione” duplica la scheda senza copiare i volumi posseduti.</div></div>${s.notes?`<div class="advanced-note"><h3>Note della serie</h3><p>${esc(s.notes).replace(/\n/g,'<br>')}</p></div>`:''}`}
 function applyBuyFilters(){
@@ -1310,6 +1625,7 @@ document.addEventListener('click',e=>{
  }
 },true);
 document.addEventListener('click',e=>{
+ const th=e.target.closest('[data-theme-select]');if(th){setTheme(th.dataset.themeSelect);return}
  const hm=e.target.closest('[data-home-metric]');
  if(hm){const target=hm.dataset.homeMetric;if(target==='owned'){navigate('owned')}else if(target==='wishlist'){navigate('wishlist')}else{filter=target==='complete'?'complete':'progress';navigate('collection')}return}
  const msToggle=e.target.closest('[data-action="missingsearchtoggle"]');
@@ -1318,7 +1634,7 @@ document.addEventListener('click',e=>{
  const specialChange=e.target.closest('[data-special-change]');if(specialChange){variantEdit(specialChange.dataset.specialChange);return}
  const specialDelete=e.target.closest('[data-special-delete]');if(specialDelete){const series=selectedSeriesItem(),vol=series?.specialVolumes?.find(v=>v.id===specialDelete.dataset.specialDelete);if(series&&vol&&confirm('Eliminare la variant '+vol.number+' · '+vol.label+'?')){series.specialVolumes=series.specialVolumes.filter(v=>v.id!==vol.id);save();variantManager(series.id)}return}
  const specialToggle=e.target.closest('[data-special-toggle]');if(specialToggle){const series=selectedSeriesItem(),vol=series?.specialVolumes?.find(v=>v.id===specialToggle.dataset.specialToggle);if(vol){const inManager=!!$('#variantAddForm');vol.owned=!vol.owned;save();if(inManager)variantManager(series.id)}return}
- const bc=e.target.closest('[data-buy-clear]');if(bc){buySearch='';const bi=$('#buySearch');if(bi){bi.value='';bi.focus()}applyBuyFilters();return}const bf=e.target.closest('[data-buy-order]');if(bf){buyOrderFilter=bf.dataset.buyOrder;render();return}const pick=e.target.closest('[data-missing-pick]');if(pick){toggleMissingPick(pick.dataset.msid,Number(pick.dataset.mnum));updateMissingPickUI();return}if(e.target.closest('[data-missing-clear]')){missingSelection.clear();lastMissingSuccess='';updateMissingPickUI();return}if(e.target.closest('[data-missing-commit]')){commitMissingPicks();return}const vw=e.target.closest('[data-view]');if(vw){view=vw.dataset.view;try{localStorage.setItem('mangatrack_view',view)}catch(_){}render();return}const mf=e.target.closest('[data-missing-view]');if(mf){missingView=mf.dataset.missingView;openMissingGroups.clear();render();return}const planToggle=e.target.closest('[data-plan-toggle]');if(planToggle){const item=data.series.find(x=>x.id===planToggle.dataset.pid),n=Number(planToggle.dataset.pnum);if(item&&!item.owned.includes(n)&&n>=1&&n<=item.total){item.purchasePlans=item.purchasePlans||{};if(item.purchasePlans[n])delete item.purchasePlans[n];else item.purchasePlans[n]={priority:'media',price:null,note:''};openMissingGroups.add(item.id);save()}return}const planEditBtn=e.target.closest('[data-plan-edit]');if(planEditBtn){planEdit(planEditBtn.dataset.pid,planEditBtn.dataset.pnum);return}const acquired=e.target.closest('[data-acquired]');if(acquired){const item=data.series.find(x=>x.id===acquired.dataset.pid),n=Number(acquired.dataset.pnum);if(item&&!item.owned.includes(n)&&n>=1&&n<=item.total){item.owned.push(n);item.owned.sort((a,b)=>a-b);registeredVolume(item.id,n);delete item.purchasePlans?.[n];openMissingGroups.add(item.id);save()}return}const wishedit=e.target.closest('[data-wishedit]');if(wishedit){wishAdd(wishedit.dataset.wishedit);return}const wishconvert=e.target.closest('[data-wishconvert]');if(wishconvert){const wish=data.wishlist.find(w=>w.id===wishconvert.dataset.wishconvert);if(wish)edit(null,wish);return}const fl=e.target.closest('[data-filter]');if(fl){filter=fl.dataset.filter;render();return}const n=e.target.closest('[data-nav]');if(n){navigate(n.dataset.nav);return}const s=e.target.closest('[data-series]');if(s){navigate('detail',s.dataset.series);return}const v=e.target.closest('[data-volume]');if(v&&suppressVolumeClick){e.preventDefault();e.stopPropagation();return}if(v){let item=data.series.find(x=>x.id===selected),num=Number(v.dataset.volume);if(!item)return;const wasOwned=item.owned.includes(num);item.owned=wasOwned?item.owned.filter(x=>x!==num):[...item.owned,num].sort((a,b)=>a-b);if(wasOwned)unregisteredVolume(item.id,num);else{registeredVolume(item.id,num);delete item.purchasePlans?.[num]}save();return}const wd=e.target.closest('[data-wishdel]');if(wd){if(confirm('Eliminare questo desiderio dalla Wishlist?')){data.wishlist=data.wishlist.filter(x=>x.id!==wd.dataset.wishdel);save()}return}const a=e.target.closest('[data-action]');if(!a)return;switch(a.dataset.action){case'add':edit(null);break;case'edit':edit(selected);break;case'variants':variantManager(selected);break;case'delete':if(confirm('Eliminare questa serie e tutti i volumi registrati?')){data.series=data.series.filter(x=>x.id!==selected);data.activity=(data.activity||[]).filter(x=>x.seriesId!==selected);page='collection';save()}break;case'wishadd':wishAdd();break;case'seeplan':navigate('missing');missingView='planned';render();break;case'quickown':quickOwnUntil();break;case'quickremove':quickRemoveFrom();break;case'quickfill':quickCompleteSeries();break;case'cloneedition':cloneEdition();break;case'undo':undoLastChange();break;case'clearsearch':query='';render();$('#search')?.focus();break;case'close':close();break;case'export':exportData();break;case'import':$('#importFile').click();break;case'cloudlogin':cloudAuthModal('login');break;case'cloudsignup':cloudAuthModal('signup');break;case'cloudlogout':cloudLogout();break;case'cloudpull':cloudPullWithConfirm();break;case'cloudpush':cloudPushWithConfirm();break;case'cloudretry':cloudRetry();break;case'adminrefresh':adminRefresh();break;}});$('#modalBack').addEventListener('click',e=>{if(e.target===$('#modalBack'))close()});document.addEventListener('toggle',e=>{const d=e.target;if(d.matches?.('[data-missing-group]')){if(d.open)openMissingGroups.add(d.dataset.missingGroup);else openMissingGroups.delete(d.dataset.missingGroup)}},true);document.addEventListener('change',e=>{if(e.target.id==='importFile')importData(e.target.files[0])});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();if((e.key==='Enter'||e.key===' ')&&e.target.matches('.collection-list-item')){e.preventDefault();navigate('detail',e.target.dataset.series)}});load();lastSavedJSON=JSON.stringify(data);render();cloudInit();})();
+ const bc=e.target.closest('[data-buy-clear]');if(bc){buySearch='';const bi=$('#buySearch');if(bi){bi.value='';bi.focus()}applyBuyFilters();return}const bf=e.target.closest('[data-buy-order]');if(bf){buyOrderFilter=bf.dataset.buyOrder;render();return}const pick=e.target.closest('[data-missing-pick]');if(pick){toggleMissingPick(pick.dataset.msid,Number(pick.dataset.mnum));updateMissingPickUI();return}if(e.target.closest('[data-missing-clear]')){missingSelection.clear();lastMissingSuccess='';updateMissingPickUI();return}if(e.target.closest('[data-missing-commit]')){commitMissingPicks();return}const vw=e.target.closest('[data-view]');if(vw){view=vw.dataset.view;try{localStorage.setItem('mangatrack_view',view)}catch(_){}render();return}const mf=e.target.closest('[data-missing-view]');if(mf){missingView=mf.dataset.missingView;openMissingGroups.clear();render();return}const planToggle=e.target.closest('[data-plan-toggle]');if(planToggle){const item=data.series.find(x=>x.id===planToggle.dataset.pid),n=Number(planToggle.dataset.pnum);if(item&&!item.owned.includes(n)&&n>=1&&n<=item.total){item.purchasePlans=item.purchasePlans||{};if(item.purchasePlans[n])delete item.purchasePlans[n];else item.purchasePlans[n]={priority:'media',price:null,note:''};openMissingGroups.add(item.id);save()}return}const planEditBtn=e.target.closest('[data-plan-edit]');if(planEditBtn){planEdit(planEditBtn.dataset.pid,planEditBtn.dataset.pnum);return}const acquired=e.target.closest('[data-acquired]');if(acquired){const item=data.series.find(x=>x.id===acquired.dataset.pid),n=Number(acquired.dataset.pnum);if(item&&!item.owned.includes(n)&&n>=1&&n<=item.total){item.owned.push(n);item.owned.sort((a,b)=>a-b);registeredVolume(item.id,n);delete item.purchasePlans?.[n];openMissingGroups.add(item.id);save()}return}const wishedit=e.target.closest('[data-wishedit]');if(wishedit){wishAdd(wishedit.dataset.wishedit);return}const wishconvert=e.target.closest('[data-wishconvert]');if(wishconvert){const wish=data.wishlist.find(w=>w.id===wishconvert.dataset.wishconvert);if(wish)edit(null,wish);return}const fl=e.target.closest('[data-filter]');if(fl){filter=fl.dataset.filter;render();return}const n=e.target.closest('[data-nav]');if(n){navigate(n.dataset.nav);return}const s=e.target.closest('[data-series]');if(s){navigate('detail',s.dataset.series);return}const v=e.target.closest('[data-volume]');if(v&&suppressVolumeClick){e.preventDefault();e.stopPropagation();return}if(v){let item=data.series.find(x=>x.id===selected),num=Number(v.dataset.volume);if(!item)return;const wasOwned=item.owned.includes(num);item.owned=wasOwned?item.owned.filter(x=>x!==num):[...item.owned,num].sort((a,b)=>a-b);if(wasOwned)unregisteredVolume(item.id,num);else{registeredVolume(item.id,num);delete item.purchasePlans?.[num]}save();return}const wd=e.target.closest('[data-wishdel]');if(wd){if(confirm('Eliminare questo desiderio dalla Wishlist?')){data.wishlist=data.wishlist.filter(x=>x.id!==wd.dataset.wishdel);save()}return}const a=e.target.closest('[data-action]');if(!a)return;switch(a.dataset.action){case'add':edit(null);break;case'edit':edit(selected);break;case'variants':variantManager(selected);break;case'delete':if(confirm('Eliminare questa serie e tutti i volumi registrati?')){data.series=data.series.filter(x=>x.id!==selected);data.activity=(data.activity||[]).filter(x=>x.seriesId!==selected);page='collection';save()}break;case'wishadd':wishAdd();break;case'seeplan':navigate('missing');missingView='planned';render();break;case'quickown':quickOwnUntil();break;case'quickremove':quickRemoveFrom();break;case'quickfill':quickCompleteSeries();break;case'cloneedition':cloneEdition();break;case'undo':undoLastChange();break;case'clearsearch':query='';render();$('#search')?.focus();break;case'close':close();break;case'export':exportData();break;case'import':$('#importFile').click();break;case'cloudlogin':cloudAuthModal('login');break;case'cloudsignup':cloudAuthModal('signup');break;case'cloudlogout':cloudLogout();break;case'cloudpull':cloudPullWithConfirm();break;case'cloudpush':cloudPushWithConfirm();break;case'cloudretry':cloudRetry();break;case'adminrefresh':adminRefresh();break;}});$('#modalBack').addEventListener('click',e=>{if(e.target===$('#modalBack'))close()});document.addEventListener('toggle',e=>{const d=e.target;if(d.matches?.('[data-missing-group]')){if(d.open)openMissingGroups.add(d.dataset.missingGroup);else openMissingGroups.delete(d.dataset.missingGroup)}},true);document.addEventListener('change',e=>{if(e.target.id==='importFile')importData(e.target.files[0])});document.addEventListener('keydown',e=>{if(e.key==='Escape')close();if((e.key==='Enter'||e.key===' ')&&e.target.matches('.collection-list-item')){e.preventDefault();navigate('detail',e.target.dataset.series)}});load();lastSavedJSON=JSON.stringify(data);if(currentTheme()==='light'){const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.setAttribute('content','#f2f7fc')}render();cloudInit();})();
 </script><script>
 if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
  window.addEventListener('load', () => {
