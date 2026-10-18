@@ -1,5 +1,5 @@
-// MangaLog v12.1: app shell only; Supabase is network-only; user data is never stored in SW cache.
-const CACHE = 'mangalog-v12-1-variant-cards';
+// MangaLog v12.2: app shell only; Supabase is network-only; user data is never stored in SW cache.
+const CACHE = 'mangalog-v12-2-mancolista-az';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './cloud-config.js', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
