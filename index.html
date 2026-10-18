@@ -1,4 +1,4 @@
-<!doctype html><html lang="it"><head><meta name="theme-color" content="#121318"><meta name="description" content="MangaLog: organizza la tua collezione manga, i volumi mancanti e gli acquisti."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" sizes="192x192" href="./icons/icon-192.png"><link rel="apple-touch-icon" href="./icons/apple-touch-icon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MangaLog v12.3</title><script>
+<!doctype html><html lang="it"><head><meta name="theme-color" content="#121318"><meta name="description" content="MangaLog: organizza la tua collezione manga, i volumi mancanti e gli acquisti."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" sizes="192x192" href="./icons/icon-192.png"><link rel="apple-touch-icon" href="./icons/apple-touch-icon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MangaLog v12.4</title><script>
 /* La preferenza di aspetto e separata dai dati della collezione e da Supabase. */
 try{const savedTheme=localStorage.getItem('mangalog_appearance_v1');
  if(savedTheme==='light')document.documentElement.setAttribute('data-theme','light');
@@ -404,7 +404,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media(max-width:520px){.special-edit-row{grid-template-columns:77px minmax(0,1fr)}.special-panel{padding:12px}.special-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.special-edit-row [data-special-remove]{justify-self:start}}
 
 
-/* MangaLog v12.3 | Light Wave. Il tema Dark originale non viene modificato. */
+/* MangaLog v12.4 | Light Wave. Il tema Dark originale non viene modificato. */
 :root{color-scheme:dark}
 :root[data-theme="light"]{
  color-scheme:light;
@@ -699,7 +699,25 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 /* Leggibilità dei piccoli testi della griglia nel tema chiaro */
 :root[data-theme="light"] .volume-legend{color:#4e6b83}
 :root[data-theme="light"] .volume-legend .legend-dot:not(.legend-owned){background:#e5f0fa}
-</style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.3</div></aside><main class="main" id="content"></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script>
+
+/* v12.4 · Area account sempre visibile sopra il contenuto, anche da smartphone */
+.account-topbar{display:flex;align-items:center;justify-content:flex-end;gap:9px;min-height:42px;margin:-8px 0 18px}
+.account-controls{display:flex;align-items:center;justify-content:flex-end;gap:8px;flex-wrap:wrap}
+.account-topbar .account-btn{font-size:12px;line-height:1.1;padding:10px 13px;white-space:nowrap}
+.account-user{display:inline-flex;align-items:center;justify-content:flex-end;gap:10px;min-width:0;max-width:min(100%,330px);padding:10px 14px;border:1px solid #343640;border-radius:50px;background:#1b1c24;color:#f6f4f5;font-size:13px;font-weight:600}
+.account-user-icon{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;width:25px;height:25px;border-radius:50%;background:#ed3e52;color:#fff;font-size:14px}
+.account-user-name{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.account-user-name strong{font-weight:850}
+.cloud-profile-form{display:flex;flex-direction:column;gap:9px;margin:15px 0 19px;max-width:520px}
+.cloud-profile-form label{font-size:12px;font-weight:750;color:#c2c3ca}
+.cloud-profile-controls{display:flex;flex-wrap:wrap;gap:9px}
+.cloud-profile-controls .input{min-width:170px;flex:1}
+.cloud-profile-controls .btn{white-space:nowrap}
+:root[data-theme="light"] .account-user{background:#f5faff;border-color:#c5d9e8;color:#18384f}
+:root[data-theme="light"] .account-user-icon{background:#1179bf;color:#fff}
+:root[data-theme="light"] .cloud-profile-form label{color:#294b66}
+@media(max-width:800px){.account-topbar{margin:-9px 0 14px;min-height:38px}.account-topbar .account-btn{padding:9px 11px}.account-user{padding:7px 11px}}
+</style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.4</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (()=>{'use strict';const KEY='mangatrack_v3_dark';const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uid=()=>typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();let data={series:[],wishlist:[],activity:[]},page='home',selected=null,query='',sort='title',view=localStorage.getItem('mangatrack_view')==='list'?'list':'grid',filter='all';let undoStack=[],lastSavedJSON='',restoringHistory=false;let cloudClient=null,cloudUser=null,cloudRevision=null,cloudReady=false,cloudBlocked=false,cloudState='offline',cloudMessage='Modalità locale',cloudTimer=null,cloudSerial=Promise.resolve(),cloudLoadingUserId=null;let cloudIsAdmin=false,adminMetrics=null,adminError='',adminLoading=false;const priorityLabels={alta:'Alta',media:'Media',bassa:'Bassa'};
@@ -1097,9 +1115,9 @@ function settingsPage(){
  `<section class="panel"><h2>🎨 Aspetto dell'app</h2><p class="muted">Scegli il tema che preferisci. Puoi usare quello chiaro sul PC e quello scuro sul telefono: la scelta rimane salvata su questo dispositivo e non modifica la collezione.</p><div class="theme-selector" role="group" aria-label="Tema MangaLog"><button type="button" class="theme-option" data-theme-select="dark" aria-pressed="${currentTheme()==='dark'}"><span class="theme-swatch dark" aria-hidden="true">☾</span><span><strong>Scuro</strong><small>Dark Manga originale</small></span></button><button type="button" class="theme-option" data-theme-select="light" aria-pressed="${currentTheme()==='light'}"><span class="theme-swatch light" aria-hidden="true">☀</span><span><strong>Chiaro</strong><small>Bianco e blu onda</small></span></button></div><p class="small-note">Il cambio è immediato e puoi tornare al tema precedente quando vuoi.</p></section>`+
  cloudSettingsPanel()+
  (cloudIsAdmin?`<section class="panel"><h2>Dashboard Admin</h2><p class="muted">Statistiche aggregate riservate al tuo account.</p><button class="btn primary" data-nav="admin">Apri Dashboard Admin →</button></section>`:'')+
- `<div class="panel"><h2>Novità della v12.3</h2><p class="muted">Tema chiaro ispirato al logo, con cambio dalle Impostazioni. Mancolista alfabetica A–Z con ricerca a scomparsa, gestione manuale di variant ed edizioni speciali, riepiloghi della Home apribili e lista alfabetica dei volumi posseduti. Dashboard Admin e MangaLog Cloud restano disponibili.</p><div class="toolbar"><button class="btn" data-action="undo" ${undoStack.length?'':'disabled'}>${undoLabel()}</button></div></div>`+
+ `<div class="panel"><h2>Novità della v12.4</h2><p class="muted">Accesso e registrazione sempre disponibili in alto a destra, nome dell’account visibile dopo l’accesso e Logout dalle Impostazioni. Tema chiaro ispirato al logo, con cambio dalle Impostazioni. Mancolista alfabetica A–Z con ricerca a scomparsa, gestione manuale di variant ed edizioni speciali, riepiloghi della Home apribili e lista alfabetica dei volumi posseduti. Dashboard Admin e MangaLog Cloud restano disponibili.</p><div class="toolbar"><button class="btn" data-action="undo" ${undoStack.length?'':'disabled'}>${undoLabel()}</button></div></div>`+
  `<div class="panel"><h2>Backup della collezione</h2><p class="muted">Il backup JSON include anche variant, edizioni speciali, wishlist e lista acquisti. Esportalo prima di modifiche importanti o cambi di account.</p><div class="toolbar"><button class="btn primary" data-action="export">↓ Esporta backup</button><button class="btn" data-action="import">↑ Importa backup</button><input type="file" id="importFile" accept=".json,application/json" class="hide"></div><p class="note">La sincronizzazione cloud continua a funzionare quando accedi al tuo account. Le copertine attuali sono segnaposto, non immagini ufficiali.</p></div>`+
- `<div class="section-head"><h2>Informazioni</h2></div><div class="panel"><div class="list-title">MangaLog v12.3 · Tema chiaro e scuro</div><p class="muted">Applicazione gratuita per catalogare i manga, sincronizzare la collezione e gestire i volumi speciali. Ricerca ISBN e copertine ufficiali sono previste in una fase futura.</p></div>`;
+ `<div class="section-head"><h2>Informazioni</h2></div><div class="panel"><div class="list-title">MangaLog v12.4 · Account in alto a destra</div><p class="muted">Applicazione gratuita per catalogare i manga, sincronizzare la collezione e gestire i volumi speciali. Ricerca ISBN e copertine ufficiali sono previste in una fase futura.</p></div>`;
 }
 function detail(){const s=data.series.find(s=>s.id===selected);if(!s)return collection();const pct=Math.round(s.owned.length/s.total*100),missing=s.total-s.owned.length;return `<button class="btn small" data-nav="collection" style="margin-bottom:20px">← Torna alla collezione</button><div class="detail-hero"><div class="detail-head">${cover(s,'detail-cover')}<div class="grow"><div class="eyebrow">LA TUA SERIE</div><h1 class="heading">${esc(s.title)}</h1><div class="muted">${esc(s.edition)}</div><div class="detail-meta"><div><small>Autore</small><strong>${esc(s.author||'Non indicato')}</strong></div><div><small>Editore</small><strong>${esc(s.publisher||'Non indicato')}</strong></div><div><small>Volumi posseduti</small><strong>${s.owned.length} di ${s.total}</strong></div><div><small>Volumi mancanti</small><strong>${missing}</strong></div></div><div class="detail-actions"><button class="btn" data-action="edit">✎ Modifica dati</button><button class="btn" data-action="variants">＋ Aggiungi variant</button><button class="btn small" data-action="delete">Elimina serie</button></div></div></div><div class="detail-progress"><div class="detail-progress-top"><strong>Completamento della serie</strong><strong class="accent-text">${pct}%</strong></div><div class="progress"><i style="width:${pct}%"></i></div><div class="muted detail-hint">${missing===0?'Hai registrato tutti i volumi!':'Ti mancano '+missing+' volumi per completare la serie.'}</div></div></div><div class="section-head"><h2>I tuoi volumi</h2><span class="pill">${s.owned.length} / ${s.total}</span></div><div class="volume-legend"><span><i class="legend-dot legend-owned"></i> Posseduto</span><span><i class="legend-dot"></i> Mancante</span></div><p class="muted" style="font-size:13px;margin-top:10px">Tocca un volume per cambiarne lo stato. Con il mouse trascina subito; sul cellulare tieni il dito fermo 1 secondo su un volume, poi trascina per selezionare più volumi. Puoi scorrere normalmente la pagina prima dell’attivazione.</p><button class="btn small detail-quicklink" data-action="seeplan">🛒 Lista acquisti: ${Object.keys(s.purchasePlans||{}).length} volumi →</button><div class="volume-grid">${Array.from({length:s.total},(_,i)=>{const n=i+1,owned=s.owned.includes(n);return `<button class="volume ${owned?'owned':''}" data-volume="${n}" aria-pressed="${owned}" aria-label="Volume ${n}: ${owned?'posseduto':'mancante'}"><span class="volume-number">${n}</span><small>${owned?'✓ Posseduto':(s.purchasePlans?.[n]?'🛒 In lista':'Mancante')}</small></button>` }).join('')}</div>${(s.specialVolumes||[]).length?`<section class="special-panel"><div class="section-head"><h2>Variant ed edizioni speciali</h2></div><p class="muted">Volumi aggiuntivi: non cambiano il completamento della serie regolare.</p><div class="special-grid">${s.specialVolumes.map(v=>`<button type="button" class="special-volume ${v.owned?'owned':''}" data-special-toggle="${esc(v.id)}" aria-pressed="${v.owned}" aria-label="Volume ${v.number} ${esc(v.label)}: ${v.owned?'posseduto':'non posseduto'}"><strong>${v.number} · ${esc(v.label)}</strong><small>${v.owned?'✓ Posseduto':'○ Non posseduto'}</small></button>`).join('')}</div></section>`:''}<div class="advanced-panel"><div class="panel-head"><div><h3>Gestione avanzata</h3><p class="sub">Strumenti rapidi per aggiornare la serie e gestire altre edizioni.</p></div></div><div class="quick-actions"><button class="btn small" data-action="quickown">Segna fino a…</button><button class="btn small" data-action="quickremove">Rimuovi da…</button><button class="btn small" data-action="quickfill">Completa la serie</button><button class="btn small" data-action="cloneedition">Nuova edizione</button><button class="btn small" data-action="undo" ${undoStack.length?'':'disabled'}>${undoLabel()}</button></div><div class="small-note">“Segna fino a…” è utile quando hai già i primi volumi consecutivi. “Nuova edizione” duplica la scheda senza copiare i volumi posseduti.</div></div>${s.notes?`<div class="advanced-note"><h3>Note della serie</h3><p>${esc(s.notes).replace(/\n/g,'<br>')}</p></div>`:''}`}
 function applyBuyFilters(){
@@ -1136,19 +1154,44 @@ function cloudSettingsPanel(){
  if(!cloudConfigured())return `<section class="cloud-panel"><h2>☁ Account e sincronizzazione</h2><div class="cloud-indicator">Configurazione cloud non ancora attiva</div><p class="cloud-help">MangaLog funziona normalmente in locale. Per attivare account e sincronizzazione, configura Supabase seguendo la guida inclusa nel pacchetto v10. Non inserire mai chiavi segrete.</p></section>`;
  const status=cloudState==='synced'?'ok':cloudState==='error'||cloudBlocked?'error':'';
  const who=cloudUser?`<p class="cloud-account">${esc(cloudUser.email||'Account personale')}</p>`:'<p class="muted">Accedi per ritrovare gli stessi volumi su più dispositivi.</p>';
- const actions=cloudUser?`<button class="btn" data-action="cloudpull">↓ Scarica dal cloud</button><button class="btn" data-action="cloudpush">↑ Carica questa collezione</button><button class="btn" data-action="cloudretry">↻ Riprova</button><button class="btn" data-action="cloudlogout">Esci</button>`:`<button class="btn primary" data-action="cloudlogin">Accedi</button><button class="btn" data-action="cloudsignup">Crea account</button>`;
- return `<section class="cloud-panel"><h2>☁ MangaLog Cloud</h2>${who}<div class="cloud-indicator ${status}">${esc(cloudMessage)}</div><div class="cloud-bar">${actions}</div><p class="cloud-help">I volumi vengono sincronizzati automaticamente quando sei online e autenticato. Se due dispositivi modificano dati non aggiornati, la sincronizzazione si ferma per evitare sovrascritture: esporta un backup prima di scegliere quale copia conservare.</p></section>`;
+ const profile=cloudUser?`<form class="cloud-profile-form" id="cloudProfileForm"><label for="cloudDisplayName">Nome visualizzato in alto a destra</label><div class="cloud-profile-controls"><input class="input" id="cloudDisplayName" name="displayName" maxlength="60" autocomplete="nickname" value="${esc(String(cloudUser.user_metadata?.display_name||cloudUser.user_metadata?.full_name||cloudUser.user_metadata?.name||''))}" placeholder="Come vuoi essere chiamato"><button class="btn" type="submit">Salva nome</button></div><p class="small-note" id="cloudProfileFeedback" role="status">Il nome sarà disponibile anche sugli altri dispositivi quando accedi allo stesso account.</p></form>`:'';
+ const actions=cloudUser?`<button class="btn" data-action="cloudpull">↓ Scarica dal cloud</button><button class="btn" data-action="cloudpush">↑ Carica questa collezione</button><button class="btn" data-action="cloudretry">↻ Riprova</button><button class="btn" data-action="cloudlogout">Logout</button>`:`<p class="muted">Per accedere o registrarti usa i pulsanti Login e Registrati in alto a destra.</p>`;
+ return `<section class="cloud-panel"><h2>☁ MangaLog Cloud</h2>${who}${profile}<div class="cloud-indicator ${status}">${esc(cloudMessage)}</div><div class="cloud-bar">${actions}</div><p class="cloud-help">I volumi vengono sincronizzati automaticamente quando sei online e autenticato. Se due dispositivi modificano dati non aggiornati, la sincronizzazione si ferma per evitare sovrascritture: esporta un backup prima di scegliere quale copia conservare.</p></section>`;
 }
-function cloudNote(state,message){cloudState=state;cloudMessage=message;if(page==='settings')render()}
+function cloudDisplayName(){
+ if(!cloudUser)return '';
+ const m=cloudUser.user_metadata||{};
+ const n=[m.display_name,m.full_name,m.name].find(v=>typeof v==='string'&&v.trim());
+ return n?String(n).trim().slice(0,60):String(cloudUser.email||'Utente').split('@')[0].slice(0,60);
+}
+function renderAccountTopbar(){
+ const bar=$('#accountTopbar');if(!bar)return;
+ bar.innerHTML=cloudUser?`<div class="account-user" title="Account connesso"><span class="account-user-icon" aria-hidden="true">✓</span><span class="account-user-name">Ciao, <strong>${esc(cloudDisplayName())}</strong></span></div>`:`<div class="account-controls"><button type="button" class="btn account-btn" data-action="cloudlogin">Login</button><button type="button" class="btn primary account-btn" data-action="cloudsignup">Registrati</button></div>`;
+}
+async function saveCloudProfile(e){
+ e.preventDefault();if(!cloudClient||!cloudUser)return;
+ const form=e.currentTarget,field=form.elements.namedItem('displayName'),btn=form.querySelector('[type="submit"]'),feedback=$('#cloudProfileFeedback');
+ const name=String(field?.value||'').trim();
+ if(!name){feedback.textContent='Inserisci un nome prima di salvare.';return}
+ btn.disabled=true;feedback.textContent='Salvataggio in corso…';
+ try{
+  const {data:response,error}=await cloudClient.auth.updateUser({data:{display_name:name}});
+  if(error)throw error;
+  if(response?.user)cloudUser=response.user;
+  renderAccountTopbar();feedback.textContent='✓ Nome aggiornato. Lo vedrai in alto a destra.';
+ }catch(err){feedback.textContent='Non riesco ad aggiornare il nome: '+String(err.message||err).slice(0,100)}
+ finally{btn.disabled=false}
+}
+function cloudNote(state,message){cloudState=state;cloudMessage=message;renderAccountTopbar();if(page==='settings')render()}
 function cloudAuthModal(type){
  if(!cloudClient){alert('Il cloud non è configurato o la libreria di accesso non è disponibile.');return}
  const signup=type==='signup';
- modal(`<h2>${signup?'Crea account MangaLog':'Accedi a MangaLog'}</h2><p class="muted">Usa un indirizzo email valido. La password deve avere almeno 8 caratteri.</p><form id="cloudAuthForm"><div class="field full"><label>Email</label><input class="input" type="email" name="email" autocomplete="email" required maxlength="254"></div><div class="field full"><label>Password</label><input class="input" type="password" name="password" minlength="8" autocomplete="${signup?'new-password':'current-password'}" required></div><div class="actions"><button class="btn" type="button" data-action="close">Annulla</button><button class="btn primary" type="submit">${signup?'Registrati':'Accedi'}</button></div><p class="small-note" id="cloudAuthFeedback" role="status"></p></form>`);
+ modal(`<h2>${signup?'Crea account MangaLog':'Accedi a MangaLog'}</h2><p class="muted">Usa un indirizzo email valido. La password deve avere almeno 8 caratteri.</p><form id="cloudAuthForm"><div class="field full"><label>Email</label><input class="input" type="email" name="email" autocomplete="email" required maxlength="254"></div>${signup?`<div class="field full"><label>Nome visualizzato</label><input class="input" type="text" name="displayName" autocomplete="nickname" required maxlength="60" placeholder="Es. Mario"></div>`:''}<div class="field full"><label>Password</label><input class="input" type="password" name="password" minlength="8" autocomplete="${signup?'new-password':'current-password'}" required></div><div class="actions"><button class="btn" type="button" data-action="close">Annulla</button><button class="btn primary" type="submit">${signup?'Registrati':'Accedi'}</button></div><p class="small-note" id="cloudAuthFeedback" role="status"></p></form>`);
  document.getElementById('cloudAuthForm').onsubmit=async e=>{
-  e.preventDefault();const f=new FormData(e.target);const email=String(f.get('email')).trim(),password=String(f.get('password'));
+  e.preventDefault();const f=new FormData(e.target);const email=String(f.get('email')).trim(),password=String(f.get('password')),displayName=String(f.get('displayName')||'').trim();
   const btn=e.target.querySelector('[type=submit]'),msg=document.getElementById('cloudAuthFeedback');btn.disabled=true;msg.textContent='Attendi…';
   try{
-   const result=signup?await cloudClient.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname}}):await cloudClient.auth.signInWithPassword({email,password});
+   const result=signup?await cloudClient.auth.signUp({email,password,options:{emailRedirectTo:location.origin+location.pathname,data:{display_name:displayName}}}):await cloudClient.auth.signInWithPassword({email,password});
    if(result.error)throw result.error;
    if(!result.data.session){msg.textContent='Controlla la tua email e conferma la registrazione, poi torna qui e accedi.';return}
    close();await cloudSwitch(result.data.session);
@@ -1170,6 +1213,7 @@ async function cloudInit(){
    if(event==='INITIAL_SESSION'||event==='TOKEN_REFRESHED')return;
    if(event==='SIGNED_IN'&&session&&cloudUser?.id!==session.user.id)setTimeout(()=>cloudSwitch(session),0);
    if(event==='SIGNED_OUT'&&cloudUser)setTimeout(()=>cloudResetToGuest(),0);
+   if(event==='USER_UPDATED'&&session?.user){cloudUser=session.user;renderAccountTopbar()}
   });
  }catch(err){cloudNote('error','Cloud non raggiungibile: '+String(err.message||err).slice(0,120))}
 }
@@ -1281,7 +1325,7 @@ async function cloudLogout(){
 }
 
 function render(){
- navRender();
+ navRender();renderAccountTopbar();
  $('#content').innerHTML=page==='home'?home():page==='collection'?collection():page==='owned'?ownedVolumesPage():page==='missing'?missingPage():page==='wishlist'?wishlistPage():page==='stats'?statsPage():page==='settings'?settingsPage():page==='admin'?(cloudIsAdmin?adminPage():home()):detail();
  if(page==='missing'&&missingView!=='simple'){
   applyBuyFilters();const bi=$('#buySearch');if(bi)bi.addEventListener('input',e=>{buySearch=e.target.value;applyBuyFilters()});
@@ -1290,6 +1334,7 @@ function render(){
   ms.addEventListener('input',e=>{missingSearch=e.target.value;applyMissingSearch();const b=$('[data-action="missingsearchclear"]');if(b)b.disabled=!missingSearch;});
   applyMissingSearch();
  }
+ const profileForm=$('#cloudProfileForm');if(profileForm)profileForm.addEventListener('submit',saveCloudProfile);
  const inp=$('#search');if(inp){
   inp.addEventListener('input',e=>{query=e.target.value;const arr=filteredSeries();$('#seriesResults').innerHTML=resultCards(arr);const n=$('.results-count');if(n)n.textContent=arr.length+' serie · Vista '+(view==='grid'?'griglia':'elenco');const clear=$('.search-clear');if(clear)clear.disabled=!query});
   $('#sort').onchange=e=>{sort=e.target.value;render();$('#search').focus()};
