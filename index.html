@@ -1130,6 +1130,33 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
  :root[data-theme^="library-"] .main::before{height:125px;margin-bottom:12px;background-position:center,center,67% 36%}
 }
 @media(prefers-reduced-motion:reduce){:root[data-theme^="library-"] .theme-option{transition:none}}
+
+/* Sfondo fotografico definitivo: se il WebP non è ancora stato caricato,
+   resta visibile il precedente SVG, evitando schermate vuote. */
+:root[data-theme="library-blue"]{--library-photo:url('./assets/library-blue.webp')}
+:root[data-theme="library-red"]{--library-photo:url('./assets/library-red.webp')}
+:root[data-theme="library-violet"]{--library-photo:url('./assets/library-violet.webp')}
+:root[data-theme="library-white"]{--library-photo:url('./assets/library-white.webp')}
+:root[data-theme^="library-"] body::before{
+ background-image:linear-gradient(180deg,rgba(4,6,13,.08),rgba(4,6,13,.65) 80%),
+ linear-gradient(90deg,rgba(var(--library-rgb),.04),transparent 65%),
+ var(--library-photo),url('./assets/manga-library-room.svg');
+ background-size:cover,cover,auto 100%,cover;
+ background-position:center,center,right center,center;
+ background-repeat:no-repeat;
+ opacity:.94;
+}
+:root[data-theme^="library-"] .main::before{
+ background-image:linear-gradient(180deg,rgba(5,9,18,.05),rgba(5,9,18,.42)),
+ var(--library-photo),url('./assets/manga-library-room.svg');
+ background-size:cover,cover,cover;
+ background-position:center,center 36%,center 36%;
+ background-repeat:no-repeat;
+}
+@media(max-width:620px){
+ :root[data-theme^="library-"] body::before{background-size:cover,cover,cover,cover;background-position:center,center,center top,center top}
+ :root[data-theme^="library-"] .main::before{background-position:center,center 30%,center 30%}
+}
 </style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.9 Librerie Neon</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=true;</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
