@@ -1339,6 +1339,27 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
  background-size:cover,cover;background-position:center,center;background-repeat:no-repeat;
  border:1px solid rgba(255,255,255,.35);color:#fff;text-shadow:0 2px 5px #000;
 }
+
+/* Selettore compatto a quattro famiglie — senza modificare i temi esistenti. */
+.theme-family-fold{border:1px solid #414655;border-radius:14px;padding:0;margin:10px 0;background:rgba(12,15,24,.73);overflow:hidden}
+.theme-family-fold .theme-family-summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:15px 14px;min-height:74px}
+.theme-family-fold .theme-family-summary::-webkit-details-marker{display:none}
+.theme-family-fold .theme-family-summary:hover{background:rgba(140,157,187,.08)}
+.theme-family-fold .theme-family-summary:focus-visible{outline:3px solid #6dc3fa;outline-offset:-3px}
+.theme-family-symbol{width:42px;height:42px;border-radius:11px;flex-shrink:0;display:grid;place-items:center;color:#fff;font-size:22px;background:linear-gradient(145deg,#2b3342,#1a1c27);border:1px solid #4d566a}
+.theme-family-info{flex:1;min-width:0}
+.theme-family-info strong,.theme-family-info small{display:block}
+.theme-family-info strong{font-size:15px}
+.theme-family-info small{font-size:12px;color:#abb4c7;margin-top:4px}
+.theme-family-current{font-size:11px;font-weight:800;color:#baf0d3;border:1px solid #2c8c64;background:#123929;border-radius:30px;padding:5px 9px;white-space:nowrap}
+.theme-family-arrow{font-size:25px;color:#a8bdce;transition:transform .2s}
+.theme-family-fold[open] .theme-family-arrow{transform:rotate(180deg)}
+.theme-family-inner{padding:0 13px 13px;border-top:1px solid #343a4a}
+.theme-family-inner .theme-selector{margin:13px 0 0}
+:root[data-theme="paper"] .theme-family-fold{background:#f7fbff;border-color:#bdd2e2;color:#1e354a}
+:root[data-theme="paper"] .theme-family-info small{color:#4a667e}
+:root[data-theme="paper"] .theme-family-arrow{color:#45647e}
+@media(max-width:520px){.theme-family-fold .theme-family-summary{padding:11px;gap:8px;min-height:64px}.theme-family-symbol{width:36px;height:36px;font-size:19px}.theme-family-info strong{font-size:13px}.theme-family-info small{font-size:10px}.theme-family-current{font-size:10px;padding:4px 7px}.theme-family-inner{padding:0 9px 10px}}
 </style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.10 Famiglie di sfondi</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=true;</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
@@ -1784,6 +1805,7 @@ async function cloudSessionGuard(){
  }catch(err){console.warn('Session guard: controllo non riuscito (rete o server)',err)}
  finally{sessionGuardBusy=false}
 }
+let themeOpenGroup='';
 function themeGroupsHtml(){
  const groups=[
   {title:'Sfondi base',subtitle:'I tre temi originali di MangaLog',items:[
@@ -1806,13 +1828,15 @@ function themeGroupsHtml(){
  ];
  let out='<section class="panel"><h2>🎨 Aspetto dell’app</h2><p class="muted">Scegli una tipologia di sfondo e poi il colore. La scelta è salvata soltanto su questo dispositivo e non cambia i dati della collezione o l’account cloud.</p>';
  for(const group of groups){
-  out+='<div class="theme-family"><h3>'+group.title+'</h3><p class="muted">'+group.subtitle+'</p><div class="theme-selector" role="group" aria-label="'+group.title+'">';
+  const groupId=group.items[0][0].split('-')[0];
+  const isCurrent=group.items.some(([id])=>id===currentTheme());
+  out+='<details class="theme-family theme-family-fold" data-theme-family="'+groupId+'"'+(themeOpenGroup===groupId?' open':'')+'><summary class="theme-family-summary"><span class="theme-family-symbol" aria-hidden="true">'+(groupId==='tokyo'?'◉':groupId==='library'?'▤':groupId==='garden'?'☔':'🍁')+'</span><span class="theme-family-info"><strong>'+group.title+'</strong><small>'+group.subtitle+'</small></span>'+(isCurrent?'<span class="theme-family-current">Attivo</span>':'')+'<span class="theme-family-arrow" aria-hidden="true">⌄</span></summary><div class="theme-family-inner"><div class="theme-selector" role="group" aria-label="'+group.title+'">';
   for(const [id,title,sub,symbol] of group.items){
    const newAsset=id.startsWith('garden-')||id.startsWith('maple-');
    const current=currentTheme()===id;
    out+='<button type="button" class="theme-option" data-theme-select="'+id+'"'+(newAsset?' data-theme-asset="'+id+'" disabled':'')+' aria-pressed="'+current+'"><span class="theme-swatch '+id+'" aria-hidden="true">'+symbol+'</span><span><strong>'+title+'</strong><small>'+sub+'</small>'+(newAsset?'<small class="theme-asset-status">Da caricare su GitHub</small>':'')+'</span>'+(current?'<span class="theme-current" aria-label="Tema selezionato">✓</span>':'')+'</button>';
   }
-  out+='</div></div>';
+  out+='</div></div></details>';
  }
  return out+'<p class="small-note">Le nuove varianti vengono abilitate automaticamente quando le immagini per smartphone e PC sono disponibili sul sito. Puoi cambiare tema in qualsiasi momento.</p></section>';
 }
@@ -2112,7 +2136,10 @@ async function cloudLogout(){
 function render(){
  navRender();renderAccountTopbar();
  $('#content').innerHTML=page==='home'?home():page==='collection'?collection():page==='owned'?ownedVolumesPage():page==='missing'?missingPage():page==='wishlist'?wishlistPage():page==='stats'?statsPage():page==='settings'?settingsPage():page==='admin'?(cloudIsAdmin?adminPage():home()):detail();
- if(page==='settings')checkThemeAssets();
+ if(page==='settings'){
+  checkThemeAssets();
+  document.querySelectorAll('[data-theme-family]').forEach(details=>details.addEventListener('toggle',()=>{if(details.isConnected)themeOpenGroup=details.open?details.dataset.themeFamily:(themeOpenGroup===details.dataset.themeFamily?'':themeOpenGroup)}));
+ }
  if(page==='missing'&&missingView!=='simple'){
   applyBuyFilters();const bi=$('#buySearch');if(bi)bi.addEventListener('input',e=>{buySearch=e.target.value;applyBuyFilters()});
  }
