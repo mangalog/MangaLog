@@ -1183,6 +1183,48 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   background-attachment:fixed,fixed;
  }
 }
+
+/* v12.9.2 — Wishlist: codifica immediata delle priorità. */
+.wishlist-card.wish-level-alta{border-left:4px solid #3bc987}
+.wishlist-card.wish-level-media{border-left:4px solid #e0b73f}
+.wishlist-card.wish-level-bassa{border-left:4px solid #e45f72}
+.wishlist-card .priority-tag.wish-priority{font-weight:850;letter-spacing:.01em}
+.wishlist-card .priority-tag.wish-priority.alta{background:#123f2c;border-color:#43c78a;color:#d7ffec}
+.wishlist-card .priority-tag.wish-priority.media{background:#42340a;border-color:#e0b73f;color:#fff0a9}
+.wishlist-card .priority-tag.wish-priority.bassa{background:#451e29;border-color:#e45f72;color:#ffe0e5}
+/* Nome account: pulsante Impostazioni su smartphone, testo non interattivo su PC. */
+.account-user-mobile{display:none!important}
+@media(max-width:800px){
+ .account-user-desktop{display:none!important}
+ .account-user-mobile{display:inline-flex!important;cursor:pointer;font:inherit;text-align:left}
+ .account-user-mobile:focus-visible{outline:3px solid #79caff;outline-offset:3px}
+ .account-settings-gear{font-size:15px;opacity:.8;margin-left:3px}
+ body.mangalog-logged-in .dashboard-top button[data-nav="settings"]{display:none!important}
+}
+/* Sfondi Libreria: su PC mostra un primo piano alla risoluzione originale,
+   fuso gradualmente con la scena di sfondo, evitando l'ingrandimento
+   eccessivo della foto verticale 941x1672. Nessuna modifica mobile/iPhone. */
+@media(min-width:801px){
+ :root[data-theme^="library-"] body::before{
+  background-image:
+   linear-gradient(90deg,rgba(4,7,14,.87) 0%,rgba(4,7,14,.72) 40%,rgba(4,7,14,.25) 100%),
+   var(--library-photo);
+  background-size:cover,cover;
+  background-position:center,center;
+  background-repeat:no-repeat,no-repeat;
+  background-attachment:fixed,fixed;
+ }
+ :root[data-theme^="library-"] body::after{
+  content:"";
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:var(--library-photo);
+  background-size:min(48vw,941px) auto;
+  background-position:right center;
+  background-repeat:no-repeat;
+  -webkit-mask-image:linear-gradient(90deg,transparent 39%,rgba(0,0,0,.4) 53%,#000 70%);
+  mask-image:linear-gradient(90deg,transparent 39%,rgba(0,0,0,.4) 53%,#000 70%);
+ }
+}
 </style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.9 Librerie Neon</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=true;</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
@@ -1522,7 +1564,7 @@ function wishlistPage(){
  return header('SERIE CHE VORRESTI INIZIARE','Wishlist','<button class="btn primary" data-action="wishadd">+ Nuovo desiderio</button>')+
  `<p class="helper-note">La Wishlist contiene <strong>serie o edizioni che non fanno ancora parte della tua collezione</strong>. I volumi mancanti di serie già aggiunte si gestiscono nella Mancolista.</p>`+
  `<div class="buy-summary">${stat('Serie desiderate',arr.length)}${stat('Priorità alta',arr.filter(x=>x.priority==='alta').length,true)}${stat('Budget indicativo',priced.length?euros(sum):'—')}</div>`+
- (arr.length?`<div class="series-grid">${arr.map(w=>`<article class="wishlist-card"><div class="buy-volume-head"><div class="eyebrow">DESIDERIO</div><span class="priority-tag ${w.priority==='alta'?'high':w.priority==='bassa'?'low':''}">${priorityLabels[w.priority]}</span></div><h3>${esc(w.title)}</h3><div class="wish-price">${euros(w.price)}</div><p class="muted" style="font-size:13px;flex:1;white-space:pre-wrap">${esc(w.notes||'Nessuna nota aggiunta.')}</p><div class="wish-tools"><button class="btn" data-wishedit="${esc(w.id)}">Modifica</button><button class="btn primary" data-wishconvert="${esc(w.id)}">+ In collezione</button><button class="btn" data-wishdel="${esc(w.id)}">Elimina</button></div></article>`).join('')}</div>`:empty('Wishlist vuota','Aggiungi una serie che ti piacerebbe iniziare.'));
+ (arr.length?`<div class="series-grid">${arr.map(w=>`<article class="wishlist-card wish-level-${safePriority(w.priority)}"><div class="buy-volume-head"><div class="eyebrow">DESIDERIO</div><span class="priority-tag wish-priority ${safePriority(w.priority)}">${priorityLabels[safePriority(w.priority)]}</span></div><h3>${esc(w.title)}</h3><div class="wish-price">${euros(w.price)}</div><p class="muted" style="font-size:13px;flex:1;white-space:pre-wrap">${esc(w.notes||'Nessuna nota aggiunta.')}</p><div class="wish-tools"><button class="btn" data-wishedit="${esc(w.id)}">Modifica</button><button class="btn primary" data-wishconvert="${esc(w.id)}">+ In collezione</button><button class="btn" data-wishdel="${esc(w.id)}">Elimina</button></div></article>`).join('')}</div>`:empty('Wishlist vuota','Aggiungi una serie che ti piacerebbe iniziare.'));
 }
 function statsPage(){
  const t=overviewTotals(),pct=t.percent+'%',pub=new Map();
@@ -1693,7 +1735,9 @@ function cloudDisplayName(){
 }
 function renderAccountTopbar(){
  const bar=$('#accountTopbar');if(!bar)return;
- bar.innerHTML=cloudUser?`<div class="account-user" title="Account connesso"><span class="account-user-icon" aria-hidden="true">✓</span><span class="account-user-name">Ciao, <strong>${esc(cloudDisplayName())}</strong></span></div>`:`<div class="account-controls"><button type="button" class="btn account-btn" data-action="cloudlogin">Login</button><button type="button" class="btn primary account-btn" data-action="cloudsignup">Registrati</button></div>`;
+ document.body.classList.toggle('mangalog-logged-in',Boolean(cloudUser));
+ const accountLabel=`<span class="account-user-icon" aria-hidden="true">✓</span><span class="account-user-name">Ciao, <strong>${esc(cloudDisplayName())}</strong></span>`;
+ bar.innerHTML=cloudUser?`<div class="account-user account-user-desktop" title="Account connesso">${accountLabel}</div><button type="button" class="account-user account-user-mobile" data-nav="settings" title="Apri le impostazioni" aria-label="Apri le impostazioni del tuo account">${accountLabel}<span class="account-settings-gear" aria-hidden="true">⚙</span></button>`:`<div class="account-controls"><button type="button" class="btn account-btn" data-action="cloudlogin">Login</button><button type="button" class="btn primary account-btn" data-action="cloudsignup">Registrati</button></div>`;
 }
 async function saveCloudProfile(e){
  e.preventDefault();if(!cloudClient||!cloudUser)return;
