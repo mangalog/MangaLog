@@ -1,4 +1,4 @@
-<!doctype html><html lang="it"><head><meta name="theme-color" content="#121318"><meta name="description" content="MangaLog: organizza la tua collezione manga, i volumi mancanti e gli acquisti."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" sizes="192x192" href="./icons/icon-192.png"><link rel="apple-touch-icon" href="./icons/apple-touch-icon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MangaLog v12.9 · Librerie Neon</title><script>
+<!doctype html><html lang="it"><head><meta name="theme-color" content="#121318"><meta name="description" content="MangaLog: organizza la tua collezione manga, i volumi mancanti e gli acquisti."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" sizes="192x192" href="./icons/icon-192.png"><link rel="apple-touch-icon" href="./icons/apple-touch-icon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MangaLog v12.9.3 · Librerie Neon</title><script>
 /* La preferenza di aspetto e separata dai dati della collezione e da Supabase. */
 try{const savedTheme=localStorage.getItem('mangalog_appearance_v1');
  const supported=['tokyo','paper','shogun','library-blue','library-red','library-violet','library-white'];
@@ -1225,7 +1225,54 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   mask-image:linear-gradient(90deg,transparent 39%,rgba(0,0,0,.4) 53%,#000 70%);
  }
 }
-</style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.9 Librerie Neon</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=true;</script>
+
+/* v12.9.3 — Priorità Wishlist chiaramente differenziate in ogni tema.
+   Le regole sono mirate solo ai desideri, non ai piani d'acquisto. */
+:root .wishlist-card .priority-tag.wish-priority.alta {
+ background:#116938 !important; border-color:#40e38c !important; color:#fff !important;
+ box-shadow:inset 0 0 0 1px rgba(200,255,225,.18) !important;
+}
+:root .wishlist-card .priority-tag.wish-priority.media {
+ background:#815f0b !important; border-color:#ffda4a !important; color:#fff7c2 !important;
+ box-shadow:inset 0 0 0 1px rgba(255,242,174,.14) !important;
+}
+:root .wishlist-card .priority-tag.wish-priority.bassa {
+ background:#8b2438 !important; border-color:#fa6781 !important; color:#fff !important;
+ box-shadow:inset 0 0 0 1px rgba(255,224,229,.13) !important;
+}
+:root .wishlist-card.wish-level-alta {border-left:4px solid #40e38c !important}
+:root .wishlist-card.wish-level-media {border-left:4px solid #ffda4a !important}
+:root .wishlist-card.wish-level-bassa {border-left:4px solid #fa6781 !important}
+/* Account: ora il nome funziona da pulsante Impostazioni anche su PC. */
+.account-user-desktop {cursor:pointer;appearance:none;font-size:13px;line-height:1.1;font-weight:600}
+.account-user-desktop:hover,.account-user-mobile:hover {border-color:#76b5df}
+.account-user-desktop:focus-visible,.account-user-mobile:focus-visible {
+ outline:3px solid #62cafa;outline-offset:3px;
+}
+@media(min-width:801px) {
+ .dashboard-top button[data-nav="settings"] {display:none !important}
+}
+/* Quattro nuovi sfondi panoramici desktop realizzati dai disegni originali.
+   La versione verticale attuale resta inalterata su smartphone/iPhone. */
+:root[data-theme="library-blue"] {--library-desktop-photo:url('./assets/library-blue-desktop.webp')}
+:root[data-theme="library-red"] {--library-desktop-photo:url('./assets/library-red-desktop.webp')}
+:root[data-theme="library-violet"] {--library-desktop-photo:url('./assets/library-violet-desktop.webp')}
+:root[data-theme="library-white"] {--library-desktop-photo:url('./assets/library-white-desktop.webp')}
+@media(min-width:801px) {
+ :root[data-theme^="library-"] body::after {content:none !important;display:none !important}
+ :root[data-theme^="library-"] body::before {
+  background-image:
+   linear-gradient(90deg,rgba(4,7,14,.23),rgba(4,7,14,.06)),
+   var(--library-desktop-photo),
+   var(--library-photo);
+  background-size:cover,cover,941px auto;
+  background-position:center,center,right center;
+  background-repeat:no-repeat,no-repeat,no-repeat;
+  background-attachment:fixed,fixed,fixed;
+  opacity:1;
+ }
+}
+</style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.9.3 Librerie Neon</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=true;</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (()=>{'use strict';const KEY='mangatrack_v3_dark';const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uid=()=>typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();let data={series:[],wishlist:[],activity:[]},page='home',selected=null,query='',sort='title',view=localStorage.getItem('mangatrack_view')==='list'?'list':'grid',filter='all';let undoStack=[],lastSavedJSON='',restoringHistory=false;let cloudClient=null,cloudUser=null,cloudRevision=null,cloudReady=false,cloudBlocked=false,cloudState='offline',cloudMessage='Modalità locale',cloudTimer=null,cloudSerial=Promise.resolve(),cloudLoadingUserId=null;let cloudIsAdmin=false,adminMetrics=null,adminError='',adminLoading=false;let adminUsers=[],adminOverview=null,adminFilter='',adminActionBusy=false,sessionGuardBusy=false;
@@ -1737,7 +1784,7 @@ function renderAccountTopbar(){
  const bar=$('#accountTopbar');if(!bar)return;
  document.body.classList.toggle('mangalog-logged-in',Boolean(cloudUser));
  const accountLabel=`<span class="account-user-icon" aria-hidden="true">✓</span><span class="account-user-name">Ciao, <strong>${esc(cloudDisplayName())}</strong></span>`;
- bar.innerHTML=cloudUser?`<div class="account-user account-user-desktop" title="Account connesso">${accountLabel}</div><button type="button" class="account-user account-user-mobile" data-nav="settings" title="Apri le impostazioni" aria-label="Apri le impostazioni del tuo account">${accountLabel}<span class="account-settings-gear" aria-hidden="true">⚙</span></button>`:`<div class="account-controls"><button type="button" class="btn account-btn" data-action="cloudlogin">Login</button><button type="button" class="btn primary account-btn" data-action="cloudsignup">Registrati</button></div>`;
+ bar.innerHTML=cloudUser?`<button type="button" class="account-user account-user-desktop" data-nav="settings" title="Apri le impostazioni" aria-label="Apri le impostazioni del tuo account">${accountLabel}</button><button type="button" class="account-user account-user-mobile" data-nav="settings" title="Apri le impostazioni" aria-label="Apri le impostazioni del tuo account">${accountLabel}<span class="account-settings-gear" aria-hidden="true">⚙</span></button>`:`<div class="account-controls"><button type="button" class="btn account-btn" data-action="cloudlogin">Login</button><button type="button" class="btn primary account-btn" data-action="cloudsignup">Registrati</button></div>`;
 }
 async function saveCloudProfile(e){
  e.preventDefault();if(!cloudClient||!cloudUser)return;
