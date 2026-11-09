@@ -1360,6 +1360,37 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 :root[data-theme="paper"] .theme-family-info small{color:#4a667e}
 :root[data-theme="paper"] .theme-family-arrow{color:#45647e}
 @media(max-width:520px){.theme-family-fold .theme-family-summary{padding:11px;gap:8px;min-height:64px}.theme-family-symbol{width:36px;height:36px;font-size:19px}.theme-family-info strong{font-size:13px}.theme-family-info small{font-size:10px}.theme-family-current{font-size:10px;padding:4px 7px}.theme-family-inner{padding:0 9px 10px}}
+
+/* v12.10.1 — Giardino/Acero desktop: due inquadrature nitide dello stesso
+   originale verticale (sinistra specchiata) e fusione soffice al centro.
+   Evita l'ampia fascia vuota impressa nei vecchi file desktop,
+   senza ingrandire una singola foto verticale sull'intero monitor.
+   Solo >= 801px: smartphone e Librerie non vengono toccati. */
+@media(min-width:801px){
+ :root:is([data-theme^="garden-"],[data-theme^="maple-"]) body::before{
+  background-image:
+   linear-gradient(90deg,rgba(4,7,14,.40) 0%,rgba(4,7,14,.13) 55%,rgba(4,7,14,.05) 100%),
+   var(--library-desktop-photo);
+  background-size:cover,cover;
+  background-position:center,center;
+  background-repeat:no-repeat,no-repeat;
+  background-attachment:fixed,fixed;
+ }
+ :root:is([data-theme^="garden-"],[data-theme^="maple-"]) body::after{
+  content:""!important;
+  display:block!important;
+  position:fixed;inset:0 auto 0 0;width:53vw;
+  z-index:0;pointer-events:none;
+  background-image:var(--library-photo);
+  background-size:cover;
+  background-position:right center;
+  background-repeat:no-repeat;
+  transform:scaleX(-1);
+  -webkit-mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.90) 32%,#000 85%);
+  mask-image:linear-gradient(90deg,transparent 0%,rgba(0,0,0,.90) 32%,#000 85%);
+  opacity:.82;
+ }
+}
 </style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.10 Famiglie di sfondi</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=true;</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
