@@ -1,7 +1,7 @@
-<!doctype html><html lang="it"><head><meta name="theme-color" content="#121318"><meta name="description" content="MangaLog: organizza la tua collezione manga, i volumi mancanti e gli acquisti."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" sizes="192x192" href="./icons/icon-192.png"><link rel="apple-touch-icon" href="./icons/apple-touch-icon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MangaLog v12.9.4 · Librerie Neon</title><script>
+<!doctype html><html lang="it"><head><meta name="theme-color" content="#121318"><meta name="description" content="MangaLog: organizza la tua collezione manga, i volumi mancanti e gli acquisti."><link rel="manifest" href="./manifest.webmanifest"><link rel="icon" sizes="192x192" href="./icons/icon-192.png"><link rel="apple-touch-icon" href="./icons/apple-touch-icon.png"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MangaLog v12.10 · Famiglie di sfondi</title><script>
 /* La preferenza di aspetto e separata dai dati della collezione e da Supabase. */
 try{const savedTheme=localStorage.getItem('mangalog_appearance_v1');
- const supported=['tokyo','paper','shogun','library-blue','library-red','library-violet','library-white'];
+ const supported=['tokyo','paper','shogun','library-blue','library-red','library-violet','library-white','garden-blue','garden-white','garden-violet','garden-green','maple-red','maple-blue','maple-violet','maple-gold'];
  document.documentElement.setAttribute('data-theme',supported.includes(savedTheme)?savedTheme:'tokyo');
 }catch(_){document.documentElement.setAttribute('data-theme','tokyo');}
 </script><style>
@@ -1272,7 +1272,60 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   opacity:1;
  }
 }
-</style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.9.4 Librerie Neon</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=true;</script>
+
+/* MangaLog: quattro famiglie di temi, composizione desktop dedicata e nitida. */
+.theme-family{padding:14px 0 6px;border-top:1px solid #41414b;margin-top:14px}
+.theme-family h3{font-size:17px;margin:0 0 4px;color:inherit}
+.theme-family>.muted{font-size:12px;margin:0}
+.theme-family .theme-selector{margin-top:11px}
+.theme-asset-status{color:#b8c2d0!important;font-size:10px!important}
+.theme-option:disabled{cursor:not-allowed;opacity:.66}
+:root[data-theme="garden-blue"]{--library-photo:url('./assets/garden-blue.webp');--library-desktop-photo:url('./assets/garden-blue-desktop.webp');--library-neon:#45b9ff;--library-rgb:69,185,255;--library-base:#0b2138}
+:root[data-theme="garden-white"]{--library-photo:url('./assets/garden-white.webp');--library-desktop-photo:url('./assets/garden-white-desktop.webp');--library-neon:#d6e9ff;--library-rgb:214,233,255;--library-base:#303b48}
+:root[data-theme="garden-violet"]{--library-photo:url('./assets/garden-violet.webp');--library-desktop-photo:url('./assets/garden-violet-desktop.webp');--library-neon:#cb80f7;--library-rgb:203,128,247;--library-base:#27183c}
+:root[data-theme="garden-green"]{--library-photo:url('./assets/garden-green.webp');--library-desktop-photo:url('./assets/garden-green-desktop.webp');--library-neon:#3bdfb1;--library-rgb:59,223,177;--library-base:#082b2a}
+:root[data-theme="maple-red"]{--library-photo:url('./assets/maple-red.webp');--library-desktop-photo:url('./assets/maple-red-desktop.webp');--library-neon:#ff5268;--library-rgb:255,82,104;--library-base:#340910}
+:root[data-theme="maple-blue"]{--library-photo:url('./assets/maple-blue.webp');--library-desktop-photo:url('./assets/maple-blue-desktop.webp');--library-neon:#54b4ff;--library-rgb:84,180,255;--library-base:#071b40}
+:root[data-theme="maple-violet"]{--library-photo:url('./assets/maple-violet.webp');--library-desktop-photo:url('./assets/maple-violet-desktop.webp');--library-neon:#db6dff;--library-rgb:219,109,255;--library-base:#300d49}
+:root[data-theme="maple-gold"]{--library-photo:url('./assets/maple-gold.webp');--library-desktop-photo:url('./assets/maple-gold-desktop.webp');--library-neon:#ffce66;--library-rgb:255,206,102;--library-base:#46301c}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]){color-scheme:dark;color:#f7f8fc;--mt-panel:#151923;--mt-focus:var(--library-neon)}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) body{background:var(--library-base);color:#f7f8fc}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .main::before{content:none!important;display:none!important}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) body::after{content:none!important;display:none!important}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) body::before{
+ content:"";position:fixed;inset:0;z-index:0;pointer-events:none;opacity:1;
+ background-image:linear-gradient(180deg,rgba(4,7,14,.24),rgba(4,7,14,.53)),var(--library-photo);
+ background-position:center,center top;
+ background-size:cover,cover;
+ background-repeat:no-repeat,no-repeat;
+ background-attachment:fixed,fixed;
+}
+@media(min-width:801px){
+ :root:is([data-theme^="garden-"],[data-theme^="maple-"]) body::before{
+  background-image:linear-gradient(90deg,rgba(4,7,14,.18),rgba(4,7,14,.06)),var(--library-desktop-photo);
+  background-position:center,center;
+  background-size:cover,cover;
+ }
+}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .sidebar{background:rgba(8,12,20,.95);border-color:rgba(var(--library-rgb),.25)}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .mobile-nav{background:rgba(9,12,21,.97);border-color:rgba(var(--library-rgb),.27)}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .nav.active,:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .nav:hover{background:rgba(var(--library-rgb),.17);color:white}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .nav.active::before{background:var(--library-neon)}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .eyebrow,:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .logo b,:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .stat .accent{color:var(--library-neon)}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .stat,:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .panel,:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .series,:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .wishlist-card,:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .dashboard-panel,:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .metric-tile,:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .detail-hero,:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .cloud-panel{background:rgba(17,21,31,.96);border-color:rgba(var(--library-rgb),.24);color:#f7f8fc}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .hero,:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .dashboard-hero{background:linear-gradient(115deg,rgba(14,19,31,.95),rgba(18,22,33,.92));border-color:rgba(var(--library-rgb),.4)}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .theme-option{background:#151923;border-color:#3c455a;color:#f5f7fb}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .theme-option[aria-pressed="true"]{border-color:var(--library-neon)}
+:root:is([data-theme^="garden-"],[data-theme^="maple-"]) .btn.primary{background:var(--library-neon);border-color:var(--library-neon);color:#07101a}
+.theme-swatch.garden-blue{background:linear-gradient(160deg,#0d354d,#1683aa)}
+.theme-swatch.garden-white{background:linear-gradient(160deg,#546c7f,#c9d5df)}
+.theme-swatch.garden-violet{background:linear-gradient(160deg,#1c133f,#974fcb)}
+.theme-swatch.garden-green{background:linear-gradient(160deg,#073b35,#239878)}
+.theme-swatch.maple-red{background:linear-gradient(160deg,#40070f,#e63636)}
+.theme-swatch.maple-blue{background:linear-gradient(160deg,#09224c,#3164b8)}
+.theme-swatch.maple-violet{background:linear-gradient(160deg,#371055,#a33fd2)}
+.theme-swatch.maple-gold{background:linear-gradient(160deg,#734014,#f5b849)}
+</style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.10 Famiglie di sfondi</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=true;</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
 (()=>{'use strict';const KEY='mangatrack_v3_dark';const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uid=()=>typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();let data={series:[],wishlist:[],activity:[]},page='home',selected=null,query='',sort='title',view=localStorage.getItem('mangatrack_view')==='list'?'list':'grid',filter='all';let undoStack=[],lastSavedJSON='',restoringHistory=false;let cloudClient=null,cloudUser=null,cloudRevision=null,cloudReady=false,cloudBlocked=false,cloudState='offline',cloudMessage='Modalità locale',cloudTimer=null,cloudSerial=Promise.resolve(),cloudLoadingUserId=null;let cloudIsAdmin=false,adminMetrics=null,adminError='',adminLoading=false;let adminUsers=[],adminOverview=null,adminFilter='',adminActionBusy=false,sessionGuardBusy=false;
@@ -1280,7 +1333,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 let passwordRecoveryMode=new URLSearchParams(location.hash.slice(1)).get('type')==='recovery'||new URLSearchParams(location.search).get('type')==='recovery';const priorityLabels={alta:'Alta',media:'Media',bassa:'Bassa'};
 const orderLabels={da_ordinare:'Da ordinare',in_corso:'Ordine in corso'};
 const THEME_KEY='mangalog_appearance_v1';
-const THEMES={tokyo:{name:'Tokyo Night',color:'#080f1a'},paper:{name:'Paper Manga',color:'#f8f6f1'},shogun:{name:'Shogun Red',color:'#0a0a0a'},'library-blue':{name:'Libreria Blu',color:'#081426'},'library-red':{name:'Libreria Rossa',color:'#1b080d'},'library-violet':{name:'Libreria Viola',color:'#180d28'},'library-white':{name:'Libreria Bianca',color:'#151b25'}};
+const THEMES={tokyo:{name:'Tokyo Night',color:'#080f1a'},paper:{name:'Paper Manga',color:'#f8f6f1'},shogun:{name:'Shogun Red',color:'#0a0a0a'},'library-blue':{name:'Libreria Blu',color:'#081426'},'library-red':{name:'Libreria Rossa',color:'#1b080d'},'library-violet':{name:'Libreria Viola',color:'#180d28'},'library-white':{name:'Libreria Bianca',color:'#151b25'},'garden-blue':{name:'Giardino Blu',color:'#0b2138'},'garden-white':{name:'Giardino Bianco',color:'#303b48'},'garden-violet':{name:'Giardino Viola',color:'#27183c'},'garden-green':{name:'Giardino Verde',color:'#082b2a'},'maple-red':{name:'Acero Rosso',color:'#340910'},'maple-blue':{name:'Acero Blu',color:'#071b40'},'maple-violet':{name:'Acero Viola',color:'#300d49'},'maple-gold':{name:'Acero Dorato',color:'#46301c'}};
 function currentTheme(){const t=document.documentElement.getAttribute('data-theme');return Object.hasOwn(THEMES,t)?t:'tokyo'}
 function setTheme(value){
  const theme=Object.hasOwn(THEMES,value)?value:'tokyo';
@@ -1717,18 +1770,56 @@ async function cloudSessionGuard(){
  }catch(err){console.warn('Session guard: controllo non riuscito (rete o server)',err)}
  finally{sessionGuardBusy=false}
 }
+function themeGroupsHtml(){
+ const groups=[
+  {title:'Sfondi base',subtitle:'I tre temi originali di MangaLog',items:[
+   ['tokyo','Tokyo Night','Blu notte · neon azzurro','🌙'],
+   ['paper','Paper Manga','Carta chiara · blu inchiostro','▤'],
+   ['shogun','Shogun Red','Nero · rosso · oro tenue','●']
+  ]},
+  {title:'Librerie manga',subtitle:'Scaffali manga con illuminazione neon',items:[
+   ['library-blue','Blu','Neon azzurro','📚'],['library-red','Rosso','Neon rosso','📚'],
+   ['library-violet','Viola','Neon viola','📚'],['library-white','Bianco','Luci bianche','📚']
+  ]},
+  {title:'Giardino sotto la pioggia',subtitle:'Giardino giapponese, pioggia, lanterne e verde',items:[
+   ['garden-blue','Blu','Pioggia blu notte','☔'],['garden-white','Bianco','Nebbia argento','☔'],
+   ['garden-violet','Viola','Crepuscolo viola','☔'],['garden-green','Verde','Riflessi smeraldo','☔']
+  ]},
+  {title:'Acero giapponese',subtitle:'Paesaggi, aceri, ponti e lanterne',items:[
+   ['maple-red','Rosso','Tramonto cremisi','🍁'],['maple-blue','Blu','Notte al chiaro di luna','🍁'],
+   ['maple-violet','Viola','Crepuscolo viola','🍁'],['maple-gold','Dorato','Autunno dorato','🍁']
+  ]}
+ ];
+ let out='<section class="panel"><h2>🎨 Aspetto dell’app</h2><p class="muted">Scegli una tipologia di sfondo e poi il colore. La scelta è salvata soltanto su questo dispositivo e non cambia i dati della collezione o l’account cloud.</p>';
+ for(const group of groups){
+  out+='<div class="theme-family"><h3>'+group.title+'</h3><p class="muted">'+group.subtitle+'</p><div class="theme-selector" role="group" aria-label="'+group.title+'">';
+  for(const [id,title,sub,symbol] of group.items){
+   const newAsset=id.startsWith('garden-')||id.startsWith('maple-');
+   const current=currentTheme()===id;
+   out+='<button type="button" class="theme-option" data-theme-select="'+id+'"'+(newAsset?' data-theme-asset="'+id+'" disabled':'')+' aria-pressed="'+current+'"><span class="theme-swatch '+id+'" aria-hidden="true">'+symbol+'</span><span><strong>'+title+'</strong><small>'+sub+'</small>'+(newAsset?'<small class="theme-asset-status">Da caricare su GitHub</small>':'')+'</span>'+(current?'<span class="theme-current" aria-label="Tema selezionato">✓</span>':'')+'</button>';
+  }
+  out+='</div></div>';
+ }
+ return out+'<p class="small-note">Le nuove varianti vengono abilitate automaticamente quando le immagini per smartphone e PC sono disponibili sul sito. Puoi cambiare tema in qualsiasi momento.</p></section>';
+}
+function checkThemeAssets(){
+ if(page!=='settings')return;
+ const buttons=document.querySelectorAll('[data-theme-asset]');
+ for(const button of buttons){
+  const id=button.getAttribute('data-theme-asset');
+  if(!id)continue;
+  const mobile='./assets/'+id+'.webp',desktop='./assets/'+id+'-desktop.webp';
+  Promise.all([mobile,desktop].map(url=>fetch(url,{method:'HEAD',cache:'no-store'}).then(response=>response.ok).catch(()=>false))).then(results=>{
+   if(!button.isConnected)return;
+   const ok=results.every(Boolean);
+   button.disabled=!ok;
+   const status=button.querySelector('.theme-asset-status');
+   if(status)status.textContent=ok?'Disponibile':'Da caricare su GitHub';
+  });
+ }
+}
 function settingsPage(){
- return header('PERSONALIZZA','Impostazioni')+
- `<section class="panel"><h2>🎨 Aspetto dell'app</h2><p class="muted">Sette stili per MangaLog: tre temi originali e quattro librerie manga illuminate. Tokyo Night è il tema predefinito; la tua scelta resta su questo dispositivo e non modifica i dati della collezione o l'account cloud.</p><div class="theme-selector" role="group" aria-label="Tema MangaLog">${[
- ['tokyo','Tokyo Night','Blu notte · neon azzurro','🌙'],
- ['paper','Paper Manga','Carta chiara · blu inchiostro','▤'],
- ['shogun','Shogun Red','Nero · rosso · oro tenue','●'],
- ['library-blue','Libreria Blu','Scaffali manga · neon blu','📚'],
- ['library-red','Libreria Rossa','Scaffali manga · neon rosso','📚'],
- ['library-violet','Libreria Viola','Scaffali manga · neon viola','📚'],
- ['library-white','Libreria Bianca','Scaffali manga · luci bianche','📚']
-
- ].map(([id,title,sub,symbol])=>`<button type="button" class="theme-option" data-theme-select="${id}" aria-pressed="${currentTheme()===id}"><span class="theme-swatch ${id}" aria-hidden="true">${symbol}</span><span><strong>${title}</strong><small>${sub}</small></span>${currentTheme()===id?'<span class="theme-current" aria-label="Tema selezionato">✓</span>':''}</button>`).join('')}</div><p class="small-note">Tocca un tema per applicarlo immediatamente. Puoi cambiarlo quando vuoi dalle Impostazioni.</p></section>`+
+ return header('PERSONALIZZA','Impostazioni')+themeGroupsHtml()+
  cloudSettingsPanel()+
  (cloudIsAdmin?`<section class="panel"><h2>Dashboard Admin</h2><p class="muted">Gestione utenti, statistiche e registro delle operazioni, riservati agli amministratori.</p><button class="btn primary" data-nav="admin">Apri Dashboard Admin Plus →</button></section>`:'')+
  `<div class="panel"><h2>Novità della v12.9</h2><p class="muted">Sette temi grafici selezionabili, incluse quattro librerie manga originali al neon, con Tokyo Night predefinito. Accesso e registrazione sempre disponibili in alto a destra, nome dell’account visibile dopo l’accesso e Logout dalle Impostazioni. Tema chiaro ispirato al logo, con cambio dalle Impostazioni. Mancolista alfabetica A–Z con ricerca a scomparsa, gestione manuale di variant ed edizioni speciali, riepiloghi della Home apribili e lista alfabetica dei volumi posseduti. Dashboard Admin e MangaLog Cloud restano disponibili.</p><div class="toolbar"><button class="btn" data-action="undo" ${undoStack.length?'':'disabled'}>${undoLabel()}</button></div></div>`+
@@ -2007,6 +2098,7 @@ async function cloudLogout(){
 function render(){
  navRender();renderAccountTopbar();
  $('#content').innerHTML=page==='home'?home():page==='collection'?collection():page==='owned'?ownedVolumesPage():page==='missing'?missingPage():page==='wishlist'?wishlistPage():page==='stats'?statsPage():page==='settings'?settingsPage():page==='admin'?(cloudIsAdmin?adminPage():home()):detail();
+ if(page==='settings')checkThemeAssets();
  if(page==='missing'&&missingView!=='simple'){
   applyBuyFilters();const bi=$('#buySearch');if(bi)bi.addEventListener('input',e=>{buySearch=e.target.value;applyBuyFilters()});
  }
