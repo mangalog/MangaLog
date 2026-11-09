@@ -1380,6 +1380,32 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   opacity:1;
  }
 }
+
+/* Desktop wide panoramico: fonte landscape autentica quando disponibile.
+   Mantiene il precedente desktop come fallback finche' gli 8 WEBP
+   non sono su GitHub. Mai specchiature, mai doppie lune. */
+:root[data-theme="garden-blue"]{--mangalog-wide-photo:url('./assets/garden-blue-desktop-wide.webp')}
+:root[data-theme="garden-white"]{--mangalog-wide-photo:url('./assets/garden-white-desktop-wide.webp')}
+:root[data-theme="garden-violet"]{--mangalog-wide-photo:url('./assets/garden-violet-desktop-wide.webp')}
+:root[data-theme="garden-green"]{--mangalog-wide-photo:url('./assets/garden-green-desktop-wide.webp')}
+:root[data-theme="maple-red"]{--mangalog-wide-photo:url('./assets/maple-red-desktop-wide.webp')}
+:root[data-theme="maple-blue"]{--mangalog-wide-photo:url('./assets/maple-blue-desktop-wide.webp')}
+:root[data-theme="maple-violet"]{--mangalog-wide-photo:url('./assets/maple-violet-desktop-wide.webp')}
+:root[data-theme="maple-gold"]{--mangalog-wide-photo:url('./assets/maple-gold-desktop-wide.webp')}
+@media(min-width:801px){
+ :root:is([data-theme^="garden-"],[data-theme^="maple-"]) body::after{
+  content:none!important;display:none!important;
+ }
+ :root:is([data-theme^="garden-"],[data-theme^="maple-"]) body::before{
+  background-image:linear-gradient(90deg,rgba(4,7,14,.30),rgba(4,7,14,.13)),
+    var(--mangalog-wide-photo),var(--library-desktop-photo);
+  background-size:cover,cover,cover;
+  background-position:center,center,center;
+  background-repeat:no-repeat,no-repeat,no-repeat;
+  background-attachment:fixed,fixed,fixed;
+  opacity:1;
+ }
+}
 </style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.10 Famiglie di sfondi</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=true;</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
