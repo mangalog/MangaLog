@@ -1381,28 +1381,26 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
  }
 }
 
-/* Desktop wide panoramico: fonte landscape autentica quando disponibile.
-   Mantiene il precedente desktop come fallback finche' gli 8 WEBP
-   non sono su GitHub. Mai specchiature, mai doppie lune. */
-:root[data-theme="garden-blue"]{--mangalog-wide-photo:url('./assets/garden-blue-desktop-wide.webp')}
-:root[data-theme="garden-white"]{--mangalog-wide-photo:url('./assets/garden-white-desktop-wide.webp')}
-:root[data-theme="garden-violet"]{--mangalog-wide-photo:url('./assets/garden-violet-desktop-wide.webp')}
-:root[data-theme="garden-green"]{--mangalog-wide-photo:url('./assets/garden-green-desktop-wide.webp')}
-:root[data-theme="maple-red"]{--mangalog-wide-photo:url('./assets/maple-red-desktop-wide.webp')}
-:root[data-theme="maple-blue"]{--mangalog-wide-photo:url('./assets/maple-blue-desktop-wide.webp')}
-:root[data-theme="maple-violet"]{--mangalog-wide-photo:url('./assets/maple-violet-desktop-wide.webp')}
-:root[data-theme="maple-gold"]{--mangalog-wide-photo:url('./assets/maple-gold-desktop-wide.webp')}
+/* Desktop landscape definitivi — cache-busting esplicito; nessun vecchio fallback */
+:root[data-theme="garden-blue"]{--mangalog-wide-photo:url('./assets/garden-blue-desktop-wide.webp?v=20261110-finale')}
+:root[data-theme="garden-white"]{--mangalog-wide-photo:url('./assets/garden-white-desktop-wide.webp?v=20261110-finale')}
+:root[data-theme="garden-violet"]{--mangalog-wide-photo:url('./assets/garden-violet-desktop-wide.webp?v=20261110-finale')}
+:root[data-theme="garden-green"]{--mangalog-wide-photo:url('./assets/garden-green-desktop-wide.webp?v=20261110-finale')}
+:root[data-theme="maple-red"]{--mangalog-wide-photo:url('./assets/maple-red-desktop-wide.webp?v=20261110-finale')}
+:root[data-theme="maple-blue"]{--mangalog-wide-photo:url('./assets/maple-blue-desktop-wide.webp?v=20261110-finale')}
+:root[data-theme="maple-violet"]{--mangalog-wide-photo:url('./assets/maple-violet-desktop-wide.webp?v=20261110-finale')}
+:root[data-theme="maple-gold"]{--mangalog-wide-photo:url('./assets/maple-gold-desktop-wide.webp?v=20261110-finale')}
 @media(min-width:801px){
  :root:is([data-theme^="garden-"],[data-theme^="maple-"]) body::after{
   content:none!important;display:none!important;
  }
  :root:is([data-theme^="garden-"],[data-theme^="maple-"]) body::before{
   background-image:linear-gradient(90deg,rgba(4,7,14,.30),rgba(4,7,14,.13)),
-    var(--mangalog-wide-photo),var(--library-desktop-photo);
-  background-size:cover,cover,cover;
-  background-position:center,center,center;
-  background-repeat:no-repeat,no-repeat,no-repeat;
-  background-attachment:fixed,fixed,fixed;
+    var(--mangalog-wide-photo);
+  background-size:cover,cover;
+  background-position:center,center;
+  background-repeat:no-repeat,no-repeat;
+  background-attachment:fixed,fixed;
   opacity:1;
  }
 }
