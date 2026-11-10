@@ -1404,6 +1404,16 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
   opacity:1;
  }
 }
+
+/* Admin Plus — pannelli opachi per garantire leggibilita' sopra ogni sfondo fotografico.
+   Non modifica l'aspetto del tema Paper e non tocca dati o funzioni admin. */
+:root:not([data-theme="paper"]) .ap-banner{background:#112334;color:#f4f7fc}
+:root:not([data-theme="paper"]) .ap-kpi{background:#152437;color:#f4f7fc}
+:root:not([data-theme="paper"]) .ap-section{background:#121e2d;color:#f4f7fc;box-shadow:0 7px 26px rgba(0,0,0,.25)}
+:root:not([data-theme="paper"]) .ap-search{background:#0c1726;color:#f4f7fc}
+:root:not([data-theme="paper"]) .ap-history li{background:#17283a}
+:root:not([data-theme="paper"]) .ap-feedback{background:#142b3e}
+:root:not([data-theme="paper"]) .ap-error{background:#40202a}
 </style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.10 Famiglie di sfondi</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=true;</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <script>
