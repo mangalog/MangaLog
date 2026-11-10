@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#09111c"><title>MangaLog v13 Beta 6 — Aggiunta reale con conferma cloud</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#f3f7ff;background:#09111c}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% 0,#203c6066,transparent 42%),#09111c;min-height:100dvh}a{color:#75caff}
+header{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:16px;max-width:1060px;margin:auto}.logo{font-size:21px;font-weight:900;letter-spacing:.05em}.logo b{color:#fd526b}main{max-width:960px;margin:auto;padding:16px 16px 90px}
+h1{font-size:clamp(25px,6vw,38px);margin:10px 0}h2{font-size:19px;margin:0 0 12px}.muted{color:#b8c8d6;line-height:1.5}.tag{color:#abddff;border:1px solid #44647e;border-radius:30px;padding:5px 12px;font-size:11px;font-weight:800}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:20px 0}.card{padding:20px;background:#132133e8;border:1px solid #39516a;border-radius:16px}.full{grid-column:1/-1}
+button,input,select{font:inherit}button{min-height:44px;padding:10px 13px;cursor:pointer;border-radius:10px;color:white;background:#29415a;border:1px solid #62839f;font-weight:750}button.primary{background:#d63855;border-color:#ff6683}button:disabled{opacity:.5;cursor:not-allowed}button:hover:not(:disabled){filter:brightness(1.14)}
+input,select{display:block;width:100%;min-height:45px;border:1px solid #526d89;background:#0b1929;border-radius:9px;padding:12px;color:#fff}label{font-size:13px;font-weight:750;display:block;margin:13px 0 7px}
+:focus-visible{outline:3px solid #7dd4ff;outline-offset:2px}.actions{display:flex;flex-wrap:wrap;gap:9px;margin-top:13px}.actions button{flex:1 1 150px}
+#frame{position:relative;background:#000;border-radius:13px;margin:14px 0;overflow:hidden;aspect-ratio:4/3}#frame video{width:100%;height:100%;object-fit:cover}
+.guide{pointer-events:none;position:absolute;left:14%;right:14%;top:37%;height:25%;border:3px solid #73efb2;border-radius:10px;box-shadow:0 0 0 150vw #0005}
+#frame[hidden],#result[hidden],#lookupProgress[hidden]{display:none}
+#lookupProgress{white-space:pre-line;margin:12px 0;border-left:4px solid #69bbff}
+#status{padding:12px;margin-top:14px;border-radius:9px;background:#1b3042;border-left:4px solid #67bfff;font-size:13px;line-height:1.45;min-height:55px}#status.err{background:#43232b;border-left-color:#ff7586}#status.good{background:#184135;border-left-color:#67f8a3}
+#result{border-color:#368f6f}#code{font-size:26px;font-weight:900;letter-spacing:.05em;color:#9dffcc;overflow-wrap:anywhere}.fields{display:grid;grid-template-columns:1fr 1fr;gap:0 13px}.info{font-size:12px;color:#afc1ce;line-height:1.55}.notice{border:1px solid #4a6279;border-radius:11px;padding:13px;background:#18293b;font-size:13px;line-height:1.5}#source[hidden]{display:none}
+@media(max-width:700px){.grid,.fields{grid-template-columns:1fr}.card{padding:15px}.full{grid-column:auto}}
+
+#labSandbox{margin-top:18px;border-color:#427b84;background:#112b37}
+#labSandbox[hidden],#labForm[hidden],#labMismatch[hidden]{display:none}
+#labSandbox .labState{background:#162b3b;border:1px solid #3e5b74;border-radius:10px;padding:12px;line-height:1.55;margin:13px 0;white-space:pre-line}
+#labSandbox .labState.fail{border-color:#d25e70;background:#3a202b;color:#ffd5de}
+#labSandbox .labState.good{border-color:#44b489;background:#173b30;color:#d5ffea}
+#labSandbox input[type=checkbox]{width:20px;min-height:20px;height:20px;accent-color:#68e0a0;flex:0 0 20px}
+#labSandbox #labMismatch{background:#463526;padding:12px;border-radius:9px;border:1px solid #c79a61;font-size:13px}
+#labSandbox .labHint{font-size:12px;color:#aac5d3;line-height:1.5}
+#labSandbox button{margin-bottom:2px}
+
+#mlReal{border-color:#438771;background:#102c2a;margin:19px 0}
+#mlReal .mlRealStatus,#mlReal .mlRealPreview{border:1px solid #456e70;border-radius:10px;padding:13px;margin:12px 0;white-space:pre-line;line-height:1.55;font-size:13px}
+#mlReal .mlRealStatus{background:#173932;color:#d2f9e6}
+#mlReal .mlRealStatus.error,#mlReal .mlRealPreview.error{background:#45262e;border-color:#c15e6e;color:#ffdee3}
+#mlReal .mlRealPreview{background:#152b30}
+#mlReal .mlRealPreview.ready{border-color:#4da87c;background:#15392b;color:#dbffe8}
+#mlReal #mlRealAgree{width:21px;min-height:21px;height:21px;flex:0 0 21px;accent-color:#6ce3aa}
+#mlReal .mlRealAgreeWrap{display:flex;align-items:flex-start;gap:9px;background:#2e322f;border:1px solid #bca16a;border-radius:9px;padding:12px;line-height:1.4;font-weight:600;font-size:13px}
+#mlReal .mlRealButtons{display:flex;gap:9px;flex-wrap:wrap}
+#mlReal .mlRealButtons button{flex:1 1 160px}
+#mlReal [hidden]{display:none!important}
+</style></head>
+<body>
+<header><div class="logo">MANGA<b>LOG</b> <span style="color:#8cbedd;font-size:11px">LAB ISBN</span></div><a href="../">← App principale</a></header>
+<main>
+<span class="tag">v13 Beta 6 · 10/11/2026 · SCANNER + CLOUD FACOLTATIVO</span>
+<h1>Scansiona il codice ISBN</h1>
+<p class="muted">Leggi il codice ISBN dal manga: lo scanner cerca prima nell'archivio e poi online. Puoi continuare a usare la demo oppure, dopo il collegamento e la conferma esplicita, aggiungere un singolo volume alla tua collezione reale MangaLog Cloud.</p>
+<div class="grid">
+<section class="card">
+<h2>1. Scansione con fotocamera</h2>
+<p class="info">Sul Samsung usa Chrome e autorizza la fotocamera; su iPhone usa Safari. Inquadra bene le 13 cifre del codice a barre EAN-13.</p>
+<div class="actions"><button type="button" id="start" class="primary">📷 Avvia fotocamera</button><button type="button" id="stop" disabled>Ferma</button></div>
+<div id="frame" hidden><video id="preview" muted autoplay playsinline></video><div class="guide" aria-hidden="true"></div></div>
+<div id="status" role="status" aria-live="polite">Pronto per la scansione.</div>
+</section>
+<section class="card">
+<h2>2. Foto o inserimento manuale</h2>
+<p class="info">Se la scansione dal vivo non riesce, fotografa solo il barcode oppure scrivi il codice.</p>
+<label for="photo">Foto del codice</label><input type="file" id="photo" accept="image/*" capture="environment">
+<label for="manual">ISBN-13</label><input id="manual" type="text" inputmode="numeric" maxlength="28" autocomplete="off" placeholder="9788864201870">
+<div class="actions"><button type="button" id="check">Verifica codice</button><button type="button" id="demo">Prova One Piece</button><button type="button" id="testGod">Prova God of High School 7</button><button type="button" id="testSweet">Prova Sweet Home 1</button></div>
+<p class="info">Accettiamo solo ISBN-13 che iniziano per 978 o 979 e superano il controllo matematico. Un ISBN valido non garantisce, da solo, che un volume sia nel catalogo.</p>
+</section>
+<section class="card full" id="result" hidden aria-live="polite">
+<h2>3. Scheda riconosciuta da confermare</h2><p id="resultState" class="info"></p><div id="code"></div><p id="help" class="muted"></p><div id="lookupProgress" class="notice" role="status" aria-live="polite" hidden></div>
+<div class="fields">
+<div><label for="series">Titolo della serie</label><input id="series" maxlength="120"></div>
+<div><label for="volume">Numero del volume</label><input id="volume" type="number" min="1" max="2000" step="1"></div>
+<div><label for="edition">Edizione italiana</label><input id="edition" maxlength="100"></div>
+<div><label for="publisher">Editore</label><input id="publisher" maxlength="100"></div>
+</div>
+<p><a id="source" href="#" target="_blank" rel="noopener noreferrer" hidden>Apri la scheda dell'editore ↗</a></p><p><a id="manualWebSearch" href="#" target="_blank" rel="noopener noreferrer" hidden>Cerca questo ISBN sul web ↗</a> <span class="info" id="manualWebNote" hidden>(ricerca manuale: apre Google solo quando tocchi il link)</span></p>
+<div class="actions"><button type="button" id="export" class="primary">Esporta scheda di prova</button><button type="button" id="copy">Copia ISBN</button><button type="button" id="searchOnline">Cerca online</button><button type="button" id="again">Altro volume</button></div>
+<p class="info">La scheda JSON esportata serve solo al collaudo: non è un backup importabile e non aggiunge volumi a MangaLog. L'aggiunta automatica con conferma verrà integrata nella fase successiva.</p>
+</section>
+</div>
+
+<section id="labSandbox" class="card">
+  <span class="tag">PASSO 4 · PROVA SICURA</span>
+  <h2 style="margin-top:12px">Aggiungi alla collezione (simulazione)</h2>
+  <p class="muted">Puoi provare con la collezione demo oppure selezionare un tuo backup MangaLog. Il backup viene letto dal Samsung <strong>solo in memoria</strong>: non viene caricato online, non modifica Supabase e non tocca la collezione reale.</p>
+  <div class="actions"><button type="button" id="labDemo">↻ Ricarica la demo</button><button id="labUndo" type="button" disabled>↶ Annulla ultima aggiunta</button></div>
+  <label for="labFile">Oppure usa un backup della collezione (.json, massimo 5 MB)</label>
+  <input id="labFile" type="file" accept=".json,application/json">
+  <div class="labState" id="labSummary" role="status" aria-live="polite">Collezione demo in preparazione…</div>
+  <div id="labForm" hidden>
+    <label for="labTarget">Destinazione del volume scansionato</label>
+    <select id="labTarget"><option value="">Scansiona prima un ISBN</option></select>
+    <p id="labMismatch" hidden><label style="margin:0;display:flex;gap:8px;align-items:flex-start"><input type="checkbox" id="labOverride"><span>Ho verificato il manga fisico: confermo che questa è la serie corretta anche se <strong>edizione/editore non coincidono</strong> con i dati trovati.</span></label></p>
+    <div class="labState" id="labDecision" role="status" aria-live="polite"></div>
+    <div class="actions"><button class="primary" id="labAdd" type="button" disabled>✓ Conferma aggiunta solo nella prova</button><button type="button" id="labReport" disabled>↓ Scarica report del test</button></div>
+    <p id="labFeedback" class="muted" aria-live="polite"></p>
+  </div>
+  <p class="labHint"><strong>La collezione di prova non viene salvata.</strong> Chiudendo la pagina le aggiunte spariscono. Il report esportabile non è un backup importabile. Per ora non c'è alcun pulsante che scrive nella MangaLog pubblica.</p>
+</section>
+
+<section class="card" id="mlReal" aria-label="Connessione MangaLog Cloud Beta 6">
+<span class="tag">PASSO 5 · BETA 6 · CLOUD REALE</span>
+<h2 style="margin-top:14px">Aggiungi un volume alla tua MangaLog</h2>
+<p class="muted">Il collegamento alla collezione <strong>non è automatico</strong>. Accedi prima a MangaLog dal medesimo browser, poi premi «Collega». Solo dopo la tua conferma il volume verrà salvato sul cloud.</p>
+<div class="mlRealButtons">
+ <button id="mlRealConnect" type="button">☁ Collega account MangaLog</button>
+ <button id="mlRealRefresh" type="button" disabled>↻ Rileggi il cloud</button>
+</div>
+<div id="mlRealStatus" class="mlRealStatus" role="status" aria-live="polite">Non collegato. Nessun dato cloud è stato caricato.</div>
+<div id="mlRealBody" hidden>
+ <label for="mlRealTarget">Serie ed edizione presenti nel cloud</label>
+ <select id="mlRealTarget"><option value="">Prima scansiona un ISBN</option></select>
+ <div id="mlRealTotalWrap" hidden>
+  <label for="mlRealTotal">Totale volumi della nuova edizione (dato provvisorio, modificabile poi in MangaLog)</label>
+  <input id="mlRealTotal" type="number" min="1" max="2000" step="1">
+ </div>
+ <p class="info">Per sicurezza l’edizione e l’editore devono coincidere esattamente. Non è consentito forzare un abbinamento errato. Se l’edizione è diversa, puoi creare una nuova serie separata.</p>
+ <div id="mlRealPreview" class="mlRealPreview" role="status" aria-live="polite">Inquadra un ISBN per iniziare.</div>
+ <label class="mlRealAgreeWrap">
+  <input type="checkbox" id="mlRealAgree">
+  <span>Ho controllato fisicamente titolo, numero ed edizione e ho esportato un backup di MangaLog. Voglio salvare <strong>questo volume nella mia vera collezione</strong>, dopo la conferma finale.</span>
+ </label>
+ <div class="mlRealButtons" style="margin-top:13px">
+  <button id="mlRealSave" type="button" class="primary" disabled>✓ Conferma e salva su MangaLog Cloud</button>
+  <button id="mlRealClose" type="button">Disattiva modalità reale</button>
+ </div>
+</div>
+<p class="info"><strong>Protezione cloud:</strong> controlliamo l’account, la sessione autorizzata, i doppioni e la revisione del database prima della scrittura. Se i dati sono cambiati su un altro dispositivo, l'operazione si interrompe. Non vengono richieste password in questo laboratorio.</p>
+<p class="info"><a href="../" target="_blank" rel="noopener noreferrer">Apri MangaLog per accedere o creare un backup ↗</a></p>
+</section>
+<p class="notice"><strong>Privacy:</strong> la fotocamera viene utilizzata solo mentre lo scanner è attivo. Non vengono inviati video o foto a MangaLog, non è necessario accedere a Supabase e non viene salvato alcun dato personale. Per gli ISBN sconosciuti il codice viene inviato alle API pubbliche di Open Library e Google Books (non le immagini). Su alcuni browser il riconoscimento si appoggia alla libreria gratuita ZXing caricata dal CDN.</p>
+</main>
+<script src="../cloud-config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+<script>
+(function(){
+'use strict';
+var el=function(id){return document.getElementById(id)};
+var known={
+'9788864201870':{series:'One Piece',volume:1,edition:'New Edition',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/greatest-97-one-piece-new-edition-1'},
+'9788834911259':{series:'DanDaDan',volume:1,edition:'Regular',publisher:'J-POP Manga',source:'https://j-pop.it/products/dandadan-1'},
+'9788822636782':{series:'The God of High School',volume:1,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-1'},
+'9788822636829':{series:'The God of High School',volume:2,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-2'},
+'9788822640819':{series:'The God of High School',volume:3,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-3'},
+'9788822641663':{series:'The God of High School',volume:4,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-4'},
+'9788822643032':{series:'The God of High School',volume:5,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-5'},
+'9788822650467':{series:'The God of High School',volume:6,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-6'},
+'9788822654182':{series:'The God of High School',volume:7,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-7'},
+'9788822630896':{series:'Sweet Home',volume:1,edition:'Edizione italiana Star Comics · Manhwa',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/sweet-home-1'}
+};
+var live=false,token=0,media=null,control=null,tickTimer=null,libraryLoading=null,current='';
+var labVersion='Beta 6 · 2026-11-10';
+function clean(v){return String(v||'').replace(/[\s-]/g,'').trim()}
+function valid(v){var n=clean(v);if(!/^97[89][0-9]{10}$/.test(n))return false;var sum=0;for(var j=0;j<12;j++)sum+=(n.charCodeAt(j)-48)*(j%2?3:1);return (10-sum%10)%10===(n.charCodeAt(12)-48)}
+function status(msg,kind){el('status').textContent=msg;el('status').className=kind||''}
+function stop(){
+live=false;token++;if(tickTimer)clearTimeout(tickTimer);tickTimer=null;
+if(control){try{control.stop()}catch(e){}control=null}
+if(media){media.getTracks().forEach(function(t){t.stop()});media=null}
+var v=el('preview');try{v.pause()}catch(e){}v.srcObject=null;
+el('frame').hidden=true;el('start').disabled=false;el('stop').disabled=true
+}
+
+var lookupSequence=0, lastExternalSource=null;
+function numberFromTitle(title){
+ var m=String(title||'').match(/(?:^|[\s,:#-])(?:vol(?:ume)?\.?|n\.)\s*(\d{1,4})\s*$/i);
+ return m?Number(m[1]):null;
+}
+function cleanTitle(title){
+ return String(title||'').replace(/(?:[\s,:#-])(?:vol(?:ume)?\.?|n\.)\s*\d{1,4}\s*$/i,'').trim();
+}
+async function fetchJSON(url,limitMs){
+ var controller=new AbortController(),timer=setTimeout(function(){controller.abort()},limitMs||7500);
+ try{
+  var response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/json'}});
+  if(response.status===404)return null;
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  return await response.json();
+ }finally{clearTimeout(timer)}
+}
+async function getOpenLibrary(code){
+ var data=await fetchJSON('https://openlibrary.org/isbn/'+code+'.json',7000);
+ if(!data||typeof data.title!=='string')return null;
+ // An edition returned by an ISBN lookup is usable only if that ISBN agrees
+ // with any identifiers explicitly present in its metadata.
+ var ids=[].concat(data.isbn_13||[],data.isbn_10||[]).map(String);
+ if(ids.length&&!ids.includes(code))return null;
+ var pub=Array.isArray(data.publishers)?data.publishers.map(function(p){return typeof p==='string'?p:(p&&p.name)||''}).find(Boolean):'';
+ var title=data.title.trim();
+ return {series:cleanTitle(title),volume:numberFromTitle(title),edition:'',publisher:pub||'',source:'https://openlibrary.org/isbn/'+code,provider:'Open Library'};
+}
+async function getGoogleBooks(code){
+ var data=await fetchJSON('https://www.googleapis.com/books/v1/volumes?q='+encodeURIComponent('isbn:'+code)+'&maxResults=10&printType=books',7500);
+ var items=Array.isArray(data&&data.items)?data.items:[];
+ for(var i=0;i<items.length;i++){
+  var item=items[i],info=item&&item.volumeInfo;
+  if(!info||typeof info.title!=='string')continue;
+  var ids=Array.isArray(info.industryIdentifiers)?info.industryIdentifiers:[];
+  if(!ids.some(function(id){return id&&id.type==='ISBN_13'&&String(id.identifier).replace(/[\s-]/g,'')===code}))continue;
+  var title=info.title.trim();
+  return {series:cleanTitle(title),volume:numberFromTitle(title),edition:'',publisher:String(info.publisher||'').slice(0,100),
+   source:(typeof info.infoLink==='string'&&/^https:\/\//.test(info.infoLink))?info.infoLink:'https://books.google.com/books?vid=ISBN'+code,provider:'Google Books'};
+ }
+ return null;
+}
+
+// The user must always get feedback: a valid ISBN is not the same as a
+// matching catalog record. Progress and per-provider errors stay visible.
+function setLookupProgress(message){
+ var p=el('lookupProgress');
+ p.hidden=false;p.textContent=message;
+}
+function barcodeIsbn(raw){
+ var cleaned=clean(raw);
+ if(valid(cleaned))return cleaned;
+ // Some EAN-13 readers append a five-digit price supplement. Accept the
+ // ISBN only when precisely one check-digit-valid candidate is present.
+ var digits=String(raw||'').replace(/[^0-9]/g,'');
+ var possible=[],seen={};
+ for(var i=0;i+13<=digits.length;i++){
+  var candidate=digits.slice(i,i+13);
+  if(!seen[candidate]&&valid(candidate)){seen[candidate]=true;possible.push(candidate)}
+ }
+ return possible.length===1?possible[0]:cleaned;
+}
+async function lookupOnline(code,sequence){
+ var names=['Open Library','Google Books'];
+ var states=['in corso…','in corso…'];
+ function show(){if(sequence===lookupSequence&&current===code)setLookupProgress(names.map(function(n,i){return n+': '+states[i]}).join('\n'))}
+ show();
+ var jobs=[getOpenLibrary,getGoogleBooks].map(function(fn,i){
+  return fn(code).then(function(item){
+   states[i]=item?'scheda disponibile':'ISBN non presente';
+   show();return {item:item,ok:true,name:names[i]};
+  }).catch(function(err){
+   var msg=String(err&&err.message||err);
+   states[i]=/AbortError|abort/i.test(msg)?'tempo scaduto':'non raggiungibile / errore';
+   show();return {item:null,ok:false,name:names[i]};
+  });
+ });
+ var all=await Promise.all(jobs);
+ return {item:all[0].item||all[1].item,success:all.some(function(x){return x.ok}),statuses:states};
+}
+async function searchOnline(code){
+ if(!valid(code)||current!==code)return;
+ var sequence=++lookupSequence;
+ el('resultState').textContent='ISBN valido · Ricerca online in corso…';
+ el('help').textContent='Sto consultando due fonti bibliografiche. Se non trovano il volume, puoi compilare i dati a mano.';
+ status('ISBN '+code+' valido. Ricerca online avviata…');
+ el('searchOnline').disabled=true;
+ setLookupProgress('Open Library: in corso…\nGoogle Books: in corso…');
+ var response;
+ try{response=await lookupOnline(code,sequence)}
+ catch(err){response={item:null,success:false,statuses:['errore','errore']}}
+ if(sequence!==lookupSequence||current!==code)return;
+ el('searchOnline').disabled=false;
+ var item=response.item;
+ if(!item){
+  el('resultState').textContent=response.success?'ISBN valido · Nessuna scheda trovata':'ISBN valido · Servizi di ricerca non disponibili';
+  el('help').textContent=response.success
+   ?'Questo ISBN non è nel nostro archivio e nessuna delle fonti consultabili lo identifica. Non significa che il manga non esista: prova a compilare i campi manualmente.'
+   :'Open Library e Google Books non hanno risposto correttamente. La lettura del codice è comunque riuscita. Puoi riprovare la ricerca o compilare i campi manualmente.';
+  status('ISBN letto correttamente: '+code+'. '+(response.success?'Non presente nelle fonti cercate.':'Ricerca esterna non riuscita.'),'err');
+  labDraw();window.dispatchEvent(new Event('mangalog-isbn-change'));
+  return;
+ }
+ ['series','volume','edition','publisher'].forEach(function(key){
+  if(!el(key).value&&item[key]!==null&&item[key]!==undefined)el(key).value=String(item[key]).slice(0,key==='series'?120:100);
+ });
+ el('resultState').textContent='ISBN valido · Scheda proposta da '+item.provider+' (da verificare)';
+ el('help').textContent='Verifica su una copia fisica titolo, lingua, numero ed edizione: le schede bibliografiche potrebbero non identificarli completamente.';
+ var link=el('source');link.href=item.source;link.textContent='Apri scheda su '+item.provider+' ↗';link.hidden=false;
+ lastExternalSource=item.source;
+ status('Scheda trovata su '+item.provider+'. Verifica edizione e numero prima di esportare.','good');
+ labDraw();window.dispatchEvent(new Event('mangalog-isbn-change'));
+}
+function match(raw,origin){
+ var code=barcodeIsbn(raw);
+ if(!valid(code)){
+  status('Codice letto ('+String(raw||'').slice(0,35)+'), ma non è un ISBN-13 valido. Cerca il barcode principale che inizia con 978 o 979, oppure inserisci le 13 cifre manualmente.','err');
+  return false;
+ }
+ stop();++lookupSequence;current=code;el('manual').value=code;lastExternalSource=null;
+ var webLink=el('manualWebSearch');webLink.href='https://www.google.com/search?q='+encodeURIComponent('"'+code+'" manga Italia');webLink.hidden=false;el('manualWebNote').hidden=false;
+ el('lookupProgress').hidden=true;el('lookupProgress').textContent='';
+ var item=known[code]||null;
+ el('result').hidden=false;el('code').textContent=code;
+ el('resultState').textContent=item?'✓ Volume identificato nell’archivio verificato':'ISBN valido · Non presente nell’archivio interno';
+ el('help').textContent=item?'Controlla che numero ed edizione coincidano con la tua copia.':'Il codice è valido. Avvio la ricerca online su Open Library e Google Books.';
+ ['series','edition','publisher','volume'].forEach(function(k){el(k).value=item?item[k]:''});
+ el('source').hidden=!item;el('source').href=item?item.source:'#';
+ el('source').textContent='Apri la scheda dell’editore ↗';
+ el('searchOnline').disabled=false;
+ status('ISBN letto da '+origin+': '+code+'. '+(item?'Scheda trovata (archivio interno).':'Ricerca online in avvio…'),'good');
+ el('result').scrollIntoView({behavior:'smooth',block:'start'});
+ labDraw();window.dispatchEvent(new Event('mangalog-isbn-change'));
+ if(!item){setLookupProgress('Open Library: in attesa…\nGoogle Books: in attesa…');searchOnline(code)}
+ return true;
+}
+function loadLibrary(){
+if(window.ZXingBrowser)return Promise.resolve();
+if(libraryLoading)return libraryLoading;
+libraryLoading=new Promise(function(resolve,reject){
+var urls=['https://cdn.jsdelivr.net/npm/@zxing/browser@0.2.1/umd/zxing-browser.min.js','https://unpkg.com/@zxing/browser@0.2.1/umd/zxing-browser.min.js'];
+function next(i){
+ if(i===urls.length){reject(new Error('La libreria ZXing non si carica. Controlla Internet o usa il codice manuale.'));return}
+ var script=document.createElement('script');script.src=urls[i];script.onload=function(){window.ZXingBrowser?resolve():next(i+1)};script.onerror=function(){next(i+1)};document.head.appendChild(script)
+}
+next(0)
+}).catch(function(err){libraryLoading=null;throw err});
+return libraryLoading
+}
+async function zxingCamera(id){
+await loadLibrary();if(!live||id!==token)return;
+var reader=new window.ZXingBrowser.BrowserMultiFormatOneDReader();
+var ctl=await reader.decodeFromStream(media,el('preview'),function(result,error,ctrl){
+ if(!live||id!==token)return;
+ if(result){control=ctrl;match(result.getText(),'fotocamera')}
+});
+if(live&&id===token)control=ctl;else try{ctl.stop()}catch(e){}
+}
+async function start(){
+stop();live=true;var id=token;el('start').disabled=true;el('stop').disabled=false;el('frame').hidden=false;status('Attivazione della fotocamera…');
+try{
+if(!window.isSecureContext||!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia)throw new Error('Apri la pagina in HTTPS con Safari o Chrome e concedi il permesso per la fotocamera.');
+var s=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false});
+if(!live||id!==token){s.getTracks().forEach(function(x){x.stop()});return}
+media=s;el('preview').srcObject=s;await el('preview').play();
+status('Fotocamera attiva: inquadra l’ISBN sul retro del manga.');
+var support=false;
+if(window.BarcodeDetector){try{support=(await window.BarcodeDetector.getSupportedFormats()).includes('ean_13')}catch(e){}}
+if(support){
+ var detector=new window.BarcodeDetector({formats:['ean_13']});
+ var scan=async function(){
+  if(!live||id!==token)return;
+  try{var found=await detector.detect(el('preview'));for(var i=0;i<found.length;i++)if(match(found[i].rawValue,'fotocamera'))return}
+  catch(e){try{await zxingCamera(id);return}catch(err){stop();status('Impossibile leggere il video: '+err.message,'err');return}}
+  if(live&&id===token)tickTimer=setTimeout(scan,280)
+ };scan()
+}else await zxingCamera(id)
+}catch(e){if(live&&id===token){stop();status('Errore fotocamera: '+String(e.message||e)+'. Prova con una foto o ISBN manuale.','err')}}
+}
+async function photo(file){
+if(!file)return;stop();status('Analizzo l’immagine del barcode…');var url=null;
+try{
+ await loadLibrary();url=URL.createObjectURL(file);
+ var img=new Image();img.src=url;await img.decode();
+ var reader=new window.ZXingBrowser.BrowserMultiFormatOneDReader();
+ var result=await reader.decodeFromImageElement(img);
+ match(result.getText(),'fotografia')
+}catch(e){status('Non riesco a leggere l’ISBN nella foto. Migliora luce, inquadratura e messa a fuoco, o usa il codice manuale.','err')}
+finally{if(url)URL.revokeObjectURL(url);el('photo').value=''}
+}
+
+/* Beta 5 sandbox. This page never writes collection data to storage or Supabase. */
+var labCollection=null,labChanges=[],labPrevious=null,labSource='demo',labCode='',labChoice='';
+function normalizedName(x){
+ return String(x||'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
+  .toLocaleLowerCase('it').replace(/[^a-z0-9]+/g,' ').trim();
+}
+function labOwned(s){return new Set((Array.isArray(s.owned)?s.owned:[]).map(Number).filter(Number.isInteger))}
+function labStats(extra){
+ var total=labCollection.series.reduce(function(n,s){return n+labOwned(s).size},0);
+ el('labSummary').textContent=(labSource==='demo'?'DEMO':'BACKUP LOCALE')+
+  ' · '+labCollection.series.length+' serie · '+total+' volumi posseduti'+(extra?'\n'+extra:'');
+ el('labUndo').disabled=!labPrevious;el('labReport').disabled=!labChanges.length;
+}
+function labDemo(){
+ labSource='demo';labChanges=[];labPrevious=null;labCode='';labChoice='';
+ labCollection={version:12,wishlist:[],activity:[],series:[
+  {id:'demo-one-piece',title:'One Piece',edition:'New Edition',publisher:'Star Comics',total:111,owned:[1],purchasePlans:{},specialVolumes:[],notes:'',author:'',created:Date.now()},
+  {id:'demo-goh',title:'The God of High School',edition:'Edizione italiana Star Comics',publisher:'Star Comics',total:7,owned:[1,2,3],purchasePlans:{},specialVolumes:[],notes:'',author:'',created:Date.now()},
+  {id:'demo-sweet-home',title:'Sweet Home',edition:'Edizione italiana Star Comics · Manhwa',publisher:'Star Comics',total:5,owned:[],purchasePlans:{"1":{priority:'media',price:0,note:'Test acquisto',status:'da_ordinare'}},specialVolumes:[],notes:'',author:'',created:Date.now()}
+ ]};
+ el('labFeedback').textContent='';
+ labStats('Le modifiche sono temporanee. One Piece n. 1 è già posseduto.');
+ labDraw();
+}
+async function labImport(file){
+ if(!file)return;
+ try{
+  if(file.size>5000000)throw Error('Il file supera 5 MB');
+  var data=JSON.parse(await file.text());
+  if(!data||!Array.isArray(data.series)||data.series.length>10000)throw Error('Non è un backup MangaLog valido');
+  if(data.wishlist!==undefined&&!Array.isArray(data.wishlist))throw Error('Wishlist non valida');
+  var ids=new Set();
+  data.series.forEach(function(s,i){
+   if(!s||typeof s.id!=='string'||!s.id||ids.has(s.id)||typeof s.title!=='string'||
+      !s.title.trim()||!Array.isArray(s.owned)||!Number.isInteger(Number(s.total))||
+      Number(s.total)<1||Number(s.total)>2000)throw Error('Serie n. '+(i+1)+' non valida');
+   ids.add(s.id);
+  });
+  // Full local clone to preserve all MangaLog fields (wishlist, plans, variants, notes).
+  labCollection=JSON.parse(JSON.stringify(data));labSource='backup';
+  labPrevious=null;labChanges=[];labCode='';labChoice='';
+  el('labFeedback').textContent='';
+  labStats('Copia di '+file.name+' caricata esclusivamente nel browser.');
+  labDraw();
+ }catch(e){
+  el('labSummary').textContent='Importazione non riuscita: '+String(e.message||e).slice(0,160)+'. La prova precedente è invariata.';
+ }finally{el('labFile').value=''}
+}
+function labCandidate(){
+ return {code:current,title:el('series').value.trim(),edition:el('edition').value.trim(),
+  publisher:el('publisher').value.trim(),number:Number(el('volume').value)};
+}
+function labOption(id,label){
+ var option=document.createElement('option');option.value=id;option.textContent=label;
+ el('labTarget').appendChild(option);
+}
+function labDraw(){
+ if(!labCollection)return;
+ labStats();
+ var panel=el('labForm');panel.hidden=!current;
+ if(!current){el('labAdd').disabled=true;return}
+ var c=labCandidate(),matches=labCollection.series.filter(function(x){return normalizedName(x.title)===normalizedName(c.title)&&c.title});
+ var sel=el('labTarget');
+ if(labCode!==current){labChoice='';labCode=current;el('labOverride').checked=false}
+ var currentValue=labChoice;
+ sel.innerHTML='';
+ labOption('','— Seleziona una serie —');
+ matches.forEach(function(x){labOption(x.id,x.title+' · '+x.edition+' ('+labOwned(x).size+'/'+x.total+')')});
+ labOption('__new__','＋ Crea una nuova serie nella prova');
+ var exact=matches.filter(function(x){return c.edition&&normalizedName(x.edition)===normalizedName(c.edition)});
+ if(!matches.some(function(x){return x.id===currentValue})&&currentValue!=='__new__'){
+  currentValue=exact.length===1?exact[0].id:'';
+ }
+ sel.value=currentValue;labChoice=currentValue;
+ labExplain();
+}
+function labCheck(){
+ if(!labCollection)return {ok:false,text:'Carica la collezione demo o un backup.'};
+ var c=labCandidate(),choice=el('labTarget').value;
+ if(!valid(c.code)||!c.title||!Number.isInteger(c.number)||c.number<1||c.number>2000)
+  return {ok:false,text:'Completa il titolo e il numero del manga scansionato (da 1 a 2000).'};
+ if(!choice)return {ok:false,text:'Seleziona la serie. Se non è presente, usa “Crea una nuova serie”.'};
+ var matches=labCollection.series.filter(function(s){return normalizedName(s.title)===normalizedName(c.title)});
+ if(choice==='__new__'){
+  if(!c.edition)return {ok:false,text:'Per una nuova serie devi indicare l’edizione italiana, anche provvisoria.'};
+  if(matches.some(function(s){return normalizedName(s.edition)===normalizedName(c.edition)}))
+   return {ok:false,text:'Questa serie e questa edizione sono già presenti: seleziona la scheda esistente, evitando duplicati di serie.'};
+  return {ok:true,kind:'new',candidate:c,text:'Creazione di '+c.title+' · '+c.edition+' con il n. '+c.number+' posseduto. Totale provvisorio: '+c.number+'.'};
+ }
+ var s=labCollection.series.find(function(s){return s.id===choice});
+ if(!s)return {ok:false,text:'La serie selezionata non è più disponibile.'};
+ if(normalizedName(s.title)!==normalizedName(c.title))
+  return {ok:false,text:'Il titolo della serie non corrisponde al manga letto.'};
+ if(labOwned(s).has(c.number))return {ok:false,kind:'duplicate',target:s,text:'⛔ DOPPIONE: '+s.title+' · '+s.edition+' n. '+c.number+' è GIÀ POSSEDUTO. Nessuna aggiunta consentita.'};
+ var mismatch=(!c.edition||normalizedName(c.edition)!==normalizedName(s.edition)||
+  (!!c.publisher&&!!s.publisher&&normalizedName(c.publisher)!==normalizedName(s.publisher)));
+ if(mismatch&&!el('labOverride').checked)
+  return {ok:false,kind:'mismatch',target:s,text:'⚠ DATI DIVERSI\nScanner: '+(c.edition||'edizione sconosciuta')+' / '+(c.publisher||'editore sconosciuto')+
+  '\nBackup: '+s.edition+' / '+s.publisher+'\nControlla la copia fisica e spunta la conferma soltanto se è la stessa edizione.'};
+ var text='Aggiunta proposta: '+s.title+' · '+s.edition+' n. '+c.number+
+  '\nVolumi posseduti: '+labOwned(s).size+' → '+(labOwned(s).size+1)+'.';
+ if(c.number>Number(s.total))text+='\nIl totale della serie passerà da '+s.total+' a '+c.number+'.';
+ if(s.purchasePlans&&Object.prototype.hasOwnProperty.call(s.purchasePlans,String(c.number)))
+  text+='\nLa voce n. '+c.number+' sarà rimossa dalla lista acquisti della COPIA di prova.';
+ if(mismatch)text+='\n⚠ Abbinamento tra edizioni diverse confermato manualmente.';
+ return {ok:true,kind:'existing',target:s,candidate:c,text:text};
+}
+function labExplain(){
+ if(el('labForm').hidden||!labCollection)return;
+ var c=labCandidate(),s=labCollection.series.find(function(s){return s.id===el('labTarget').value});
+ var mismatch=!!s&&(!c.edition||normalizedName(c.edition)!==normalizedName(s.edition)||
+  (!!c.publisher&&!!s.publisher&&normalizedName(c.publisher)!==normalizedName(s.publisher)));
+ el('labMismatch').hidden=!mismatch;
+ if(!mismatch)el('labOverride').checked=false;
+ var plan=labCheck(),box=el('labDecision');box.textContent=plan.text;
+ box.className='labState'+(plan.ok?' good':plan.kind==='duplicate'||plan.kind==='mismatch'?' fail':'');
+ el('labAdd').disabled=!plan.ok;
+}
+function labAdd(){
+ var plan=labCheck();if(!plan.ok){labExplain();return}
+ if(!window.confirm('CONFERMA SOLO NEL LABORATORIO\n\n'+plan.text+
+   '\n\nNessuna modifica viene salvata su MangaLog o Supabase.\n\nConfermi?'))return;
+ plan=labCheck();if(!plan.ok){labExplain();return}
+ var c=plan.candidate;
+ labPrevious={data:JSON.stringify(labCollection),changes:labChanges.length};
+ var target;
+ if(plan.kind==='new'){
+  target={id:'lab-'+Date.now()+'-'+labCollection.series.length,title:c.title,edition:c.edition,
+  publisher:c.publisher||'Non specificato',author:'',total:c.number,owned:[],purchasePlans:{},
+  specialVolumes:[],notes:'Serie creata soltanto nel laboratorio ISBN.',created:Date.now()};
+  labCollection.series.push(target);
+ }else target=labCollection.series.find(function(s){return s.id===plan.target.id});
+ if(labOwned(target).has(c.number))return;
+ target.owned=Array.from(new Set([].concat(target.owned,[c.number]).map(Number))).sort(function(a,b){return a-b});
+ target.total=Math.max(Number(target.total),c.number);
+ if(target.purchasePlans)delete target.purchasePlans[String(c.number)];
+ if(!Array.isArray(labCollection.activity))labCollection.activity=[];
+ labCollection.activity=labCollection.activity.filter(function(x){return !(x&&x.seriesId===target.id&&Number(x.volume)===c.number)});
+ labCollection.activity.unshift({seriesId:target.id,volume:c.number,at:Date.now()});
+ labCollection.activity=labCollection.activity.slice(0,120);
+ labChanges.push({isbn:c.code,title:target.title,edition:target.edition,volume:c.number});
+ el('labFeedback').textContent='✓ Volume '+c.number+' aggiunto SOLO NELLA PROVA. Puoi annullare oppure scansionare un altro volume.';
+ labChoice=target.id;labDraw();
+}
+function labUndo(){
+ if(!labPrevious)return;
+ labCollection=JSON.parse(labPrevious.data);
+ labChanges=labChanges.slice(0,labPrevious.changes);
+ labPrevious=null;labChoice='';
+ el('labFeedback').textContent='↶ Ultima aggiunta annullata nella copia di prova.';
+ labDraw();
+}
+function labReport(){
+ if(!labChanges.length)return;
+ var payload={format:'mangalog-isbn-beta5-report',testOnly:true,
+  warning:'NON è un backup MangaLog e non è importabile.',createdAt:new Date().toISOString(),
+  source:labSource,changes:labChanges};
+ var url=URL.createObjectURL(new Blob([JSON.stringify(payload,null,2)],{type:'application/json'}));
+ var a=document.createElement('a');a.href=url;a.download='MangaLog_scanner_beta5_report.json';
+ document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(url)},1200);
+}
+
+function exportSheet(){
+if(!current)return;
+var title=el('series').value.trim(),n=Number(el('volume').value);
+if(!title||!Number.isInteger(n)||n<1||n>2000){status('Inserisci prima titolo della serie e numero di volume corretto.','err');return}
+var p={format:'mangalog-isbn-lab-v1',isbn13:current,series:title,volume:n,edition:el('edition').value.trim(),publisher:el('publisher').value.trim(),officialSource:known[current]?known[current].source:null,externalSource:lastExternalSource,verifiedInPilot:!!known[current],createdAt:new Date().toISOString(),note:'Prova tecnica, non importare come backup MangaLog'};
+var blob=new Blob([JSON.stringify(p,null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='mangalog-isbn-'+current+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1000);
+status('Scheda esportata. La tua collezione è rimasta invariata.','good')
+}
+
+el('labDemo').addEventListener('click',function(){
+ if(labChanges.length&&!window.confirm('Cancellare le aggiunte effettuate nella prova?'))return;
+ labDemo();
+});
+el('labFile').addEventListener('change',function(e){labImport(e.target.files&&e.target.files[0])});
+el('labUndo').addEventListener('click',labUndo);
+el('labTarget').addEventListener('change',function(e){labChoice=e.target.value;el('labOverride').checked=false;labExplain()});
+el('labOverride').addEventListener('change',labExplain);
+el('labAdd').addEventListener('click',labAdd);
+el('labReport').addEventListener('click',labReport);
+['series','volume','edition','publisher'].forEach(function(id){el(id).addEventListener('input',labDraw)});
+el('start').addEventListener('click',start);
+el('stop').addEventListener('click',function(){stop();status('Fotocamera fermata.')});
+el('check').addEventListener('click',function(){stop();match(el('manual').value,'inserimento manuale')});
+el('manual').addEventListener('keydown',function(e){if(e.key==='Enter')el('check').click()});
+el('demo').addEventListener('click',function(){stop();match('9788864201870','codice demo')});
+el('testGod').addEventListener('click',function(){stop();match('9788822654182','codice demo')});
+el('testSweet').addEventListener('click',function(){stop();match('9788822630896','codice demo')});
+el('photo').addEventListener('change',function(e){photo(e.target.files&&e.target.files[0])});
+el('export').addEventListener('click',exportSheet);
+el('copy').addEventListener('click',async function(){if(!current)return;try{await navigator.clipboard.writeText(current);status('ISBN copiato.','good')}catch(e){el('manual').focus();el('manual').select();status('Codice selezionato per copiarlo.')}});
+el('searchOnline').addEventListener('click',function(){if(current)searchOnline(current)});
+el('again').addEventListener('click',function(){lookupSequence++;labChoice='';el('labForm').hidden=true;el('manualWebSearch').hidden=true;el('manualWebNote').hidden=true;el('lookupProgress').hidden=true;el('result').hidden=true;current='';el('manual').value='';el('searchOnline').disabled=false;status('Pronto per un altro volume.');window.dispatchEvent(new Event('mangalog-isbn-change'));el('start').focus()});
+window.addEventListener('pagehide',stop);
+document.addEventListener('visibilitychange',function(){if(document.hidden&&live)stop()});
+window.MangaLogISBNTest={valid:valid,normalize:clean,barcodeIsbn:barcodeIsbn,numberFromTitle:numberFromTitle,version:labVersion};
+window.MangaLogBeta5Test={check:labCheck,draw:labDraw,add:labAdd,undo:labUndo,importBackup:labImport,demo:labDemo};
+window.MangaLogISBNBridge={valid:valid,candidate:function(){return {isbn:current,title:el('series').value,volume:el('volume').value,edition:el('edition').value,publisher:el('publisher').value}}};
+// Link diagnostico con ?isbn=9788822654182: consente un test senza fotocamera.
+labDemo();
+var prefill=new URLSearchParams(location.search).get('isbn');
+if(prefill&&valid(prefill)){match(prefill,'link di test')}
+})();
+</script><script src="./scanner-isbn-cloud-beta6.js"></script></body></html>
