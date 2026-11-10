@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#09111c"><title>MangaLog v13 — Laboratorio ISBN</title>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#09111c"><title>MangaLog v13 — Laboratorio ISBN con ricerca online</title>
 <style>
 :root{color-scheme:dark;font-family:system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color:#f3f7ff;background:#09111c}
 *{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% 0,#203c6066,transparent 42%),#09111c;min-height:100dvh}a{color:#75caff}
@@ -47,11 +47,11 @@ input{display:block;width:100%;min-height:45px;border:1px solid #526d89;backgrou
 <div><label for="publisher">Editore</label><input id="publisher" maxlength="100"></div>
 </div>
 <p><a id="source" href="#" target="_blank" rel="noopener noreferrer" hidden>Apri la scheda dell'editore ↗</a></p>
-<div class="actions"><button type="button" id="export" class="primary">Esporta scheda di prova</button><button type="button" id="copy">Copia ISBN</button><button type="button" id="again">Altro volume</button></div>
+<div class="actions"><button type="button" id="export" class="primary">Esporta scheda di prova</button><button type="button" id="copy">Copia ISBN</button><button type="button" id="searchOnline">Cerca online</button><button type="button" id="again">Altro volume</button></div>
 <p class="info">La scheda JSON esportata serve solo al collaudo: non è un backup importabile e non aggiunge volumi a MangaLog. L'aggiunta automatica con conferma verrà integrata nella fase successiva.</p>
 </section>
 </div>
-<p class="notice"><strong>Privacy:</strong> la fotocamera viene utilizzata solo mentre lo scanner è attivo. Non vengono inviati video o foto a MangaLog, non è necessario accedere a Supabase e non viene salvato alcun dato personale. Su alcuni browser il riconoscimento si appoggia alla libreria gratuita ZXing caricata dal CDN.</p>
+<p class="notice"><strong>Privacy:</strong> la fotocamera viene utilizzata solo mentre lo scanner è attivo. Non vengono inviati video o foto a MangaLog, non è necessario accedere a Supabase e non viene salvato alcun dato personale. Per gli ISBN sconosciuti il codice viene inviato alle API pubbliche di Open Library e Google Books (non le immagini). Su alcuni browser il riconoscimento si appoggia alla libreria gratuita ZXing caricata dal CDN.</p>
 </main>
 <script>
 (function(){
@@ -59,7 +59,14 @@ input{display:block;width:100%;min-height:45px;border:1px solid #526d89;backgrou
 var el=function(id){return document.getElementById(id)};
 var known={
 '9788864201870':{series:'One Piece',volume:1,edition:'New Edition',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/greatest-97-one-piece-new-edition-1'},
-'9788834911259':{series:'DanDaDan',volume:1,edition:'Regular',publisher:'J-POP Manga',source:'https://j-pop.it/products/dandadan-1'}
+'9788834911259':{series:'DanDaDan',volume:1,edition:'Regular',publisher:'J-POP Manga',source:'https://j-pop.it/products/dandadan-1'},
+'9788822636782':{series:'The God of High School',volume:1,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-1'},
+'9788822636829':{series:'The God of High School',volume:2,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-2'},
+'9788822640819':{series:'The God of High School',volume:3,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-3'},
+'9788822641663':{series:'The God of High School',volume:4,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-4'},
+'9788822643032':{series:'The God of High School',volume:5,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-5'},
+'9788822650467':{series:'The God of High School',volume:6,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-6'},
+'9788822654182':{series:'The God of High School',volume:7,edition:'Edizione italiana Star Comics',publisher:'Star Comics',source:'https://www.starcomics.com/fumetto/the-god-of-high-school-7'}
 };
 var live=false,token=0,media=null,control=null,tickTimer=null,libraryLoading=null,current='';
 function clean(v){return String(v||'').replace(/[\s-]/g,'').trim()}
@@ -72,17 +79,102 @@ if(media){media.getTracks().forEach(function(t){t.stop()});media=null}
 var v=el('preview');try{v.pause()}catch(e){}v.srcObject=null;
 el('frame').hidden=true;el('start').disabled=false;el('stop').disabled=true
 }
+
+var lookupSequence=0, lastExternalSource=null;
+function numberFromTitle(title){
+ var m=String(title||'').match(/(?:^|[\s,:#-])(?:vol(?:ume)?\.?|n\.)\s*(\d{1,4})\s*$/i);
+ return m?Number(m[1]):null;
+}
+function cleanTitle(title){
+ return String(title||'').replace(/(?:[\s,:#-])(?:vol(?:ume)?\.?|n\.)\s*\d{1,4}\s*$/i,'').trim();
+}
+async function fetchJSON(url,limitMs){
+ var controller=new AbortController(),timer=setTimeout(function(){controller.abort()},limitMs||7500);
+ try{
+  var response=await fetch(url,{signal:controller.signal,headers:{Accept:'application/json'}});
+  if(response.status===404)return null;
+  if(!response.ok)throw new Error('HTTP '+response.status);
+  return await response.json();
+ }finally{clearTimeout(timer)}
+}
+async function getOpenLibrary(code){
+ var data=await fetchJSON('https://openlibrary.org/isbn/'+code+'.json',7000);
+ if(!data||typeof data.title!=='string')return null;
+ // An edition returned by an ISBN lookup is usable only if that ISBN agrees
+ // with any identifiers explicitly present in its metadata.
+ var ids=[].concat(data.isbn_13||[],data.isbn_10||[]).map(String);
+ if(ids.length&&!ids.includes(code))return null;
+ var pub=Array.isArray(data.publishers)?data.publishers.map(function(p){return typeof p==='string'?p:(p&&p.name)||''}).find(Boolean):'';
+ var title=data.title.trim();
+ return {series:cleanTitle(title),volume:numberFromTitle(title),edition:'',publisher:pub||'',source:'https://openlibrary.org/isbn/'+code,provider:'Open Library'};
+}
+async function getGoogleBooks(code){
+ var data=await fetchJSON('https://www.googleapis.com/books/v1/volumes?q='+encodeURIComponent('isbn:'+code)+'&maxResults=10&printType=books',7500);
+ var items=Array.isArray(data&&data.items)?data.items:[];
+ for(var i=0;i<items.length;i++){
+  var item=items[i],info=item&&item.volumeInfo;
+  if(!info||typeof info.title!=='string')continue;
+  var ids=Array.isArray(info.industryIdentifiers)?info.industryIdentifiers:[];
+  if(!ids.some(function(id){return id&&id.type==='ISBN_13'&&String(id.identifier).replace(/[\s-]/g,'')===code}))continue;
+  var title=info.title.trim();
+  return {series:cleanTitle(title),volume:numberFromTitle(title),edition:'',publisher:String(info.publisher||'').slice(0,100),
+   source:(typeof info.infoLink==='string'&&/^https:\/\//.test(info.infoLink))?info.infoLink:'https://books.google.com/books?vid=ISBN'+code,provider:'Google Books'};
+ }
+ return null;
+}
+async function lookupOnline(code){
+ var failed=0,good=0;
+ // Use official metadata APIs, not scraping Google Images or publishers' pages.
+ for(var fn of [getOpenLibrary,getGoogleBooks]){
+  try{var result=await fn(code);good++;if(result)return {item:result,failed:failed,success:true}}
+  catch(err){failed++}
+ }
+ return {item:null,failed:failed,success:good>0};
+}
+async function searchOnline(code){
+ if(!valid(code)||current!==code)return;
+ var sequence=++lookupSequence;
+ el('resultState').textContent='ISBN valido · Ricerca online in corso…';
+ el('help').textContent='Sto interrogando Open Library e Google Books per questo ISBN. L’edizione italiana e il numero saranno sempre da confermare.';
+ status('ISBN '+code+' valido: ricerca online in corso…');
+ el('searchOnline').disabled=true;
+ var response;
+ try{response=await lookupOnline(code)}
+ catch(err){response={item:null,failed:2,success:false}}
+ if(sequence!==lookupSequence||current!==code)return;
+ el('searchOnline').disabled=false;
+ var item=response.item;
+ if(!item){
+  el('resultState').textContent=response.success?'ISBN valido · Nessuna scheda trovata nelle due fonti':'ISBN valido · Servizi online non raggiungibili';
+  el('help').textContent=response.success
+   ?'Non è una prova che il volume non esista. Le fonti gratuite non contengono tutti i manga italiani: puoi inserire manualmente titolo, numero, edizione ed editore.'
+   :'La ricerca online non è riuscita. Controlla Internet o riprova fra poco. Puoi comunque completare i campi manualmente.';
+  status('ISBN riconosciuto: '+code+'. '+(response.success?'Nessun dato nelle fonti consultate.':'Ricerca online non disponibile.'),'err');
+  return;
+ }
+ // Do not overwrite any fields the user may have edited while lookup ran.
+ ['series','volume','edition','publisher'].forEach(function(key){
+  if(!el(key).value&&item[key]!==null&&item[key]!==undefined)el(key).value=String(item[key]).slice(0,key==='series'?120:100);
+ });
+ el('resultState').textContent='ISBN valido · Scheda proposta da '+item.provider+' (da verificare)';
+ el('help').textContent='La fonte ha associato una scheda bibliografica a questo ISBN. Verifica sulla copia fisica il titolo, il numero, la lingua e soprattutto l’edizione: non sono garantiti dai risultati online.';
+ var link=el('source');link.href=item.source;link.textContent='Apri scheda su '+item.provider+' ↗';link.hidden=false;
+ lastExternalSource=item.source;
+ status('Scheda trovata su '+item.provider+'. Conferma i dati prima di esportare.','good');
+}
 function match(raw,origin){
-var code=clean(raw);
-if(!valid(code)){status('Codice rilevato, ma non è un ISBN-13 valido per un libro. Controlla il barcode o inseriscilo manualmente.','err');return false}
-stop();current=code;el('manual').value=code;
-var item=known[code]||null;el('result').hidden=false;el('code').textContent=code;
-el('resultState').textContent=item?'✓ Corrispondenza verificata con il sito dell’editore':'ISBN valido · Volume non ancora presente nel mini-catalogo';
-el('help').textContent=item?'Controlla che il numero e la versione indicati coincidano con la tua copia.':'Il codice supera il controllo, ma non sappiamo ancora a quale edizione italiana appartenga. Inserisci manualmente i dettagli.';
-['series','edition','publisher','volume'].forEach(function(k){el(k).value=item?item[k]:''});
-el('source').hidden=!item;el('source').href=item?item.source:'#';
-status('ISBN letto da '+origin+': '+code+'. Verifica la scheda.','good');
-el('result').scrollIntoView({behavior:'smooth',block:'start'});return true
+ var code=clean(raw);
+ if(!valid(code)){status('Codice rilevato, ma non è un ISBN-13 valido per un libro. Controlla il barcode o inseriscilo manualmente.','err');return false}
+ stop();++lookupSequence;current=code;el('manual').value=code;lastExternalSource=null;
+ var item=known[code]||null;el('result').hidden=false;el('code').textContent=code;
+ el('resultState').textContent=item?'✓ Scheda verificata sul sito dell’editore':'ISBN valido · In attesa della ricerca online';
+ el('help').textContent=item?'Controlla che numero ed edizione coincidano con la tua copia.':'Questo ISBN non è nel mini-catalogo locale. Cercherò la scheda nelle fonti bibliografiche online.';
+ ['series','edition','publisher','volume'].forEach(function(k){el(k).value=item?item[k]:''});
+ el('source').hidden=!item;el('source').href=item?item.source:'#';el('source').textContent='Apri la scheda dell’editore ↗';
+ status('ISBN letto da '+origin+': '+code+'. '+(item?'Scheda locale trovata.':'Avvio ricerca online…'),'good');
+ el('result').scrollIntoView({behavior:'smooth',block:'start'});
+ if(!item)searchOnline(code);
+ return true
 }
 function loadLibrary(){
 if(window.ZXingBrowser)return Promise.resolve();
@@ -142,7 +234,7 @@ function exportSheet(){
 if(!current)return;
 var title=el('series').value.trim(),n=Number(el('volume').value);
 if(!title||!Number.isInteger(n)||n<1||n>2000){status('Inserisci prima titolo della serie e numero di volume corretto.','err');return}
-var p={format:'mangalog-isbn-lab-v1',isbn13:current,series:title,volume:n,edition:el('edition').value.trim(),publisher:el('publisher').value.trim(),officialSource:known[current]?known[current].source:null,verifiedInPilot:!!known[current],createdAt:new Date().toISOString(),note:'Prova tecnica, non importare come backup MangaLog'};
+var p={format:'mangalog-isbn-lab-v1',isbn13:current,series:title,volume:n,edition:el('edition').value.trim(),publisher:el('publisher').value.trim(),officialSource:known[current]?known[current].source:null,externalSource:lastExternalSource,verifiedInPilot:!!known[current],createdAt:new Date().toISOString(),note:'Prova tecnica, non importare come backup MangaLog'};
 var blob=new Blob([JSON.stringify(p,null,2)],{type:'application/json'}),u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download='mangalog-isbn-'+current+'.json';document.body.appendChild(a);a.click();a.remove();setTimeout(function(){URL.revokeObjectURL(u)},1000);
 status('Scheda esportata. La tua collezione è rimasta invariata.','good')
 }
@@ -154,9 +246,10 @@ el('demo').addEventListener('click',function(){stop();match('9788864201870','cod
 el('photo').addEventListener('change',function(e){photo(e.target.files&&e.target.files[0])});
 el('export').addEventListener('click',exportSheet);
 el('copy').addEventListener('click',async function(){if(!current)return;try{await navigator.clipboard.writeText(current);status('ISBN copiato.','good')}catch(e){el('manual').focus();el('manual').select();status('Codice selezionato per copiarlo.')}});
-el('again').addEventListener('click',function(){el('result').hidden=true;current='';el('manual').value='';status('Pronto per un altro volume.');el('start').focus()});
+el('searchOnline').addEventListener('click',function(){if(current)searchOnline(current)});
+el('again').addEventListener('click',function(){lookupSequence++;el('result').hidden=true;current='';el('manual').value='';status('Pronto per un altro volume.');el('start').focus()});
 window.addEventListener('pagehide',stop);
 document.addEventListener('visibilitychange',function(){if(document.hidden&&live)stop()});
-window.MangaLogISBNTest={valid:valid,normalize:clean}
+window.MangaLogISBNTest={valid:valid,normalize:clean,numberFromTitle:numberFromTitle}
 })();
 </script></body></html>
