@@ -353,7 +353,7 @@ function open(api){
   get('mlISBNResult').hidden=true;
   note('Il codice è cambiato: premi Verifica ISBN per controllare il nuovo volume.');
  });
- get('mlISBNCameraTab').addEventListener('click',()=>selectMethod('camera'));
+ get('mlISBNCameraTab').addEventListener('click',()=>{selectMethod('camera');cameraStart()});
  get('mlISBNManualTab').addEventListener('click',()=>selectMethod('manual'));
  get('mlISBNStart').addEventListener('click',cameraStart);
  get('mlISBNStop').addEventListener('click',()=>{cameraStop();get('mlISBNCameraStatus').textContent='Fotocamera fermata.'});
