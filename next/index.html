@@ -110,7 +110,7 @@ function home(){
  '<div class="stat"><span>▦ Volumi posseduti</span><strong>'+owned+'</strong><span>Demo, non dati reali</span></div>'+
  '<div class="stat"><span>▤ Serie</span><strong>'+getOwnCollection().length+'</strong><span>Edizioni della prova</span></div>'+
  '<div class="stat"><span>☷ Mancolista</span><strong>'+getOwnCollection().reduce((n,x)=>n+x.total-x.owned,0)+'</strong><span>Volumi mancanti demo</span></div>'+
- '<div class="stat"><span>♡ Wishlist</span><strong>5</strong><span>Esempio grafico</span></div></div>'+
+ '<div class="stat"><span>♡ Wishlist</span><strong>'+window.MangaLogNextCollection.summary().wishlist+'</strong><span>Desideri nella demo</span></div></div>'+
  '<div class="section-head"><div><h2>La tua collezione</h2><p>Libreria, progressi e volumi: tutto in primo piano.</p></div>'+
  '<button class="btn secondary" data-go="collection">Visualizza tutte le serie</button></div>'+
  '<div class="collection-grid">'+collectionCards(getOwnCollection().slice(0,3))+'</div>'+
@@ -132,20 +132,6 @@ function collectionCards(items){
  '<div class="card-buttons"><button class="btn" data-demo-details="'+esc(item.title)+'">ⓘ Dettagli</button>'+
  '<button class="btn primary" data-go="market">▧ Market</button></div></div></article>'
  }).join('')
-}
-function collection(){
- const total=getOwnCollection().reduce((n,item)=>n+item.owned,0);
- return headline('LA TUA LIBRERIA','La tua collezione','Le schede manga e i progressi riprendono la grafica definitiva. I volumi mostrati sono esempi, non il tuo archivio personale.')+
- '<div class="home-overview">'+
- '<div class="stat"><span>▦ Volumi posseduti</span><strong>'+total+'</strong></div>'+
- '<div class="stat"><span>▤ Serie</span><strong>'+getOwnCollection().length+'</strong></div>'+
- '<div class="stat"><span>☷ Mancolista</span><strong>'+getOwnCollection().reduce((n,x)=>n+x.total-x.owned,0)+'</strong></div>'+
- '<div class="stat"><span>♡ Wishlist</span><strong>5</strong></div></div>'+
- '<div class="section-head"><div><h2>La tua collezione</h2><p>Edizioni, avanzamento e schede volume nello stile della nuova MangaLog.</p></div>'+
- label('Anteprima con serie demo','muted')+'</div>'+
- '<div class="market-filter-row"><span class="filter-pill active">Tutte le serie</span><span class="filter-pill">Tutti gli stati</span><span class="filter-pill">Tutte le edizioni</span></div>'+
- '<div class="collection-grid">'+collectionCards(getOwnCollection())+'</div>'+
- '<div class="notice">Le copertine sono segnaposto grafici originali. In questa versione di anteprima non viene letta né modificata la collezione reale. Il ripristino di Collezione, Mancolista e Wishlist avverrà più avanti su un ambiente di prova separato.</div>'
 }
 function status(p){return state.friends.has(p.id)?'friend':state.requests.has(p.id)?'requested':state.incoming.has(p.id)?'incoming':'none'}
 function person(p,kind){
@@ -254,7 +240,14 @@ function market(){
  '<div class="notice"><strong>ANTEPRIMA — NESSUNA VENDITA.</strong> Le schede illustrate non rappresentano offerte, disponibilità, negozi verificati o prezzi reali. Il Market vero verrà costruito solo dopo le verifiche tecniche e commerciali.</div>'
 }
 function draw(){
- document.querySelectorAll('[data-page]').forEach(btn=>{const selected=btn.dataset.page===state.page;btn.classList.toggle('active',selected);btn.setAttribute('aria-current',selected?'page':'false')});
+ document.querySelectorAll('[data-page]').forEach(btn=>{
+  const mobile=btn.closest?.('#mobileNav');
+  const page=state.page==='series-detail'?'collection':state.page;
+  const represented=mobile&&['wishlist','statistics','purchases','market'].includes(page)?'more':page;
+  const selected=btn.dataset.page===represented;
+  btn.classList.toggle('active',selected);
+  btn.setAttribute('aria-current',selected?'page':'false')
+ });
  const lib=window.MangaLogNextCollection;
  screen.innerHTML=lib.pages.has(state.page)?lib.render(state.page):
   state.page==='more'?lib.morePage():
