@@ -149,7 +149,13 @@ function renderTarget(){
 function verified(raw){
  if(!active)return;
  const code=fromBarcode(raw);
- if(!validISBN(code)){note('Questo non è un ISBN-13 valido. Controlla le 13 cifre che iniziano con 978 o 979.','err');return}
+ if(!validISBN(code)){
+  active.code=null;active.info=null;active.reviewSignature=null;
+  get('mlISBNDetails').hidden=true;get('mlISBNReview').hidden=true;
+  get('mlISBNResult').hidden=true;
+  note('Questo non è un ISBN-13 valido. Controlla le 13 cifre che iniziano con 978 o 979.','err');
+  return
+ }
  cameraStop();
  const m=catalog[code]||null;
  active.code=code;active.info=m;active.reviewSignature=null;
@@ -340,6 +346,13 @@ function open(api){
  ].join(''));
  get('modalContent').classList.add('isbn-flow-modal');
  get('mlISBNForm').addEventListener('submit',e=>{e.preventDefault();verified(get('mlISBNCode').value)});
+ get('mlISBNCode').addEventListener('input',()=>{
+  if(!active||!active.code||clean(get('mlISBNCode').value)===active.code)return;
+  active.code=null;active.info=null;active.reviewSignature=null;
+  get('mlISBNDetails').hidden=true;get('mlISBNReview').hidden=true;
+  get('mlISBNResult').hidden=true;
+  note('Il codice è cambiato: premi Verifica ISBN per controllare il nuovo volume.');
+ });
  get('mlISBNCameraTab').addEventListener('click',()=>selectMethod('camera'));
  get('mlISBNManualTab').addEventListener('click',()=>selectMethod('manual'));
  get('mlISBNStart').addEventListener('click',cameraStart);
