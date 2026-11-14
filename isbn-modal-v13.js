@@ -275,6 +275,7 @@ async function cameraStart(){
 function selectMethod(which){
  if(!active)return;
  cameraStop();
+ active.method=which;
  get('mlISBNManualTab').setAttribute('aria-selected',String(which==='manual'));
  get('mlISBNCameraTab').setAttribute('aria-selected',String(which==='camera'));
  get('mlISBNManualPane').hidden=which!=='manual';
@@ -287,7 +288,10 @@ function resetForAnother(){
  active.reviewSignature=null;active.submitting=false;
  get('mlISBNDetails').hidden=true;get('mlISBNReview').hidden=true;get('mlISBNSuccess').hidden=true;
  get('mlISBNEntry').hidden=false;get('mlISBNResult').hidden=true;
- get('mlISBNCode').value='';note('',null);selectMethod('manual');
+ get('mlISBNCode').value='';note('',null);
+ const preferred=active.method==='manual'?'manual':'camera';
+ selectMethod(preferred);
+ if(preferred==='camera')void cameraStart();
 }
 function cleanup(){
  if(!active)return;
@@ -298,25 +302,25 @@ function cleanup(){
 function open(api){
  if(!api||!api.present||!api.getSeries||!api.commit)throw Error('Scanner API non disponibile.');
  cleanup();
- active={api,code:null,info:null,submitting:false,cameraToken:0,stream:null,control:null,timer:null};
+ active={api,code:null,info:null,submitting:false,method:'camera',cameraToken:0,stream:null,control:null,timer:null};
  api.present([
  '<div id="mlISBN">',
  '<div class="isbn-top"><div class="isbn-kicker">MangaLog · La tua collezione</div>',
  '<h2>Scanner ISBN</h2><p class="isbn-desc">Aggiungi un volume in pochi passaggi, senza uscire dall’app.</p></div>',
  '<div class="isbn-content">',
  '<div id="mlISBNEntry"><div class="isbn-tabs" role="tablist" aria-label="Metodo di lettura">',
- '<button type="button" class="isbn-tab" id="mlISBNCameraTab" role="tab" aria-selected="false">▣ Fotocamera</button>',
- '<button type="button" class="isbn-tab" id="mlISBNManualTab" role="tab" aria-selected="true">⌨ Inserisci ISBN</button>',
+ '<button type="button" class="isbn-tab" id="mlISBNCameraTab" role="tab" aria-selected="true">▣ Fotocamera</button>',
+ '<button type="button" class="isbn-tab" id="mlISBNManualTab" role="tab" aria-selected="false">⌨ Inserisci ISBN</button>',
  '</div>',
- '<div id="mlISBNManualPane" role="tabpanel"><form id="mlISBNForm">',
+ '<div id="mlISBNManualPane" role="tabpanel" hidden><form id="mlISBNForm">',
  '<label class="isbn-label" for="mlISBNCode">Codice ISBN-13</label><div class="isbn-inline">',
  '<input class="isbn-input" id="mlISBNCode" inputmode="numeric" autocomplete="off" maxlength="30" placeholder="978-88..." aria-describedby="mlISBNHint">',
  '<button type="submit" class="btn primary">Verifica ISBN</button></div></form>',
  '<p class="isbn-muted" id="mlISBNHint">Puoi scriverlo con o senza trattini. Non serve conoscere l’editore in anticipo.</p></div>',
- '<div id="mlISBNCameraPane" role="tabpanel" hidden>',
+ '<div id="mlISBNCameraPane" role="tabpanel">',
  '<div class="isbn-camera-frame"><video id="mlISBNVideo" autoplay muted playsinline></video><div class="isbn-camera-line" aria-hidden="true"></div></div>',
  '<p class="isbn-muted" id="mlISBNCameraStatus" aria-live="polite">Fotocamera inattiva.</p>',
- '<div class="isbn-actions"><button type="button" id="mlISBNStart" class="btn primary">Attiva fotocamera</button>',
+ '<div class="isbn-actions"><button type="button" id="mlISBNStart" class="btn primary">Riprova fotocamera</button>',
  '<button type="button" id="mlISBNStop" class="btn">Ferma</button></div></div></div>',
  '<div id="mlISBNResult" class="isbn-result" hidden></div>',
  '<div id="mlISBNDetails" hidden><hr class="isbn-line"><h3 class="isbn-h3">Dettagli del volume</h3>',
@@ -365,7 +369,10 @@ function open(api){
  get('mlISBNAnother').addEventListener('click',resetForAnother);
  get('mlISBNView').addEventListener('click',()=>{const id=active&&active.savedId;cleanup();api.dismiss();if(api.goToCollection)api.goToCollection(id)});
  get('mlISBNCancel').addEventListener('click',()=>{cleanup();api.dismiss()});
- selectMethod('manual');
+ // The user tapped Scanner ISBN: open directly in camera mode. Android/Chrome
+ // still controls whether a browser permission prompt must be shown.
+ selectMethod('camera');
+ void cameraStart();
 }
 window.addEventListener('pagehide',cleanup);
 window.MangaLogISBNModal={open,cleanup,validISBN,fromBarcode,plan,catalog,version:'v13 integrated'};
