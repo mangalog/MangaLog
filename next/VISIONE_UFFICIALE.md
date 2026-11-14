@@ -21,7 +21,7 @@ Queste immagini sono il riferimento **di layout, gerarchia visiva, atmosfera e c
 ## Regole di design approvate
 
 - Tema principale: **Giappone di notte** blu-nero, aceri giapponesi rossi, luna e architettura tradizionale.
-- Sidebar desktop con sezioni principali: Home, Collezione, Mancolista, Wishlist, Social, Market, Statistiche, Gestione acquisti, Impostazioni e Admin per l'account amministratore.
+- **Navigazione principale definitiva a cinque voci**: Home, Collezione, Mancolista, Social, Market, sia su desktop sia su smartphone. Wishlist, Statistiche, Volumi posseduti, Gestione acquisti e Impostazioni sono accessibili con pulsanti interni alla sezione Collezione. La futura Dashboard Admin sarà accessibile soltanto all'amministratore dalla sua area riservata.
 - Navigazione mobile comoda, senza sidebar laterale permanente; evitare tremolii o scroll anomali dello sfondo su iPhone.
 - Pannelli scuri con bordo blu, testo bianco leggibile, azioni principali rosse, secondarie azzurre, badge funzionali.
 - **Home/Collezione**: contatori, libreria visibile, filtro grid/list, copertine quando legali, posseduti, Mancolista e dettaglio edizioni.
@@ -32,7 +32,7 @@ Queste immagini sono il riferimento **di layout, gerarchia visiva, atmosfera e c
 
 ## Stato tecnico corrente
 
-- `next/index.html`: mock navigabile Home/Collezione/Social/Market con dati inventati.
+- `next/index.html`: versione Next che riutilizza direttamente **le pagine, CSS, componenti e logica Collezione/Mancolista/Wishlist/Statistiche dell'ultima MangaLog stabile**, con menu semplificato, Social segnaposto e Market vuoto. Dati campione locali su chiave distinta, senza Supabase.
 - `next/next-visual.css`: prime regole per aderire ai quattro bozzetti approvati.
 - Nessuna lettura dei dati della collezione stabile, nessuna autenticazione, nessun acquisto.
 - Nuovo backend Social e la sicurezza RLS devono usare **un ambiente di prova distinto**.
@@ -44,3 +44,7 @@ Queste immagini sono il riferimento **di layout, gerarchia visiva, atmosfera e c
 3. Profili veri, richieste di amicizia, consenso, privacy, blocchi e confronto.
 4. Market vetrina per negozi pilota dopo accordi e catalogo autorizzato.
 5. Test di migrazione dati e rilascio graduale finale con backup e rollback.
+
+## Decisione successiva — Navigazione e riutilizzo (14 novembre 2026)
+
+Confermato dall'utente: **non ridisegnare** le funzioni già funzionanti della MangaLog originale; mantenere le stesse schermate, accorpandole sotto Collezione (e Mancolista in voce principale). La copia originale in Next usa `mangalog_next_actual_collection_2026` come chiave dati locale, scollegata da Supabase, e non registra un service worker separato. Non deve essere confusa con la versione pubblica completa. Il vecchio prototipo Social è archiviato in `next/anteprima-social-archivio.html`. Sul ramo principale soltanto `/next/` mostra la nuova struttura; `/MangaLog/` non cambia.
