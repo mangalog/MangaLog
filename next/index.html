@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0e1018">
+<meta name="robots" content="noindex,nofollow">
+<title>MangaLog Next — Anteprima Social e Market</title>
+<style>
+:root{font-family:Inter,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;color-scheme:dark;--bg:#0e1018;--panel:#171a25;--panel2:#202333;--stroke:#343748;--muted:#a9adc0;--text:#f7f6fb;--red:#ff526d;--blue:#60c9ec;--green:#6ad9af}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse 1200px 560px at 70% -10%,#43283b7d,transparent 70%),var(--bg);color:var(--text);min-height:100dvh}button,input{font:inherit}button{cursor:pointer}button:disabled{opacity:.45;cursor:not-allowed}button:focus-visible,input:focus-visible{outline:3px solid #ff99ab;outline-offset:2px}
+a{color:#8ddaff}p{line-height:1.6}.shell{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:100vh}
+.sidebar{position:sticky;top:0;height:100vh;border-right:1px solid var(--stroke);padding:32px 20px;background:#11131ceb;display:flex;flex-direction:column}
+.logo{display:flex;align-items:center;gap:12px;font-weight:950;font-size:23px;letter-spacing:-1px}.logo-mark{width:42px;height:42px;border:2px solid var(--red);border-radius:12px;display:grid;place-items:center;background:#2f1b2b;box-shadow:0 0 24px #c23b5366;color:#fff;font-size:21px}.logo sup{font-size:10px;color:var(--red);letter-spacing:2px;vertical-align:top;margin-left:4px}
+.sidebar .side-desc{font-size:12px;color:var(--muted);margin:12px 0 32px;max-width:190px}.side-nav{display:flex;flex-direction:column;gap:8px}.side-nav button,.bottom-nav button{border:1px solid transparent;border-radius:11px;color:#b6b7c7;background:transparent;text-align:left;padding:12px 14px;font-weight:750;display:flex;gap:12px;align-items:center}
+.side-nav button.active,.bottom-nav button.active{background:#39232c;color:white;border-color:#a04460}.side-nav button span{font-size:20px;width:25px;text-align:center}.side-footer{margin-top:auto;font-size:12px;line-height:1.7;color:var(--muted);border-top:1px solid var(--stroke);padding-top:18px}
+.main{min-width:0;padding:24px clamp(16px,4vw,65px) 70px;max-width:1480px;width:100%;margin:0 auto}
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:30px;flex-wrap:wrap}
+.env{font-size:11px;font-weight:850;letter-spacing:1.2px;text-transform:uppercase;color:#efbac4;display:flex;align-items:center;gap:8px}
+.env::before{content:"";width:8px;height:8px;background:var(--red);border-radius:50%}
+.account{display:flex;align-items:center;gap:9px;border:1px solid var(--stroke);border-radius:999px;padding:7px 12px;background:#1e202d;font-weight:750;font-size:12px}.account .mini-avatar{background:#784253;border-radius:50%;width:29px;height:29px;display:grid;place-items:center}
+.kicker{font-size:11px;letter-spacing:2px;font-weight:850;text-transform:uppercase;color:#ff9db0}.heading{font-size:clamp(30px,4vw,46px);letter-spacing:-1.5px;line-height:1.14;margin:9px 0 10px}.subtitle{color:var(--muted);max-width:670px;margin:0 0 25px}
+.panel{border:1px solid var(--stroke);border-radius:18px;background:linear-gradient(145deg,#1c1f2c,#171922);padding:24px;min-width:0}
+.panel h2,.panel h3{margin-top:0;letter-spacing:-.3px}.panel h2{font-size:19px}.panel p{font-size:14px;color:var(--muted)}
+.hero{border:1px solid #74405a;border-radius:22px;background:linear-gradient(112deg,#472334,#211a2b 60%,#131825);padding:clamp(24px,4vw,43px);position:relative;overflow:hidden}
+.hero::after{content:"◈";position:absolute;right:4%;top:-48px;font-size:260px;font-weight:900;color:#e7566a14;pointer-events:none}.hero>*{position:relative;z-index:1}.hero h1{font-size:clamp(30px,4.3vw,52px);max-width:670px;line-height:1.13;letter-spacing:-1.8px;margin:10px 0 17px}
+.hero p{color:#e8cdd6;max-width:590px;font-size:15px}.btn{border:1px solid #535569;background:#2a2d3b;border-radius:11px;padding:12px 17px;min-height:43px;color:#fff;font-weight:800;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none}
+.btn.primary{border-color:#ff6c7e;background:#f04761;color:#fff}.btn.secondary{border-color:#67819b;background:#1c3549}.btn:hover:not(:disabled){filter:brightness(1.13)}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}.grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.section-head{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin:34px 0 16px;flex-wrap:wrap}.section-head h2{margin:0;font-size:23px;letter-spacing:-.5px}.section-head p{font-size:13px;color:var(--muted);margin:4px 0 0}
+.card-icon{height:49px;width:49px;border-radius:14px;border:1px solid #5b4e60;background:#332633;display:grid;place-items:center;font-size:25px;margin-bottom:18px}
+.feature{display:flex;flex-direction:column;min-height:220px}.feature h3{font-size:18px;margin:0}.feature p{flex:1}.feature .mini-link{color:#ecb1be;font-weight:850;font-size:13px;border:0;background:none;padding:9px 0;text-align:left}
+.notice{border:1px solid #65594d;border-radius:12px;padding:13px 16px;background:#302a2b;color:#ffddbf;font-size:12px;line-height:1.65;margin-top:20px}.badge{display:inline-block;border:1px solid #685a6f;border-radius:999px;padding:4px 9px;color:#d5c2dd;background:#312637;font-size:10px;font-weight:850;letter-spacing:.6px;text-transform:uppercase}.badge.green{border-color:#387c63;background:#173729;color:#9cf1c9}.badge.muted{background:#282b39;border-color:#525668;color:#c1c5d3}.card-row{display:flex;align-items:center;gap:13px}.grow{flex:1;min-width:0}
+.avatar{border:1px solid #aa637a;background:linear-gradient(145deg,#8b4d6b,#342938);border-radius:14px;min-width:50px;width:50px;height:50px;display:grid;place-items:center;font-weight:900;font-size:18px}.avatar.blue{background:linear-gradient(145deg,#376d81,#252d40);border-color:#4c98ac}.avatar.gold{background:linear-gradient(145deg,#a37a48,#302a2b);border-color:#c79a5a}
+.card-title{font-size:16px;font-weight:850;margin:0}.small{font-size:12px;color:var(--muted)}.stat-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}.stat{border:1px solid var(--stroke);background:#1a1d28;border-radius:15px;padding:18px}.stat strong{display:block;font-size:32px;letter-spacing:-.5px;margin:6px 0}.stat span{color:var(--muted);font-size:12px;font-weight:650}
+.collection-list{display:grid;gap:10px}.series{display:flex;align-items:center;gap:15px;border:1px solid var(--stroke);border-radius:12px;background:#1c1f2b;padding:13px 15px}.series-art{width:45px;height:63px;border:1px solid #716476;background:linear-gradient(135deg,#603345,#1e2232);border-radius:5px;flex:0 0 45px;display:grid;place-items:center;font-size:17px;font-weight:900}.series .counts{font-size:13px;font-weight:800;color:#f5b1bf;text-align:right;white-space:nowrap}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:25px 0 18px}.tab{border:1px solid #434656;background:#202331;color:#c8cad7;border-radius:9px;padding:10px 14px;font-size:13px;font-weight:800}.tab.active{border-color:#f5617c;background:#452633;color:white}
+.list{display:grid;gap:11px}.person{display:flex;align-items:center;gap:12px;border:1px solid var(--stroke);background:#1a1d28;border-radius:15px;padding:15px}.person-info{flex:1;min-width:0}.person-info p{margin:3px 0 0;color:var(--muted);font-size:12px}.person-actions{display:flex;gap:8px;flex-wrap:wrap}.person-actions .btn{padding:9px 13px;font-size:12px;min-height:37px}
+.input{border:1px solid #5e5a6c;border-radius:11px;background:#11151e;padding:13px;color:white;width:100%;font-size:15px;min-height:48px}
+.compare-list{display:grid;gap:10px}.compare-row{display:flex;align-items:center;gap:10px;border:1px solid #424452;border-radius:11px;background:#242636;padding:12px 15px}.compare-row span:first-child{flex:1}.compare-row .tag{font-size:10px;font-weight:850;color:#a5ecdb;border-radius:30px;background:#1b453c;padding:5px 9px}.compare-row .tag.diff{color:#ffc9d2;background:#552f41}
+.market-hero{text-align:center;padding:70px 25px;border:1px dashed #85576b;border-radius:20px;background:radial-gradient(ellipse at 50% 40%,#512b3a77,transparent 65%),#1c1d2a}.market-hero .illustration{font-size:54px;margin-bottom:15px}.market-hero h2{font-size:29px;margin:7px 0}.market-hero p{max-width:520px;margin:0 auto 12px}.footer{font-size:11px;color:#979bae;margin-top:36px;padding-top:18px;border-top:1px solid var(--stroke)}
+.bottom-nav{display:none}.hidden{display:none!important}
+@media(max-width:1060px){.shell{grid-template-columns:200px minmax(0,1fr)}.sidebar{padding:25px 12px}.main{padding:25px 24px 65px}.grid3{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:760px){.shell{display:block}.sidebar{display:none}.main{padding:18px 17px 100px}.bottom-nav{position:fixed;display:flex;bottom:0;left:0;right:0;z-index:10;background:#171923ef;border-top:1px solid #47404d;backdrop-filter:blur(18px);justify-content:space-around;padding:7px 5px max(8px,env(safe-area-inset-bottom))}.bottom-nav button{flex:1;display:flex;flex-direction:column;gap:3px;padding:8px 4px;align-items:center;font-size:10px;text-align:center;min-width:0}.bottom-nav button span{font-size:19px}.topbar{margin-bottom:20px}.grid3,.grid2{grid-template-columns:1fr}.stat-grid{gap:8px}.stat{padding:12px}.stat strong{font-size:24px}.hero{padding:26px 22px}.person{flex-wrap:wrap}.person-actions{width:100%}.person-actions .btn{flex:1}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="sidebar" aria-label="Navigazione MangaLog Next">
+  <div class="logo"><div class="logo-mark">M</div><div>MangaLog<sup>NEXT</sup></div></div>
+  <p class="side-desc">Colleziona, condividi, scopri. La prossima versione di MangaLog.</p>
+  <nav class="side-nav" id="desktopNav">
+    <button data-page="home" class="active"><span>⌂</span>Home</button>
+    <button data-page="collection"><span>▦</span>Collezione</button>
+    <button data-page="social"><span>♧</span>Social</button>
+    <button data-page="market"><span>▧</span>Market</button>
+  </nav>
+  <div class="side-footer">ANTEPRIMA RISERVATA ALLO SVILUPPO<br>Social demo · Market segnaposto<br>Nessun dato del tuo account viene letto o modificato.</div>
+</aside>
+<main class="main">
+  <div class="topbar">
+    <div class="env">Versione parallela · Anteprima interattiva</div>
+    <div class="account"><span class="mini-avatar">ML</span><span>Utente demo</span><span class="badge">Offline</span></div>
+  </div>
+  <div id="screen" aria-live="polite"></div>
+  <div class="footer">MangaLog Next · Prototipo locale di interfaccia. Nessun account, ordine, pagamento o collegamento Supabase attivo. MangaLog stabile non viene modificata.</div>
+</main>
+</div>
+<nav class="bottom-nav" id="mobileNav" aria-label="Navigazione mobile">
+ <button data-page="home" class="active"><span>⌂</span>Home</button>
+ <button data-page="collection"><span>▦</span>Collezione</button>
+ <button data-page="social"><span>♧</span>Social</button>
+ <button data-page="market"><span>▧</span>Market</button>
+</nav>
+<script>
+(function(){
+'use strict';
+const friendProfiles=[
+ {id:'mika',name:'MikaReads',initial:'MR',style:'',bio:'Amante degli shonen e delle edizioni italiane.',collection:['One Piece','Dandadan','Frieren','Blue Lock']},
+ {id:'kuro',name:'KuroShelf',initial:'KS',style:'blue',bio:'Collezionista di seinen e volumi speciali.',collection:['Berserk','Vinland Saga','One Piece','Death Note']},
+ {id:'luna',name:'LunaTomo',initial:'LT',style:'gold',bio:'Fantasy e storie d’autore.',collection:['Frieren','Atelier of Witch Hat','Blue Period']}
+];
+const ownCollection=[
+ {title:'One Piece',edition:'New Edition',owned:34,total:110,initial:'OP'},
+ {title:'Dandadan',edition:'J-POP Manga',owned:12,total:20,initial:'DD'},
+ {title:'Berserk',edition:'Serie Nera',owned:9,total:41,initial:'BK'},
+ {title:'Frieren',edition:'Edizione italiana',owned:6,total:14,initial:'FR'}
+];
+const state={page:'home',tab:'friends',friends:new Set(['mika','kuro']),requests:new Set(),incoming:new Set(['luna']),search:'',compareWith:'mika',sharing:false};
+const screen=document.getElementById('screen');
+function esc(x){return String(x==null?'':x).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','"':'&quot;',"'":'&#39;'}[c]))}
+function avatar(p){return '<div class="avatar '+esc(p.style)+'">'+esc(p.initial)+'</div>'}
+function headline(k,t,desc){return '<div class="kicker">'+k+'</div><h1 class="heading">'+t+'</h1><p class="subtitle">'+desc+'</p>'}
+function label(text,kind){return '<span class="badge '+(kind||'')+'">'+text+'</span>'}
+function home(){
+ return '<section class="hero"><div class="kicker">LA NUOVA MANGALOG</div><h1>La tua collezione.<br>Una nuova community.</h1>'+
+  '<p>La tua libreria manga resta il cuore dell’app. Intorno nascono amici, confronto collezioni e un futuro Market per le fumetterie.</p>'+
+  '<div class="actions"><button class="btn primary" data-go="social">Esplora il Social →</button><button class="btn secondary" data-go="collection">La tua collezione</button></div></section>'+
+  '<div class="section-head"><div><h2>Tre mondi, una sola MangaLog</h2><p>Una struttura pensata per crescere senza perdere la semplicità dell’app originale.</p></div></div>'+
+  '<div class="grid3">'+
+    '<section class="panel feature"><div class="card-icon">▦</div><h3>La mia collezione</h3><p>Volumi posseduti, Mancolista e Wishlist rimangono al centro.</p><button class="mini-link" data-go="collection">Vedi collezione →</button></section>'+
+    '<section class="panel feature"><div class="card-icon">♧</div><h3>MangaLog Social</h3><p>Amici, profili e confronti delle collezioni condivise con consenso.</p><button class="mini-link" data-go="social">Scopri il Social →</button></section>'+
+    '<section class="panel feature"><div class="card-icon">▧</div><h3>MangaLog Market</h3><p>Una futura vetrina per fumetterie e manga mancanti. Nessun acquisto attivo.</p><button class="mini-link" data-go="market">Esplora il progetto →</button></section>'+
+  '</div>'+
+  '<div class="section-head"><div><h2>La tua community, quando vorrai</h2><p>Le collezioni sono private per impostazione predefinita.</p></div>'+label('Privacy prima di tutto','green')+'</div>'+
+  '<div class="grid2"><section class="panel"><h2>Anteprima amici</h2><p>Profili e dati inventati per provare la futura esperienza Social.</p>'+
+  friendProfiles.slice(0,2).map(p=>'<div class="card-row" style="margin-top:16px">'+avatar(p)+'<div class="grow"><div class="card-title">'+esc(p.name)+'</div><div class="small">'+(state.friends.has(p.id)?'Amico demo':'Profilo demo')+'</div></div></div>').join('')+
+  '<div class="actions"><button class="btn secondary" data-go="social">Vai agli amici</button></div></section>'+
+  '<section class="panel"><h2>Market in preparazione</h2><div style="font-size:39px;margin:19px 0">▧</div><p>La futura sezione collegherà Mancolista e fumetterie partner, mantenendo gratuite le funzioni di collezione.</p>'+
+  '<div class="actions"><button class="btn" data-go="market">Apri il Market</button></div></section></div>'+
+  '<div class="notice">Questa è un’anteprima interattiva del progetto parallelo. Non usa il tuo account, la collezione reale o il database Supabase della versione stabile.</div>'
+}
+function collection(){
+ const total=ownCollection.reduce((n,s)=>n+s.owned,0);
+ return headline('IL CUORE DI MANGALOG','La mia collezione','La nuova struttura conserva Collezione, Mancolista e Wishlist. Qui utilizziamo soltanto dati dimostrativi.')+
+ '<div class="stat-grid"><div class="stat"><span>Serie demo</span><strong>'+ownCollection.length+'</strong></div>'+
+ '<div class="stat"><span>Volumi posseduti</span><strong>'+total+'</strong></div>'+
+ '<div class="stat"><span>Amici demo</span><strong>'+state.friends.size+'</strong></div></div>'+
+ '<div class="section-head"><div><h2>La tua libreria</h2><p>Questa schermata non accede alle serie del tuo account esistente.</p></div>'+label('Dati dimostrativi','muted')+'</div>'+
+ '<div class="collection-list">'+ownCollection.map(s=>'<div class="series"><div class="series-art">'+esc(s.initial)+'</div><div class="grow"><div class="card-title">'+esc(s.title)+'</div><div class="small">'+esc(s.edition)+'</div></div><div class="counts">'+s.owned+' / '+s.total+'<div class="small">volumi</div></div></div>').join('')+'</div>'+
+ '<div class="notice">Nel prossimo ciclo collegheremo questa sezione al modello dati della nuova app e a un database di prova separato. I dati del MangaLog stabile non vengono importati o sovrascritti.</div>'
+}
+function status(p){return state.friends.has(p.id)?'friend':state.requests.has(p.id)?'requested':state.incoming.has(p.id)?'incoming':'none'}
+function person(p,kind){
+ const st=status(p);
+ let buttons='';
+ if(kind==='friends')buttons='<button class="btn secondary" data-compare="'+p.id+'">Confronta</button><button class="btn" data-remove="'+p.id+'">Rimuovi</button>';
+ else if(kind==='incoming')buttons='<button class="btn primary" data-accept="'+p.id+'">Accetta</button><button class="btn" data-deny="'+p.id+'">Rifiuta</button>';
+ else if(st==='requested')buttons='<button class="btn" data-cancel="'+p.id+'">Annulla richiesta</button>';
+ else if(st==='friend')buttons=label('Amico','green');
+ else buttons='<button class="btn primary" data-request="'+p.id+'">+ Aggiungi amico</button>';
+ return '<div class="person">'+avatar(p)+'<div class="person-info"><strong>'+esc(p.name)+'</strong><p>'+esc(p.bio)+'</p></div><div class="person-actions">'+buttons+'</div></div>'
+}
+function social(){
+ let content='';
+ if(state.tab==='friends'){
+  const friends=friendProfiles.filter(p=>state.friends.has(p.id));
+  content='<div class="section-head"><div><h2>I tuoi amici</h2><p>La collezione altrui si può confrontare solo quando condivisa.</p></div>'+label(friends.length+' amici demo','muted')+'</div>'+
+   '<div class="list">'+(friends.length?friends.map(p=>person(p,'friends')).join(''):'<div class="panel">Nessun amico demo. Cercane uno nella scheda Ricerca.</div>')+'</div>';
+ }else if(state.tab==='search'){
+  const filtered=friendProfiles.filter(p=>p.name.toLowerCase().includes(state.search.toLowerCase()));
+  content='<div class="section-head"><div><h2>Cerca amici</h2><p>In futuro useremo nickname, senza esporre indirizzi email.</p></div></div>'+
+  '<input class="input" id="socialSearch" value="'+esc(state.search)+'" placeholder="Cerca un nickname..." aria-label="Cerca nickname">'+
+  '<div class="list" style="margin-top:15px">'+(filtered.length?filtered.map(p=>person(p,'search')).join(''):'<div class="panel">Nessun profilo trovato.</div>')+'</div>';
+ }else if(state.tab==='requests'){
+  const incoming=friendProfiles.filter(p=>state.incoming.has(p.id));
+  const outgoing=friendProfiles.filter(p=>state.requests.has(p.id));
+  content='<div class="section-head"><div><h2>Richieste di amicizia</h2><p>Accettazione sempre esplicita; in futuro anche blocco e segnalazione.</p></div></div>'+
+  '<div class="panel"><h3>Ricevute</h3><div class="list">'+(incoming.length?incoming.map(p=>person(p,'incoming')).join(''):'<p>Nessuna richiesta ricevuta.</p>')+'</div></div>'+
+  '<div class="panel" style="margin-top:14px"><h3>Inviate</h3><div class="list">'+(outgoing.length?outgoing.map(p=>person(p,'search')).join(''):'<p>Nessuna richiesta inviata.</p>')+'</div></div>';
+ }else{
+  const friends=friendProfiles.filter(p=>state.friends.has(p.id));
+  let p=friendProfiles.find(p=>p.id===state.compareWith&&state.friends.has(p.id))||friends[0];
+  if(p)state.compareWith=p.id;
+  const mine=new Set(ownCollection.map(x=>x.title));
+  const theirs=new Set(p?p.collection:[]);
+  const common=[...mine].filter(x=>theirs.has(x));
+  const onlyMine=[...mine].filter(x=>!theirs.has(x));
+  const onlyTheirs=[...theirs].filter(x=>!mine.has(x));
+  content='<div class="section-head"><div><h2>Confronta collezioni</h2><p>Simulazione con dati inventati e autorizzati. Le raccolte reali sono private per impostazione predefinita.</p></div></div>'+
+  (p?'<div class="panel"><label class="small" for="compareSelect">Confronta con un amico demo</label><select class="input" id="compareSelect" style="margin-top:8px">'+friends.map(u=>'<option value="'+u.id+'" '+(u.id===p.id?'selected':'')+'>'+esc(u.name)+'</option>').join('')+'</select>'+
+  '<div class="stat-grid" style="margin:17px 0"><div class="stat"><span>In comune</span><strong>'+common.length+'</strong></div><div class="stat"><span>Solo tu</span><strong>'+onlyMine.length+'</strong></div><div class="stat"><span>Solo amico</span><strong>'+onlyTheirs.length+'</strong></div></div>'+
+  '<div class="compare-list">'+
+  common.map(x=>'<div class="compare-row"><span>'+esc(x)+'</span><span class="tag">In comune</span></div>').join('')+
+  onlyMine.map(x=>'<div class="compare-row"><span>'+esc(x)+'</span><span class="tag diff">Solo tu</span></div>').join('')+
+  onlyTheirs.map(x=>'<div class="compare-row"><span>'+esc(x)+'</span><span class="tag diff">Solo '+esc(p.name)+'</span></div>').join('')+
+  '</div></div>':'<div class="panel">Aggiungi un amico demo per provare il confronto.</div>');
+ }
+ return headline('LA COMMUNITY DI COLLEZIONISTI','MangaLog Social','Aggiungi amici, scopri le loro librerie condivise e confronta le serie. Questa anteprima simula le interazioni senza account reali.')+
+ '<section class="panel" style="margin-bottom:18px"><div class="card-row"><div class="card-icon" style="margin:0">♧</div><div class="grow"><strong>Privacy della collezione</strong><div class="small">'+(state.sharing?'Anteprima condivisa soltanto per questa sessione demo':'Privata per impostazione predefinita')+'</div></div>'+label(state.sharing?'Demo condivisa':'Privata',state.sharing?'green':'muted')+'</div>'+
+ '<div class="actions"><button class="btn" data-privacy-toggle="'+(state.sharing?'off':'on')+'">'+(state.sharing?'Disattiva condivisione demo':'Simula consenso alla condivisione')+'</button></div></section>'+
+ '<div class="tabs" role="tablist" aria-label="Sezioni Social">'+
+ [['friends','Amici'],['search','Cerca persone'],['requests','Richieste'],['compare','Confronto']].map(x=>'<button class="tab '+(state.tab===x[0]?'active':'')+'" data-social-tab="'+x[0]+'" role="tab" aria-selected="'+(state.tab===x[0])+'">'+x[1]+'</button>').join('')+'</div>'+content+
+ '<div class="notice">Profili, amicizie e collezioni mostrati qui sono esclusivamente dimostrativi e vengono azzerati ricaricando la pagina. Nessun messaggio è inviato a utenti reali.</div>'
+}
+function market(){
+ return headline('IL FUTURO DELLA RICERCA MANGA','MangaLog Market','La sezione dedicata alle fumetterie, progettata per aiutare i collezionisti a trovare i volumi che mancano.')+
+ '<div class="market-hero"><div class="illustration">▧</div>'+label('In sviluppo','muted')+'<h2>La tua prossima fumetteria è qui.</h2><p>Prepareremo negozi partner, ricerca da Mancolista e disponibilità. La parte di vendita verrà sviluppata soltanto quando saranno definiti accordi e responsabilità.</p>'+
+ '<div class="actions" style="justify-content:center"><button class="btn secondary" data-go="collection">Torna alla collezione</button></div></div>'+
+ '<div class="grid2" style="margin-top:17px"><div class="panel"><h3>Per i collezionisti</h3><p>Individua i manga mancanti e scopri, in futuro, quali negozi li hanno disponibili.</p>'+label('Previsto','muted')+'</div>'+
+ '<div class="panel"><h3>Per le fumetterie</h3><p>Vetrina negozio, catalogo e possibili collegamenti con le Mancoliste degli utenti, nel rispetto delle autorizzazioni.</p>'+label('Previsto','muted')+'</div></div>'+
+ '<div class="notice">Nessun negozio è registrato, nessun prodotto è in vendita e non sono previsti pagamenti o ordini in questa anteprima. L’app base per i collezionisti resterà gratuita.</div>'
+}
+function draw(){
+ document.querySelectorAll('[data-page]').forEach(btn=>{const selected=btn.dataset.page===state.page;btn.classList.toggle('active',selected);btn.setAttribute('aria-current',selected?'page':'false')});
+ screen.innerHTML=state.page==='collection'?collection():state.page==='social'?social():state.page==='market'?market():home();
+ const search=document.getElementById('socialSearch');
+ if(search)search.addEventListener('input',e=>{state.search=e.target.value;const pos=e.target.selectionStart;draw();const input=document.getElementById('socialSearch');if(input){input.focus();input.setSelectionRange(pos,pos)}});
+ const compare=document.getElementById('compareSelect');
+ if(compare)compare.addEventListener('change',e=>{state.compareWith=e.target.value;draw()});
+}
+document.addEventListener('click',e=>{
+ const nav=e.target.closest('[data-page],[data-go]');
+ if(nav){state.page=nav.dataset.page||nav.dataset.go;state.tab=state.page==='social'?state.tab:'friends';draw();window.scrollTo(0,0);return}
+ const tab=e.target.closest('[data-social-tab]');
+ if(tab){state.tab=tab.dataset.socialTab;draw();return}
+ const id=e.target.closest('[data-request],[data-accept],[data-deny],[data-remove],[data-cancel],[data-compare]');
+ if(id){
+  const d=id.dataset;
+  if(d.request){state.requests.add(d.request)}
+  if(d.cancel){state.requests.delete(d.cancel)}
+  if(d.accept){state.incoming.delete(d.accept);state.friends.add(d.accept)}
+  if(d.deny){state.incoming.delete(d.deny)}
+  if(d.remove){state.friends.delete(d.remove)}
+  if(d.compare){state.compareWith=d.compare;state.tab='compare';state.page='social'}
+  draw();return
+ }
+ const priv=e.target.closest('[data-privacy-toggle]');
+ if(priv){state.sharing=priv.dataset.privacyToggle==='on';draw()}
+});
+draw();
+})();
+</script>
+</body>
+</html>
