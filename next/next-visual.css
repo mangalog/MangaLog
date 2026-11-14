@@ -182,3 +182,14 @@ body{background:#05111d;color:#f5f9ff}
  .tab{min-width:0;flex:1;padding:12px 7px;font-size:12px}
  .hero{min-height:0}
 }
+
+/* Explicit list mode, preserving the same market cards and demo-only actions. */
+.market-products.list{display:grid;grid-template-columns:1fr}
+.market-products.list .market-product{display:flow-root;min-height:165px}
+.market-products.list .market-cover{width:100px;max-width:100px;min-height:135px;float:left;margin-right:16px;aspect-ratio:3/4}
+.market-products.list .market-product h3{margin-top:4px}
+.market-products.list .market-product .btn{width:auto}
+@media(max-width:760px){
+ .market-products.list .market-cover{width:82px;max-width:82px;min-height:116px;margin-right:12px}
+ .market-products.list .market-product .market-info-row{flex-wrap:wrap}
+}
