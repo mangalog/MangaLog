@@ -1,6 +1,6 @@
 // MangaLog v12.10: app shell only; Supabase is network-only; user data is never stored in SW cache.
 // Re-trigger GitHub Pages publishing after the previous Pages build was marked abandoned.
-const CACHE = 'mangalog-v12-11-official-isbn-modal-fixed-20261114';
+const CACHE = 'mangalog-v12-11-isbn-auto-camera-20261114';
 const SHELL = ['./', './index.html', './manifest.webmanifest', './cloud-config.js', './isbn-modal-v13.js', './icons/icon-192.png', './icons/icon-512.png', './icons/apple-touch-icon.png', './assets/manga-library-room.svg', './assets/library-blue.webp', './assets/library-red.webp', './assets/library-violet.webp', './assets/library-white.webp'];
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()));
