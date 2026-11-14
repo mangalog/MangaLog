@@ -43,6 +43,7 @@ a{color:#8ddaff}p{line-height:1.6}.shell{display:grid;grid-template-columns:240p
 @media(max-width:760px){.shell{display:block}.sidebar{display:none}.main{padding:18px 17px 100px}.bottom-nav{position:fixed;display:flex;bottom:0;left:0;right:0;z-index:10;background:#171923ef;border-top:1px solid #47404d;backdrop-filter:blur(18px);justify-content:space-around;padding:7px 5px max(8px,env(safe-area-inset-bottom))}.bottom-nav button{flex:1;display:flex;flex-direction:column;gap:3px;padding:8px 4px;align-items:center;font-size:10px;text-align:center;min-width:0}.bottom-nav button span{font-size:19px}.topbar{margin-bottom:20px}.grid3,.grid2{grid-template-columns:1fr}.stat-grid{gap:8px}.stat{padding:12px}.stat strong{font-size:24px}.hero{padding:26px 22px}.person{flex-wrap:wrap}.person-actions{width:100%}.person-actions .btn{flex:1}}
 </style>
 <link rel="stylesheet" href="./next-visual.css">
+<link rel="stylesheet" href="./collection-suite.css">
 </head>
 <body>
 <div class="shell">
@@ -52,12 +53,12 @@ a{color:#8ddaff}p{line-height:1.6}.shell{display:grid;grid-template-columns:240p
   <nav class="side-nav" id="desktopNav">
     <button data-page="home" class="active"><span>⌂</span>Home</button>
     <button data-page="collection"><span>▦</span>Collezione</button>
-    <button disabled title="La Mancolista arriverà nella nuova versione"><span>☷</span>Mancolista</button>
-    <button disabled title="La Wishlist arriverà nella nuova versione"><span>♡</span>Wishlist</button>
+    <button data-page="missing"><span>☷</span>Mancolista</button>
+    <button data-page="wishlist"><span>♡</span>Wishlist</button>
+    <button data-page="statistics"><span>▥</span>Statistiche</button>
+    <button data-page="purchases"><span>▣</span>Gestione acquisti</button>
     <button data-page="social"><span>♧</span>Social</button>
     <button data-page="market"><span>▧</span>Market</button>
-    <button disabled title="Le statistiche saranno migrate dalla versione stabile"><span>▥</span>Statistiche</button>
-    <button disabled title="Funzione ancora da migrare"><span>▣</span>Gestione acquisti</button>
     <button disabled title="Impostazioni in preparazione"><span>⚙</span>Impostazioni</button>
   </nav>
   <div class="side-footer">ANTEPRIMA RISERVATA ALLO SVILUPPO<br>Social demo · Market segnaposto<br>Nessun dato del tuo account viene letto o modificato.</div>
@@ -74,9 +75,11 @@ a{color:#8ddaff}p{line-height:1.6}.shell{display:grid;grid-template-columns:240p
 <nav class="bottom-nav" id="mobileNav" aria-label="Navigazione mobile">
  <button data-page="home" class="active"><span>⌂</span>Home</button>
  <button data-page="collection"><span>▦</span>Collezione</button>
+ <button data-page="missing"><span>☷</span>Mancolista</button>
  <button data-page="social"><span>♧</span>Social</button>
- <button data-page="market"><span>▧</span>Market</button>
+ <button data-page="more"><span>☷</span>Altro</button>
 </nav>
+<script src="./collection-suite.js"></script>
 <script>
 (function(){
 'use strict';
@@ -85,12 +88,7 @@ const friendProfiles=[
  {id:'kuro',name:'KuroShelf',initial:'KS',style:'blue',bio:'Collezionista di seinen e volumi speciali.',collection:['Berserk','Vinland Saga','One Piece','Death Note']},
  {id:'luna',name:'LunaTomo',initial:'LT',style:'gold',bio:'Fantasy e storie d’autore.',collection:['Frieren','Atelier of Witch Hat','Blue Period']}
 ];
-const ownCollection=[
- {title:'One Piece',edition:'New Edition',owned:34,total:110,initial:'OP'},
- {title:'Dandadan',edition:'J-POP Manga',owned:12,total:20,initial:'DD'},
- {title:'Berserk',edition:'Serie Nera',owned:9,total:41,initial:'BK'},
- {title:'Frieren',edition:'Edizione italiana',owned:6,total:14,initial:'FR'}
-];
+function getOwnCollection(){return window.MangaLogNextCollection.getOverviewSeries()}
 const marketSamples=[
  {id:'op',title:'One Piece',edition:'New Edition',volume:'35',publisher:'Star Comics',category:'missing'},
  {id:'dd',title:'Dandadan',edition:'Edizione italiana',volume:'13',publisher:'J-POP Manga',category:'missing'},
@@ -104,18 +102,18 @@ function avatar(p){return '<div class="avatar '+esc(p.style)+'">'+esc(p.initial)
 function headline(k,t,desc){return '<div class="kicker">'+k+'</div><h1 class="heading">'+t+'</h1><p class="subtitle">'+desc+'</p>'}
 function label(text,kind){return '<span class="badge '+(kind||'')+'">'+text+'</span>'}
 function home(){
- const owned=ownCollection.reduce((sum,item)=>sum+item.owned,0);
+ const owned=getOwnCollection().reduce((sum,item)=>sum+item.owned,0);
  return '<section class="hero"><div class="kicker">MANGALOG · LA TUA LIBRERIA</div><h1>Il tuo mondo manga.<br>Ora anche insieme.</h1>'+
  '<p>La collezione che conosci, un nuovo Social per confrontarti con gli amici e un futuro Market dedicato alle fumetterie. Tutto nello stile delle nostre anteprime originali.</p>'+
  '<div class="next-hero-actions"><button class="btn primary" data-go="collection">▦ La tua collezione</button><button class="btn secondary" data-go="social">♧ Scopri il Social</button><button class="btn" data-go="market">▧ Esplora il Market</button></div></section>'+
  '<div class="home-overview">'+
  '<div class="stat"><span>▦ Volumi posseduti</span><strong>'+owned+'</strong><span>Demo, non dati reali</span></div>'+
- '<div class="stat"><span>▤ Serie</span><strong>'+ownCollection.length+'</strong><span>Edizioni della prova</span></div>'+
- '<div class="stat"><span>☷ Mancolista</span><strong>'+ownCollection.reduce((n,x)=>n+x.total-x.owned,0)+'</strong><span>Volumi mancanti demo</span></div>'+
+ '<div class="stat"><span>▤ Serie</span><strong>'+getOwnCollection().length+'</strong><span>Edizioni della prova</span></div>'+
+ '<div class="stat"><span>☷ Mancolista</span><strong>'+getOwnCollection().reduce((n,x)=>n+x.total-x.owned,0)+'</strong><span>Volumi mancanti demo</span></div>'+
  '<div class="stat"><span>♡ Wishlist</span><strong>5</strong><span>Esempio grafico</span></div></div>'+
  '<div class="section-head"><div><h2>La tua collezione</h2><p>Libreria, progressi e volumi: tutto in primo piano.</p></div>'+
  '<button class="btn secondary" data-go="collection">Visualizza tutte le serie</button></div>'+
- '<div class="collection-grid">'+collectionCards(ownCollection.slice(0,3))+'</div>'+
+ '<div class="collection-grid">'+collectionCards(getOwnCollection().slice(0,3))+'</div>'+
  '<div class="section-head"><div><h2>Un nuovo mondo si apre</h2><p>Il Social e il Market avranno pagine complete nella futura MangaLog.</p></div></div>'+
  '<div class="grid2">'+
  '<section class="panel feature"><div class="card-icon">♧</div><h3>MangaLog Social</h3><p>Amici, collezioni condivise, attività e confronti tra lettori. Nella demo puoi già esplorare il funzionamento visivo.</p><button class="mini-link" data-go="social">Apri il Social →</button></section>'+
@@ -136,17 +134,17 @@ function collectionCards(items){
  }).join('')
 }
 function collection(){
- const total=ownCollection.reduce((n,item)=>n+item.owned,0);
+ const total=getOwnCollection().reduce((n,item)=>n+item.owned,0);
  return headline('LA TUA LIBRERIA','La tua collezione','Le schede manga e i progressi riprendono la grafica definitiva. I volumi mostrati sono esempi, non il tuo archivio personale.')+
  '<div class="home-overview">'+
  '<div class="stat"><span>▦ Volumi posseduti</span><strong>'+total+'</strong></div>'+
- '<div class="stat"><span>▤ Serie</span><strong>'+ownCollection.length+'</strong></div>'+
- '<div class="stat"><span>☷ Mancolista</span><strong>'+ownCollection.reduce((n,x)=>n+x.total-x.owned,0)+'</strong></div>'+
+ '<div class="stat"><span>▤ Serie</span><strong>'+getOwnCollection().length+'</strong></div>'+
+ '<div class="stat"><span>☷ Mancolista</span><strong>'+getOwnCollection().reduce((n,x)=>n+x.total-x.owned,0)+'</strong></div>'+
  '<div class="stat"><span>♡ Wishlist</span><strong>5</strong></div></div>'+
  '<div class="section-head"><div><h2>La tua collezione</h2><p>Edizioni, avanzamento e schede volume nello stile della nuova MangaLog.</p></div>'+
  label('Anteprima con serie demo','muted')+'</div>'+
  '<div class="market-filter-row"><span class="filter-pill active">Tutte le serie</span><span class="filter-pill">Tutti gli stati</span><span class="filter-pill">Tutte le edizioni</span></div>'+
- '<div class="collection-grid">'+collectionCards(ownCollection)+'</div>'+
+ '<div class="collection-grid">'+collectionCards(getOwnCollection())+'</div>'+
  '<div class="notice">Le copertine sono segnaposto grafici originali. In questa versione di anteprima non viene letta né modificata la collezione reale. Il ripristino di Collezione, Mancolista e Wishlist avverrà più avanti su un ambiente di prova separato.</div>'
 }
 function status(p){return state.friends.has(p.id)?'friend':state.requests.has(p.id)?'requested':state.incoming.has(p.id)?'incoming':'none'}
@@ -203,7 +201,7 @@ function social(){
   const friends=friendProfiles.filter(p=>state.friends.has(p.id));
   let p=friendProfiles.find(p=>p.id===state.compareWith&&state.friends.has(p.id))||friends[0];
   if(p)state.compareWith=p.id;
-  const mine=new Set(ownCollection.map(x=>x.title));
+  const mine=new Set(getOwnCollection().map(x=>x.title));
   const theirs=new Set(p?p.collection:[]);
   const common=[...mine].filter(x=>theirs.has(x));
   const onlyMine=[...mine].filter(x=>!theirs.has(x));
@@ -257,7 +255,11 @@ function market(){
 }
 function draw(){
  document.querySelectorAll('[data-page]').forEach(btn=>{const selected=btn.dataset.page===state.page;btn.classList.toggle('active',selected);btn.setAttribute('aria-current',selected?'page':'false')});
- screen.innerHTML=state.page==='collection'?collection():state.page==='social'?social():state.page==='market'?market():home();
+ const lib=window.MangaLogNextCollection;
+ screen.innerHTML=lib.pages.has(state.page)?lib.render(state.page):
+  state.page==='more'?lib.morePage():
+  state.page==='social'?social():state.page==='market'?market():home();
+ if(lib.pages.has(state.page))lib.afterRender(draw);
  const search=document.getElementById('socialSearch');
  if(search)search.addEventListener('input',e=>{state.search=e.target.value;const pos=e.target.selectionStart;draw();const input=document.getElementById('socialSearch');if(input){input.focus();input.setSelectionRange(pos,pos)}});
  const marketSearch=document.getElementById('marketSearch');
@@ -270,7 +272,14 @@ function draw(){
  const compare=document.getElementById('compareSelect');
  if(compare)compare.addEventListener('change',e=>{state.compareWith=e.target.value;draw()});
 }
+document.addEventListener('change',e=>{
+ window.MangaLogNextCollection.handleChange(e.target,draw)
+});
 document.addEventListener('click',e=>{
+ const libBtn=e.target.closest('[data-library-action]');
+ if(libBtn&&window.MangaLogNextCollection.handleClick(libBtn,{
+  draw,go(page){state.page=page;draw();window.scrollTo(0,0)}
+ }))return;
  const nav=e.target.closest('[data-page],[data-go]');
  if(nav){state.page=nav.dataset.page||nav.dataset.go;state.tab=state.page==='social'?state.tab:'friends';draw();window.scrollTo(0,0);return}
  const marketFilter=e.target.closest('[data-market-filter]');
@@ -291,7 +300,7 @@ document.addEventListener('click',e=>{
   draw();return
  }
  const demoDetail=e.target.closest('[data-demo-details]');
- if(demoDetail){alert('La scheda reale di '+demoDetail.dataset.demoDetails+' arriverà con la nuova Collezione. Questa è un’anteprima grafica con dati dimostrativi.');return}
+ if(demoDetail){state.page='collection';draw();return}
  const priv=e.target.closest('[data-privacy-toggle]');
  if(priv){state.sharing=priv.dataset.privacyToggle==='on';draw()}
 });
