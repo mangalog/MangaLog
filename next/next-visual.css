@@ -1,0 +1,184 @@
+/* MangaLog Next — UI design baseline 2026-11-14.
+   Based on the approved Home, Social and Market night-japan concept mockups.
+   No external fonts, image licensing, analytics, checkout or user-data requests. */
+:root{
+ --bg:#06111e;--panel:#0a1928ed;--panel2:#0d2234eb;--stroke:#37536b;
+ --muted:#b2c5d3;--text:#f8fbff;--red:#fb415b;--blue:#4ec4fb;--green:#49d3a0;
+ color-scheme:dark
+}
+body{background:#05111d;color:#f5f9ff}
+.shell{grid-template-columns:234px minmax(0,1fr)}
+.sidebar{background:linear-gradient(180deg,#061222 0%,#06121f 68%,#07172b 100%);border-right:1px solid #27435b;padding:28px 15px 28px;z-index:4}
+.logo{font-size:25px;font-style:italic;letter-spacing:-1.4px;text-shadow:0 1px 6px #000}
+.logo-mark{background:linear-gradient(135deg,#07192f,#2c101d);border:2px solid #d73650;border-radius:50%;box-shadow:0 0 24px #ff3c5e44;font-size:25px;transform:rotate(-8deg)}
+.logo sup{font-size:10px;color:#f24f69}
+.sidebar .side-desc{border-bottom:1px solid #1e3648;padding-bottom:18px;max-width:100%;margin:14px 5px 20px;font-size:11px;letter-spacing:.75px}
+.side-nav{gap:5px}
+.side-nav button{font-size:14px;font-weight:780;padding:14px 11px;border-radius:10px;color:#f1f4fc;transition:background .15s}
+.side-nav button span{font-size:21px;color:#dce9f7}
+.side-nav button.active{background:linear-gradient(90deg,#792b42bb,#1c2636ee);border-left:4px solid #ff4d67;border-top-color:#783e54;border-bottom-color:#783e54;color:#fff}
+.side-nav button:hover:not(.active){background:#15283b;border-color:#30546e}
+.side-footer{color:#91b7d3;font-size:11px}
+.main{position:relative;isolation:isolate;overflow:hidden;max-width:none;padding:24px clamp(20px,2.7vw,48px) 76px}
+.main::before{content:"";position:absolute;top:0;left:0;right:0;height:720px;z-index:-2;pointer-events:none;background-image:linear-gradient(180deg,#04101b55 0%,#06162544 38%,#061424 82%,#061424 100%),url("../assets/maple-red-desktop-wide.webp");background-repeat:no-repeat;background-size:cover;background-position:top center}
+.main::after{content:"";position:absolute;z-index:-1;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 0,#07132385 530px,#071323 100%)}
+.topbar{margin-bottom:26px}
+.env{color:#ffd9df;text-shadow:0 2px 5px #000;font-size:11px}
+.env:before{background:#ff4e66;box-shadow:0 0 13px #ff4262}
+.account{background:#091524dc;border-color:#3a5b75;color:#fff;padding:8px 13px;box-shadow:0 5px 18px #010b14a0}
+.account .mini-avatar{background:linear-gradient(135deg,#a43b50,#ff556e);box-shadow:0 0 0 2px #173448}
+.kicker{color:#ff4865;font-weight:900;letter-spacing:3px;text-shadow:0 1px 5px #001}
+.heading{font-size:clamp(32px,3.2vw,45px);font-weight:900;text-shadow:0 3px 12px #00131f}
+.subtitle{color:#e1eaf4;text-shadow:0 2px 7px #000;max-width:840px}
+.panel{border:1px solid #36546f;border-radius:16px;background:linear-gradient(128deg,#0d1e30ed,#091725ef);box-shadow:0 8px 24px #0005}
+.panel h2{font-size:20px}
+.panel p{color:#c1d0dc}
+.hero{border:1px solid #6c4961;min-height:270px;border-radius:20px;background:linear-gradient(95deg,#092039df 0%,#1b284d9a 62%,#561f3980 100%);box-shadow:0 10px 36px #0006}
+.hero::after{content:"";display:none}
+.hero .kicker{font-size:12px}
+.hero h1{font-weight:1000;text-shadow:0 4px 16px #000}
+.hero p{color:#e8eff9}
+.btn{background:#111e30;border-color:#6987a3;border-radius:10px;box-shadow:inset 0 1px #ffffff0c;min-height:41px}
+.btn.primary{background:linear-gradient(180deg,#fb4a63,#a92b40);border-color:#ff697d;box-shadow:0 4px 18px #eb31503b}
+.btn.secondary{background:linear-gradient(180deg,#174369,#112d4b);border-color:#62b8ec;color:#e9faff}
+.btn:hover:not(:disabled){filter:brightness(1.16)}
+.badge{background:#09243b;border-color:#42728a;color:#e0f4ff}
+.badge.green{background:#103e33;border-color:#2bb885;color:#9ef8d0}
+.badge.muted{background:#20304a;border-color:#435c77;color:#cdd8e4}
+.section-head h2{font-size:23px;text-shadow:0 2px 7px #000}
+.section-head h2::before{content:"";display:inline-block;width:5px;height:25px;margin-right:12px;vertical-align:-5px;border-radius:4px;background:#ff4565;box-shadow:0 0 10px #e72f4e66}
+.section-head p{color:#c7d6e5}
+.card-icon{border-color:#5b4767;background:#301e34;color:#ff617c}
+.feature{min-height:240px}
+.feature .mini-link{color:#65d4ff}
+.notice{background:#1a2839ee;border:1px solid #355979;color:#dfebf8}
+.stat{border-color:#36516c;border-radius:14px;background:#07192ce8}
+.stat strong{color:#e9f8ff}
+.stat span{color:#aacde4}
+.tabs{border-bottom:1px solid #3b5976;gap:9px;padding-bottom:0;margin-top:20px;margin-bottom:20px}
+.tab{color:#f4f7ff;background:#08182bcf;border-color:#3e6080;font-size:14px;border-radius:13px 13px 0 0;min-width:140px;padding:13px 18px}
+.tab.active{background:linear-gradient(180deg,#842c47,#3a1b30);border-color:#cc4760;color:white;box-shadow:inset 0 -3px #ff5069}
+.card-title{color:#fff}
+.series,.person,.compare-row{background:#0a1b2cf0;border-color:#35536e}
+.series-art{background:linear-gradient(140deg,#17273b,#4b253d);border-color:#587c98;color:#fbe7eb}
+.series .counts{color:#d6efff}
+.avatar{border-radius:50%;border-color:#5d93b1;background:linear-gradient(145deg,#5d395f,#1e5d82);box-shadow:0 0 0 3px #071727;font-size:14px}
+.avatar.blue{background:linear-gradient(145deg,#4c95a5,#252d50)}
+.avatar.gold{background:linear-gradient(145deg,#aa8450,#5c353d)}
+.compare-row .tag{background:#124c43;color:#a3f9e2}
+.compare-row .tag.diff{background:#51243c;color:#ffc1cc}
+.market-hero{border-color:#526d8a;background:linear-gradient(90deg,#0c2c4de8,#1e1c3bd8),url("../assets/maple-red-desktop-wide.webp") center/cover}
+.market-hero h2{text-shadow:0 3px 10px #001}
+.market-hero p{color:#d5e6f8}
+.input{background:#061323d9;border-color:#5a7991;color:#f6fbff}
+.input::placeholder{color:#98b3ca}
+.footer{color:#9bb9c8;border-color:#2c4861}
+.next-hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.mock-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border:1px solid #436789;border-radius:15px;background:#091d31e8;overflow:hidden;margin-bottom:20px}
+.mock-stat{padding:16px 22px;display:flex;gap:13px;align-items:center;position:relative}
+.mock-stat+.mock-stat:before{content:"";position:absolute;left:0;top:17px;bottom:17px;width:1px;background:#52708c}
+.mock-stat .icon{font-size:29px;min-width:34px;text-align:center}
+.mock-stat strong{display:block;font-size:25px;line-height:1.12;color:#95cfff}
+.mock-stat span{display:block;color:#d4e1ef;font-size:12px}
+.social-dashboard{display:grid;grid-template-columns:1.03fr 1.48fr 1.05fr;gap:16px}
+.social-dashboard .panel{padding:15px}
+.social-column-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:14px}
+.social-column-head h2{font-size:19px;margin:0}
+.social-column-head .tiny-link{border:0;background:none;color:#60cdff;font-size:12px;font-weight:750}
+.social-friend{display:flex;align-items:center;gap:10px;padding:9px 11px;border:1px solid #31516d;border-radius:11px;background:#06192ae8;margin-top:8px}
+.social-friend strong{font-size:13px}.social-friend .small{font-size:11px;color:#abc8db}
+.social-friend .avatar{min-width:41px;height:41px;width:41px}
+.social-friend .mini-action{border:1px solid #557b98;color:#bfeaff;border-radius:7px;background:#14324a;padding:5px 8px;font-size:11px;font-weight:780}
+.social-feed{display:flex;align-items:flex-start;gap:12px;border-bottom:1px solid #37516b;padding:13px 0;font-size:13px;min-height:86px}
+.social-feed:last-child{border:0}
+.social-feed .feed-icon{height:37px;width:37px;flex:0 0 37px;border-radius:50%;display:grid;place-items:center;background:#14344d;color:#81d2fc;font-size:19px}
+.social-feed .feed-title{font-weight:850;color:#eff6fb}.social-feed p{margin:4px 0 0;font-size:11px;color:#b1c6d8}
+.social-featured{margin:11px 0 13px;border:1px solid #385978;border-radius:12px;padding:12px;background:#071728e8}
+.social-featured .featured-art{display:flex;gap:5px;margin:13px 0}
+.social-featured .featured-art span{height:72px;min-width:0;flex:1;display:grid;place-items:center;overflow:hidden;text-align:center;font-size:10px;font-weight:900;padding:4px;border-radius:5px;background:linear-gradient(135deg,#143e5d,#4f253e);border:1px solid #62768c;line-height:1.1}
+.social-featured .btn{min-height:35px;font-size:11px;padding:7px 9px}
+.market-benefits{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px;margin-bottom:20px}
+.market-benefit{border:1px solid #49647d;border-radius:13px;background:#091d30dd;padding:14px 16px;display:flex;gap:11px;align-items:center}
+.market-benefit .symbol{font-size:28px;color:#fb536d}
+.market-benefit strong{display:block;font-size:14px}
+.market-benefit small{color:#b8cedd;font-size:11px}
+.market-tools{display:flex;gap:11px;margin:19px 0 14px;align-items:center}
+.market-tools .input{flex:1}
+.market-tool-btn{border:1px solid #617995;border-radius:11px;padding:10px 14px;background:#0d2136;color:#f3f9ff;font-weight:780}
+.market-filter-row{display:flex;gap:9px;flex-wrap:wrap;margin-bottom:25px}
+.filter-pill{border:1px solid #5e7790;border-radius:999px;color:#e1ecf4;background:#071a2edc;padding:9px 15px;font-size:12px;font-weight:850}
+.filter-pill.active{border-color:#ff536d;background:#5c2438;color:#fff;box-shadow:0 0 0 2px #ff354b3d}
+.featured-banners{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.featured-banner{border-radius:12px;border:1px solid #567899;background:linear-gradient(130deg,#214260e8,#09233de8);min-height:132px;padding:19px;display:flex;flex-direction:column;justify-content:flex-end;position:relative;overflow:hidden}
+.featured-banner:nth-child(2){background:linear-gradient(130deg,#4d2137e8,#101e3de8)}
+.featured-banner:nth-child(3){background:linear-gradient(130deg,#3b1436e8,#123c56e8)}
+.featured-banner:before{content:"◇";position:absolute;top:-39px;right:-12px;font-size:145px;color:#ffffff17;font-weight:900}
+.featured-banner strong,.featured-banner small{position:relative}
+.featured-banner strong{font-size:21px;font-weight:950}
+.featured-banner small{font-size:12px;color:#bfe7ff}
+.market-products{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}
+.market-product{border:1px solid #42627a;background:#071a2ce8;border-radius:14px;padding:14px;min-width:0}
+.market-cover{border:1px solid #6a6984;border-radius:8px;aspect-ratio:3/4;width:100%;display:flex;flex-direction:column;justify-content:space-between;padding:10px;font-weight:950;line-height:1.07;background:linear-gradient(135deg,#17436a 0%,#6c2c4a 90%);box-shadow:0 9px 15px #0008}
+.market-product:nth-child(2n) .market-cover{background:linear-gradient(125deg,#534338,#1b6580)}
+.market-product:nth-child(3n) .market-cover{background:linear-gradient(125deg,#1d1e39,#8f3246)}
+.market-cover small{font-size:9px;letter-spacing:2px;color:#dbeefe}
+.market-cover strong{font-size:clamp(18px,1.5vw,25px);word-break:break-word;color:#fff;text-shadow:0 2px 9px #000}
+.market-product h3{font-size:14px;margin:12px 0 3px}
+.market-product p{font-size:11px;margin:2px 0;color:#afc4d3}
+.market-product .market-price{font-size:16px;font-weight:850;color:#ecf7ff;margin-top:10px}
+.market-product .btn{font-size:11px;padding:7px 9px;width:100%;margin-top:9px}
+.market-info-row{display:flex;justify-content:space-between;gap:8px;align-items:center;margin-top:12px}
+.market-info-row .badge{font-size:9px}
+.home-overview{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px;margin:20px 0}
+.home-overview .stat{padding:16px 18px}
+.collection-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.collection-card{display:flex;gap:15px;min-width:0;align-items:stretch;border:1px solid #44627d;border-radius:13px;padding:13px;background:#091a2deb}
+.collection-card .series-art{width:92px;min-width:92px;height:142px;flex:0 0 92px;border-radius:7px;display:flex;flex-direction:column;align-items:flex-start;justify-content:flex-end;padding:10px;font-size:14px;line-height:1.07}
+.collection-card .series-art small{font-size:10px;font-weight:650;letter-spacing:1px;color:#d8e5f6;margin-bottom:auto}
+.collection-card .series-art strong{font-size:15px;color:#fff}
+.collection-card h3{margin:3px 0 6px;font-size:16px;line-height:1.15}
+.collection-card .small{font-size:11px;color:#b4cbde}
+.progress-track{background:#17273b;border:1px solid #304b63;height:9px;overflow:hidden;border-radius:999px;margin:14px 0 7px}
+.progress-fill{height:100%;background:linear-gradient(90deg,#29b583,#65dfa6);border-radius:999px}
+.collection-card .card-buttons{display:flex;gap:7px;flex-wrap:wrap;margin-top:12px}
+.collection-card .card-buttons .btn{font-size:11px;padding:7px 10px;min-height:33px}
+.next-empty{background:#0a192bea;border:1px solid #456782;border-radius:13px;padding:22px}
+@media(max-width:1250px){
+ .social-dashboard{grid-template-columns:1fr 1.3fr}
+ .social-dashboard .featured-column{grid-column:1/-1}
+ .market-products{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .collection-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media(max-width:1060px){
+ .main{padding:20px 22px 65px}
+ .sidebar{padding:25px 11px}
+ .shell{grid-template-columns:200px minmax(0,1fr)}
+ .market-benefits{grid-template-columns:1fr}
+ .home-overview{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .featured-banners{grid-template-columns:1fr}
+}
+@media(max-width:760px){
+ .main{padding:17px 15px 100px}
+ .main::before{height:470px;background-position:top center;background-size:auto 470px}
+ .topbar{margin-bottom:18px}
+ .bottom-nav{background:#081629f5;border-top:1px solid #3b5871;z-index:11}
+ .bottom-nav button{color:#bad2e7;border:1px solid transparent;border-radius:10px}
+ .bottom-nav button.active{background:#552239;border-color:#c84660;color:#fff}
+ .social-dashboard,.grid3,.grid2{grid-template-columns:1fr}
+ .social-dashboard .featured-column{grid-column:auto}
+ .mock-stats{grid-template-columns:1fr}
+ .mock-stat+.mock-stat:before{left:20px;right:20px;height:1px;width:auto;top:0;bottom:auto}
+ .market-benefits{grid-template-columns:1fr}
+ .market-products{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+ .market-product{padding:10px}
+ .market-tools{flex-wrap:wrap}
+ .market-tools .input{flex-basis:100%}
+ .market-filter-row{gap:7px}
+ .filter-pill{padding:9px 11px}
+ .featured-banners{grid-template-columns:1fr}
+ .collection-grid{grid-template-columns:1fr}
+ .collection-card .series-art{width:78px;min-width:78px;flex-basis:78px;height:124px}
+ .home-overview{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .tab{min-width:0;flex:1;padding:12px 7px;font-size:12px}
+ .hero{min-height:0}
+}
