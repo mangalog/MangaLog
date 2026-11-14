@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="it"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MangaLog · Prova copertine private Naruto</title>
+<style>body{font:16px system-ui;background:#101116;color:#f5f5f7;margin:0;padding:20px}main{max-width:960px;margin:auto}h1{color:#ff5268}.note{color:#b9bbc6}button,input{font:inherit}button{background:#e84058;color:white;border:0;border-radius:8px;padding:9px;cursor:pointer}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(135px,1fr));gap:12px}.card{background:#1c1e26;border:1px solid #383b48;border-radius:12px;padding:10px}.card img{width:100%;aspect-ratio:2/3;object-fit:contain;background:#292b34}.placeholder{aspect-ratio:2/3;display:grid;place-items:center;background:#292b34;color:#aaa}.card label{display:block;font-size:12px;margin:9px 0}.card input{width:100%;font-size:11px}.card button{font-size:12px;margin-top:7px;background:#444754}small{color:#bbb}</style></head>
+<body><main><h1>Naruto · Serie Rossa</h1><p class="note">Laboratorio personale di MangaLog: 72 volumi. Seleziona una foto della copertina corretta per ciascun volume. Le immagini sono salvate solo nel browser di questo dispositivo, non su GitHub o Supabase. Usa soltanto immagini che puoi conservare legittimamente.</p><p id="status">Caricamento archivio locale…</p><div class="grid" id="grid"></div></main>
+<script>
+const DB='mangalog-private-covers-v1',STORE='covers',PREFIX='naruto-serie-rossa:';
+const status=document.getElementById('status'),grid=document.getElementById('grid');
+let db;
+const request=indexedDB.open(DB,1);
+request.onupgradeneeded=()=>{request.result.createObjectStore(STORE)};
+request.onerror=()=>status.textContent='Impossibile aprire l’archivio locale del browser.';
+request.onsuccess=()=>{db=request.result;status.textContent='Archivio locale pronto. Le immagini non vengono caricate online.';for(let n=1;n<=72;n++)createCard(n)};
+function store(mode){return db.transaction(STORE,mode).objectStore(STORE)}
+function createCard(n){
+ const card=document.createElement('div');card.className='card';
+ const title=document.createElement('strong');title.textContent='Volume '+n;
+ const preview=document.createElement('div');preview.className='placeholder';preview.textContent='Nessuna copertina';
+ const label=document.createElement('label');label.textContent='Scegli immagine';
+ const input=document.createElement('input');input.type='file';input.accept='image/*';input.setAttribute('aria-label','Copertina Naruto volume '+n);
+ const remove=document.createElement('button');remove.textContent='Rimuovi';remove.hidden=true;
+ const key=PREFIX+n;let objectURL=null;
+ function show(blob){if(objectURL)URL.revokeObjectURL(objectURL);preview.replaceChildren();objectURL=URL.createObjectURL(blob);const img=document.createElement('img');img.src=objectURL;img.alt='Copertina Naruto Serie Rossa volume '+n;preview.append(img);preview.className='';remove.hidden=false}
+ const get=store('readonly').get(key);get.onsuccess=()=>{if(get.result)show(get.result)};
+ input.onchange=()=>{const file=input.files?.[0];if(!file)return;if(!file.type.startsWith('image/')){alert('Seleziona un’immagine');return}if(file.size>8*1024*1024){alert('Immagine troppo grande: massimo 8 MB');return}const put=store('readwrite').put(file,key);put.onsuccess=()=>show(file);put.onerror=()=>alert('Spazio insufficiente per salvare la copertina')};
+ remove.onclick=()=>{const del=store('readwrite').delete(key);del.onsuccess=()=>{if(objectURL)URL.revokeObjectURL(objectURL);objectURL=null;preview.replaceChildren();preview.className='placeholder';preview.textContent='Nessuna copertina';remove.hidden=true;input.value=''}};
+ label.append(input);card.append(title,preview,label,remove);grid.append(card)
+}
+</script></body></html>
