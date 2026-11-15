@@ -1,0 +1,8 @@
+/* Naruto Serie Rossa: optional private cover assets, never touches collection data. */
+(()=>{'use strict';
+const root='lab/naruto-private-assets/';
+const css=document.createElement('style');css.textContent='.volume.ml-naruto-cover{padding:5px 3px 8px;overflow:hidden}.volume.ml-naruto-cover img{display:block;width:100%;aspect-ratio:2/3;object-fit:contain;border-radius:5px;margin-bottom:5px}.volume.ml-naruto-cover .volume-number{display:block}';document.head.append(css);
+function active(){const h=document.querySelector('#content .detail-hero h1');return h?.textContent.trim().toLowerCase()==='naruto'&&/serie rossa/i.test(document.querySelector('#content .detail-head .muted')?.textContent||'')}
+function render(){if(!active())return;const grid=document.querySelector('#content .volume-grid');if(!grid)return;for(let n=1;n<=72;n++){const button=grid.querySelector('[data-volume="'+n+'"]');if(!button||button.querySelector('img.ml-naruto-photo'))continue;const img=document.createElement('img');img.className='ml-naruto-photo';img.alt='Naruto Serie Rossa volume '+n;img.loading='lazy';img.decoding='async';img.src=root+'Naruto_Serie_Rossa_'+String(n).padStart(2,'0')+'.jpg';img.onerror=()=>{img.remove();button.classList.remove('ml-naruto-cover')};button.insertBefore(img,button.firstChild);button.classList.add('ml-naruto-cover')}}
+let queued=false;new MutationObserver(()=>{if(queued)return;queued=true;requestAnimationFrame(()=>{queued=false;render()})}).observe(document.body,{childList:true,subtree:true});render();
+})();
