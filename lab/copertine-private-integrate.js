@@ -1,6 +1,6 @@
 /* MangaLog Naruto cover trial: local-only, never changes collection or cloud data. */
 (()=>{'use strict';
-const DB='mangalog-private-covers-v1',STORE='covers',PREFIX='naruto-serie-rossa:';
+const DB='mangalog-naruto-covers-clean-v3',STORE='covers',PREFIX='naruto-serie-rossa:';
 let db, busy=false, urls=new Map(), painted=new WeakSet();
 const style=document.createElement('style');style.textContent=`
 .ml-cover-tools{margin:12px 0;padding:14px;border:1px solid #6a505b;border-radius:12px;background:#1b1c25}
@@ -45,7 +45,7 @@ function refresh(){
  if(!document.querySelector('.ml-cover-tools')){
  const panel=document.createElement('section');panel.className='ml-cover-tools';
  const h=document.createElement('strong');h.textContent='Copertine Naruto · prova privata';
- const p=document.createElement('p');p.textContent='Carica una sola volta il JSON contenuto nello ZIP Naruto. Importa soltanto le immagini: non sostituisce la collezione, non modifica i volumi posseduti e non invia fotografie a Supabase.';
+ const p=document.createElement('p');p.textContent='Importa una sola volta il JSON delle 72 copertine, senza sostituire il backup della collezione. Le immagini rimangono solo su questo dispositivo.';
  const input=document.createElement('input');input.type='file';input.accept='.json,application/json';input.setAttribute('aria-label','Seleziona backup Naruto con 72 copertine');
  const status=document.createElement('p');status.className='ml-cover-status';status.setAttribute('role','status');
  input.addEventListener('change',()=>importJSON(input.files?.[0],status));
