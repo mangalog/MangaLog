@@ -11,8 +11,9 @@
 2. `social/collection-compare.sql`
 3. `social/privacy-hardening.sql`
 4. `social/api-privileges.sql` (RPC anon bloccate)\n5. `social/safe-friendship-responses.sql` (accettazione con RLS senza RPC privilegiata)\n6. `social/private-rls-helpers.sql` (funzioni interne fuori dallo schema pubblico)
+7. `social/notifications.sql` (notifiche testuali: richieste, accettazioni, commenti e like)
 
-Le sette tabelle `social_*` hanno tutte RLS attivo. Le RPC sensibili sono negate al ruolo `anon`. Le due funzioni interne `SECURITY DEFINER` sono nello schema non esposto `social_private`, richiamabili soltanto dal ruolo autenticato. L'advisor di sicurezza Supabase non segnala più avvisi nel progetto di test (verifica del 16 novembre 2026).
+Le otto tabelle `social_*` hanno tutte RLS attivo. Le RPC sensibili sono negate al ruolo `anon`. Le due funzioni interne `SECURITY DEFINER` sono nello schema non esposto `social_private`, richiamabili soltanto dal ruolo autenticato. L'advisor di sicurezza Supabase non segnala più avvisi nel progetto di test (verifica del 16 novembre 2026).
 
 ### Test eseguiti
 - SQL transazionale con due identità fittizie, **ROLLBACK** al termine.
@@ -33,3 +34,9 @@ Le sette tabelle `social_*` hanno tutte RLS attivo. Le RPC sensibili sono negate
 - Non utilizzare un visualizzatore HTML di terze parti per inserire password reali, nemmeno di test, senza averne verificato l'affidabilità.
 
 ### Verifica delle risposte alle richieste\nIl mittente non può accettare una richiesta: solo il destinatario può aggiornare `status` da `pending` a `accepted` o `declined`, attraverso RLS e permessi di colonna. L'indice `social_friend_unique_pair_idx` evita richieste duplicate anche in direzioni opposte. Le prove con SQL vengono sempre annullate tramite `ROLLBACK`.\n
+### Notifiche (fase successiva)
+- Campanella nella barra in alto; non aggiunge una quinta scheda alla navigazione Social mobile.
+- Eventi generati nel database, senza immagini o caricamenti in Storage.
+- Il destinatario può segnare le notifiche come lette; gli utenti bloccati non compaiono più nelle notifiche visibili.
+- Test transazionale `social/tests/notifications-rollback.sql`: inviti, accettazioni, commenti, like, accesso del destinatario e blocchi. Tutti i dati del test sono annullati.
+- Il test browser con due account reali è ancora da fare su un'origine web affidabile: non inserire password nell'anteprima servita da visualizzatori esterni.
