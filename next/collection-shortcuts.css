@@ -159,3 +159,66 @@
   #content > .nx-shortcuts .nx-shortcut-items .btn,
   #content > .nx-shortcuts .nx-shortcuts-caret{transition:none}
 }
+
+
+/* Navigazione PC: la Collezione si espande nella barra laterale.
+   La toolbar superiore rimane ESCLUSIVAMENTE su smartphone. */
+@media(min-width:801px){
+  #content > .nx-shortcuts{display:none!important}
+  #desktopNav{overflow-y:auto;max-height:calc(100vh - 155px);padding-right:3px}
+  #desktopNav .nx-desktop-collection-group{margin:3px 0}
+  #desktopNav .nx-desktop-collection-toggle{
+    display:flex;align-items:center;width:100%;gap:13px
+  }
+  #desktopNav .nx-desktop-collection-toggle .nx-sidebar-caret{
+    margin-left:auto;font-size:15px;opacity:.82;
+    transition:transform .17s ease
+  }
+  #desktopNav .nx-desktop-collection-toggle[aria-expanded="true"] .nx-sidebar-caret{
+    transform:rotate(180deg)
+  }
+  #desktopNav .nx-desktop-collection-items{
+    display:none;flex-direction:column;gap:2px;margin:3px 0 9px 15px;
+    padding-left:12px;border-left:1px solid rgba(115,153,187,.43)
+  }
+  #desktopNav .nx-desktop-collection-items.is-open{display:flex}
+  #desktopNav .nx-desktop-collection-items .nx-desktop-subnav-link{
+    border:1px solid transparent;background:transparent;
+    color:#bbcfdf;border-radius:9px;padding:10px 9px;min-height:36px;
+    text-align:left;display:flex;align-items:center;gap:9px;
+    font-size:12px;line-height:1.25;font-weight:710;width:100%;
+    transition:background .15s,border-color .15s,color .15s
+  }
+  #desktopNav .nx-desktop-collection-items .nx-desktop-subnav-link:hover{
+    background:rgba(75,114,148,.19);color:#fff;
+    border-color:rgba(100,148,185,.24)
+  }
+  #desktopNav .nx-desktop-collection-items .nx-desktop-subnav-link.active{
+    color:#fff;background:rgba(163,43,75,.27);
+    border-color:rgba(236,86,118,.56)
+  }
+  #desktopNav .nx-desktop-collection-items .nx-sidebar-subicon{
+    width:17px;font-size:15px;text-align:center;flex-shrink:0
+  }
+  #desktopNav button:focus-visible{outline:2px solid #87d3ff;outline-offset:1px}
+  :root[data-theme="paper"] #desktopNav .nx-desktop-collection-items .nx-desktop-subnav-link{
+    color:#34465b
+  }
+  :root[data-theme="paper"] #desktopNav .nx-desktop-collection-items .nx-desktop-subnav-link.active{
+    background:#f4dbe2;color:#782641;border-color:#bf5770
+  }
+}
+.nx-mobile-settings{display:none}
+@media(max-width:800px){
+  .nx-mobile-settings{
+    appearance:none;display:inline-flex;align-items:center;justify-content:center;
+    width:39px;height:39px;border-radius:10px;
+    border:1px solid rgba(121,156,190,.45);
+    background:rgba(18,43,63,.84);color:#f1f6ff;font-size:19px;
+    cursor:pointer
+  }
+  .nx-mobile-settings:focus-visible{outline:2px solid #87d3ff;outline-offset:2px}
+  :root[data-theme="paper"] .nx-mobile-settings{
+    background:#fffdf8;color:#30485b;border-color:#bdcbd8
+  }
+}
