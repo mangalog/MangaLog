@@ -1473,6 +1473,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .nx-related-copy{min-width:0;flex:1;display:flex;flex-direction:column;gap:5px}.nx-related-copy strong{font-size:14px;overflow-wrap:anywhere}.nx-related-copy small{font-size:11px;color:#b9b8c6}
 .nx-related-cover{display:grid;place-items:center;flex:0 0 42px;height:57px;border:1px solid #79424c;border-radius:5px;background:linear-gradient(135deg,#411927,#181a25);color:#eac2c8;font-weight:900;font-size:12px}
 .nx-related-remove{padding:5px 7px;font-size:11px}
+.nx-oneshot-owned[hidden],.field[hidden]{display:none!important}
 .nx-oneshot-owned{padding:10px;border:1px solid #54505a;border-radius:10px}.nx-oneshot-owned label{display:flex;gap:10px;align-items:center}
 @media(max-width:540px){.nx-related-panel{padding:12px}.nx-related-entry{flex-wrap:wrap}.nx-related-remove{margin-left:auto}}
 </style><style id="next-subnav-style">
@@ -2918,9 +2919,16 @@ if(!localStorage.getItem(KEY)){
   {id:'next-dd',title:'Dandadan',edition:'Edizione italiana demo',publisher:'J-POP Manga',total:20,owned:Array.from({length:12},(_,i)=>i+1),missingPriority:'alta',created:Date.now()-6000},
   {id:'next-bk',title:'Berserk',edition:'Serie Nera',publisher:'Planet Manga',total:41,owned:Array.from({length:9},(_,i)=>i+1),missingPriority:'media',created:Date.now()-5000},
   {id:'next-fr',title:'Frieren',edition:'Edizione italiana demo',publisher:'J-POP Manga',total:14,owned:Array.from({length:6},(_,i)=>i+1),missingPriority:'bassa',created:Date.now()-4000},
-  {id:'next-na',title:'Naruto',edition:'Planet Manga demo',publisher:'Panini Manga',total:72,owned:Array.from({length:72},(_,i)=>i+1),missingPriority:'bassa',created:Date.now()-3000}
+  {id:'next-na',title:'Naruto',edition:'Planet Manga demo',publisher:'Panini Manga',total:72,owned:Array.from({length:72},(_,i)=>i+1),missingPriority:'bassa',created:Date.now()-3000},
+  {id:'next-roto',title:"L'Emblema di Roto",edition:'Demo: volumi illustrativi',publisher:'',total:8,owned:[1,2,3,4,5,6,7,8],created:Date.now()-2500},
+  {id:'next-roto2',title:"L'Emblema di Roto II",edition:'Demo: volumi illustrativi',publisher:'',total:6,owned:[1,2],created:Date.now()-2200},
+  {id:'next-ritorno',title:"L'Emblema di Roto - Il Ritorno",edition:'Demo: volumi illustrativi',publisher:'',total:4,owned:[1],created:Date.now()-2000},
+  {id:'next-drstone',title:'Dr. Stone',edition:'Esempio demo',publisher:'',total:26,owned:Array.from({length:26},(_,i)=>i+1),created:Date.now()-1800},
+  {id:'next-byakuya',title:'Dr. Stone Reboot: Byakuya',edition:'Esempio demo',publisher:'',kind:'oneshot',total:1,owned:[1],created:Date.now()-1500},
+  {id:'next-lookback',title:'Look Back',edition:'Esempio demo',publisher:'',kind:'oneshot',total:1,owned:[1],created:Date.now()-1300}
  ];
  data.series=nextDemo.map(norm);
+ data.links=normalizeLinks([{from:'next-roto',to:'next-roto2',kind:'sequel'},{from:'next-roto',to:'next-ritorno',kind:'related'},{from:'next-drstone',to:'next-byakuya',kind:'spinoff'}],data.series);
  data.wishlist=[
   normalizeWishlistItem({id:'next-w1',title:'Blue Period',priority:'alta',notes:'Solo esempio demo',price:null}),
   normalizeWishlistItem({id:'next-w2',title:'Atelier of Witch Hat',priority:'media',notes:'Solo esempio demo',price:null})
