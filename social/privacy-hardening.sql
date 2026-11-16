@@ -81,3 +81,26 @@ using (
  not public.social_is_blocked(user_id,auth.uid())
  and exists(select 1 from public.social_posts p where p.id=post_id)
 );
+
+-- Accesso Data API esplicito: solo account autenticati, RLS sempre attiva.
+-- Il progetto di test deve applicare prima schema.sql e collection-compare.sql.
+revoke all on table public.social_profiles,
+ public.social_friend_requests, public.social_blocks,
+ public.social_posts, public.social_comments,
+ public.social_likes, public.social_collection_volumes from anon;
+grant select, insert, update on table public.social_profiles to authenticated;
+grant select, insert, delete on table public.social_friend_requests to authenticated;
+grant select, insert, delete on table public.social_blocks to authenticated;
+grant select, insert, update, delete on table public.social_posts to authenticated;
+grant select, insert, delete on table public.social_comments to authenticated;
+grant select, insert, delete on table public.social_likes to authenticated;
+grant select, insert, delete on table public.social_collection_volumes to authenticated;
+-- Indici per feed, amicizie e policy più frequenti.
+create index if not exists social_friend_sender_status_idx
+ on public.social_friend_requests(sender_id, status);
+create index if not exists social_posts_author_idx
+ on public.social_posts(author_id, created_at desc);
+create index if not exists social_comments_author_idx
+ on public.social_comments(author_id);
+create index if not exists social_blocks_blocked_idx
+ on public.social_blocks(blocked_id);
