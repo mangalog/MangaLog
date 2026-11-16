@@ -31,7 +31,7 @@ reset role;
 set local role authenticated;
 select set_config('request.jwt.claim.sub','33333333-3333-4333-8333-333333333333',true);
 do $$begin
- if not public.social_are_friends(
+ if not social_private.are_friends(
  '33333333-3333-4333-8333-333333333333',
  '44444444-4444-4444-8444-444444444444') then
  raise exception 'Friendship not recognized';end if;
