@@ -15,7 +15,10 @@ const examplePosts=[
 ];
 const S={page:'feed',friendTab:'list',filter:'all',compare:'riko',search:'',searchResults:[],activePost:'',busy:false,mode:'demo',authTab:'login',
  user:null,profile:{user_id:'me',username:'mangacollector',display_name:'MangaCollector',bio:'Collezionista di manga 📚 Amo completare le mie serie!',collection_visibility:'private'},
- people:Object.fromEntries(examplePeople.map(x=>[x.user_id,x])),friends:['riko','luca','vale'],requests:[{id:'req1',sender_id:'hiro',receiver_id:'me',status:'pending'},{id:'req2',sender_id:'sakura',receiver_id:'me',status:'pending'}],sent:[],posts:examplePosts,volumes:exampleVolumes,compareLocked:false
+ people:Object.fromEntries(examplePeople.map(x=>[x.user_id,x])),friends:['riko','luca','vale'],requests:[{id:'req1',sender_id:'hiro',receiver_id:'me',status:'pending'},{id:'req2',sender_id:'sakura',receiver_id:'me',status:'pending'}],sent:[],posts:examplePosts,volumes:exampleVolumes,compareLocked:false,notifications:[
+ {id:'ndemo1',actor_id:'hiro',kind:'friend_request',target_id:'req1',created_at:'Adesso',read_at:null},
+ {id:'ndemo2',actor_id:'riko',kind:'post_comment',target_id:'demo1',created_at:'Ieri',read_at:null}
+ ],unread:2
 };
 let client=null;
 function note(text,error){banner.textContent=text||'';banner.classList.toggle('error',!!error)}
@@ -33,7 +36,9 @@ function navigation(){
  document.getElementById('social-side').innerHTML='<div class="section-label">MANGALOG NEXT</div>'+sidebarLinks+'<div class="sidebar-tip">'+(S.mode==='demo'?'Anteprima locale · dati di esempio':'Progetto Supabase di TEST')+'<br>Le tue collezioni reali restano intatte.</div>';
  document.getElementById('social-bottom').innerHTML=mainHtml;
  document.getElementById('social-mobile-tabs').innerHTML=tabs;
- document.getElementById('social-mobile-tabs').hidden=S.page==='privacy';
+ document.getElementById('social-mobile-tabs').hidden=['privacy','notifications'].includes(S.page);
+ const bell=document.getElementById('social-bell');
+ if(bell){bell.hidden=S.mode==='real'&&!S.user;bell.innerHTML='♧ <span aria-hidden="true">🔔</span>'+(S.unread?'<span class="notif-count">'+(S.unread>50?'50+':S.unread)+'</span>':'');bell.setAttribute('aria-label','Notifiche'+(S.unread?' non lette: '+S.unread:''));}
  document.getElementById('social-mode').textContent=S.mode==='demo'?'DEMO NAVIGABILE':'TEST ISOLATO';
 }
 
@@ -77,9 +82,59 @@ return html;
 function visLabel(v){return v==='public'?'pubblica':v==='friends'?'visibile agli amici':'privata'}
 function privacy(){const vis=S.profile?.collection_visibility||'private';return head('Privacy e visibilità','Scegli chi può vedere i tuoi dati e i volumi condivisi.')+section('<h3>La mia collezione Social</h3>'+[['private','🔒 Privata','Visibile soltanto a te'],['friends','♧ Solo amici','Visibile agli amici accettati'],['public','◎ Pubblica','Visibile agli utenti autenticati']].map(v=>'<label class="privacy-choice"><input type="radio" name="visibility" value="'+v[0]+'" '+(vis===v[0]?'checked':'')+'><span><strong>'+v[1]+'</strong><small>'+v[2]+'</small></span></label>').join('')+'<p class="hint">Nessun volume della Collezione principale viene pubblicato in automatico.</p>')+section('<h3>Foto e archiviazione</h3><p class="hint">I post sono soltanto testuali. Non sono previsti caricamenti di immagini sui server.</p>'+(S.mode==='real'?button('Esci dal Social di test','logout','yes',true):''));
 }
+
+function notificationLabel(n){
+ const labels={
+  friend_request:'ti ha inviato una richiesta di amicizia',
+  friend_accepted:'ha accettato la tua richiesta di amicizia',
+  post_comment:'ha commentato un tuo post',
+  post_like:'ha messo Mi piace a un tuo post'
+ };
+ return labels[n.kind]||'ha interagito con te';
+}
+function notificationsPage(){
+ let list=S.notifications||[];
+ return head('Notifiche','Le interazioni più recenti della tua community.')+
+ section('<div class="row between" style="margin-bottom:8px"><strong>Le tue notifiche</strong>'+
+ (list.some(n=>!n.read_at)?button('Segna tutte lette','read-all','yes',true):'<span class="hint">Tutto letto ✓</span>')+'</div>'+
+ (list.length?list.map(n=>{const who=person(n.actor_id);return '<div class="notification-item'+(!n.read_at?' unread':'')+'">'+
+ avatar(who)+'<button class="notification-open" data-open-notification="'+esc(n.id)+'"><strong>'+esc(who.display_name)+'</strong> '+notificationLabel(n)+
+ '<small>'+dateLabel(n.created_at)+(n.read_at?'':' · Nuova')+'</small></button>'+
+ '</div>'}).join(''):'<p class="hint">Non hai notifiche da leggere.</p>'));
+}
+async function fetchNotifications(){
+ if(S.mode!=='real'||!S.user||!S.profile)return;
+ const list=await get(client.from('social_notifications')
+  .select('id,actor_id,kind,target_id,read_at,created_at')
+  .order('created_at',{ascending:false}).limit(50));
+ S.notifications=list||[];
+ S.unread=S.notifications.filter(n=>!n.read_at).length;
+ Object.assign(S.people,await names(S.notifications.map(n=>n.actor_id)));
+}
+async function markNotificationRead(id){
+ const n=S.notifications.find(x=>x.id===id);if(!n)return;
+ if(S.mode==='real'&&!n.read_at){
+  await get(client.from('social_notifications').update({read_at:new Date().toISOString()})
+  .eq('id',id).eq('recipient_id',S.user.id));
+ }else n.read_at=n.read_at||new Date().toISOString();
+ S.unread=Math.max(0,S.unread-(!n.read_at?1:0));
+}
+async function openNotification(id){
+ const n=S.notifications.find(x=>x.id===id);if(!n)return;
+ await markNotificationRead(id);
+ if(n.kind==='friend_request'||n.kind==='friend_accepted'){
+  S.friendTab=n.kind==='friend_request'?'requests':'list';
+  await route('friends');
+ }else{
+  await route('feed');
+  S.activePost=n.target_id;
+  render();
+ }
+}
+
 function auth(){return head('Social di test','Accedi solo con un account del progetto Supabase di test.')+section('<div class="tabs"><button class="tab '+(S.authTab==='login'?'active':'')+'" data-auth-tab="login">Accedi</button><button class="tab '+(S.authTab==='signup'?'active':'')+'" data-auth-tab="signup">Registrati</button></div><form id="auth-form" class="fields"><label>Email<input class="field" name="email" type="email" required></label><label>Password<input class="field" name="password" type="password" minlength="6" required></label><button class="btn" type="submit">'+(S.authTab==='login'?'Accedi':'Crea account')+'</button></form><p class="hint">La versione online di MangaLog utilizza un database diverso.</p>')}
 function myId(){return S.mode==='real'?S.user?.id:'me'}
-function render(){navigation();view.innerHTML=S.mode==='real'&&!S.user?auth():S.mode==='real'&&!S.profile&&S.page!=='profile'?head('Benvenuto nel Social','Crea prima un profilo personale.')+section(button('Crea profilo','page','profile')):({feed,profile,friends,compare,privacy}[S.page]||feed)()}
+function render(){navigation();view.innerHTML=S.mode==='real'&&!S.user?auth():S.mode==='real'&&!S.profile&&S.page!=='profile'?head('Benvenuto nel Social','Crea prima un profilo personale.')+section(button('Crea profilo','page','profile')):({feed,profile,friends,compare,privacy,notifications:notificationsPage}[S.page]||feed)()}
 async function get(query){const {data,error}=await query;if(error)throw error;return data}
 async function names(ids){let unique=[...new Set(ids.filter(Boolean))];if(!unique.length)return{};const list=await get(client.from('social_profiles').select('user_id,username,display_name,collection_visibility').in('user_id',unique));return Object.fromEntries(list.map(p=>[p.user_id,p]))}
 async function reload(){
@@ -87,6 +142,7 @@ if(S.mode!=='real'||!S.user){render();return}
 view.innerHTML='<div class="panel">Caricamento Social…</div>';
 try{
  S.profile=await get(client.from('social_profiles').select('*').eq('user_id',S.user.id).maybeSingle());
+ await fetchNotifications();
  if(S.page==='friends'||S.page==='compare'||S.page==='profile'){
  const req=await get(client.from('social_friend_requests').select('id,sender_id,receiver_id,status').or('sender_id.eq.'+S.user.id+',receiver_id.eq.'+S.user.id).limit(150));
  S.requests=req;let ids=req.flatMap(r=>[r.sender_id,r.receiver_id]);Object.assign(S.people,await names(ids));
@@ -123,6 +179,16 @@ if(d.mainNav){
  try{sessionStorage.setItem('mangalog_next_target',d.mainNav)}catch(e){}
  window.location.href='./index.html';return;
 }
+if(d.notifications){act(()=>route('notifications'));return}
+if(d.openNotification){act(()=>openNotification(d.openNotification));return}
+if(d.readAll){act(async()=>{
+  if(S.mode==='real')await get(client.from('social_notifications')
+   .update({read_at:new Date().toISOString()})
+   .eq('recipient_id',S.user.id).is('read_at',null));
+  else S.notifications.forEach(n=>n.read_at=n.read_at||new Date().toISOString());
+  if(S.mode==='real')await fetchNotifications();else S.unread=0;
+  render();note('Notifiche segnate come lette.');
+ });return}
 if(d.page){act(()=>route(d.page));return}
 if(d.friendTab){S.friendTab=d.friendTab;render();return}
 if(d.filter){S.filter=d.filter;render();return}
