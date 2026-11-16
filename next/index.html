@@ -2538,7 +2538,67 @@ function variantEdit(specialId){
   save();variantManager(series.id);
  };
 }
-function edit(id,fromWishlist=null){
+
+/* Opere collegate: ogni opera esiste solo nella collezione principale. */
+function relatedSection(s){
+ const works=universeWorks(s.id);
+ let html='<section class="nx-related-panel"><div class="section-head"><h2>Opere collegate · Universo manga</h2><span class="pill">'+works.length+' opere</span></div>'
+  +'<p class="muted nx-related-help">Ogni opera appare anche nella collezione generale, ma i volumi vengono contati una sola volta. I collegamenti sono reciproci.</p>'
+  +'<div class="nx-related-tools"><button class="btn small" type="button" data-action="linkwork">+ Collega opera esistente</button><button class="btn small" type="button" data-action="newlinked">+ Crea opera collegata</button></div>';
+ if(!works.length)return html+'<p class="nx-related-empty">Nessuna opera collegata per ora. Puoi associare spin-off, sequel, prequel o altre serie.</p></section>';
+ html+='<div class="nx-related-grid">';
+ for(const work of works){
+  const direct=directWorkLink(s.id,work.id),relationship=direct?relationText(s.id,direct):'Stesso universo';
+  html+='<div class="nx-related-entry"><button class="nx-related-open" type="button" data-related-open="'+esc(work.id)+'" aria-label="Apri '+esc(work.title)+'">'
+   +'<span class="nx-related-cover" aria-hidden="true">ML</span><span class="nx-related-copy"><strong>'+esc(work.title)+'</strong>'
+   +'<small>'+esc(relationship)+' · '+(work.kind==='oneshot'?'Volume unico':'Serie manga')+'</small>'
+   +'<small>'+work.owned.length+' / '+work.total+' volumi posseduti</small></span><span class="chevron" aria-hidden="true">›</span></button>'
+   +(direct?'<button class="btn small nx-related-remove" type="button" data-related-unlink="'+esc(work.id)+'" aria-label="Scollega '+esc(work.title)+'">Scollega</button>':'')
+   +'</div>';
+ }
+ return html+'</div></section>';
+}
+function linkWork(id){
+ const parent=data.series.find(s=>s.id===id);if(!parent)return;
+ const available=data.series.filter(s=>s.id!==id&&!directWorkLink(id,s.id)).sort((a,b)=>a.title.localeCompare(b.title,'it'));
+ if(!available.length)return alert('Non ci sono altre opere da collegare. Usa «Crea opera collegata» per inserirne una nuova.');
+ const opts=available.map(s=>'<option value="'+esc(s.id)+'">'+esc(s.title)+' · '+esc(s.edition)+'</option>').join('');
+ const kinds=Object.entries(relationKinds).map(([key,value])=>'<option value="'+key+'">'+value+'</option>').join('');
+ modal('<h2>Collega un’opera a '+esc(parent.title)+'</h2><p class="muted">Le opere rimangono autonome e senza doppioni nei conteggi.</p>'
+  +'<form id="relatedWorkForm"><div class="form-grid"><div class="field full"><label for="relatedTarget">Opera già in collezione</label><select class="input" name="target" id="relatedTarget" required>'+opts+'</select></div>'
+  +'<div class="field full"><label for="relatedKind">Relazione</label><select class="input" name="kind" id="relatedKind">'+kinds+'</select></div></div>'
+  +'<div class="actions"><button type="button" class="btn" data-action="close">Annulla</button><button type="submit" class="btn primary">Collega opera</button></div></form>');
+ $('#relatedWorkForm').onsubmit=e=>{
+  e.preventDefault();const f=new FormData(e.target),target=String(f.get('target')||'');
+  if(target===id||!data.series.some(s=>s.id===target)||directWorkLink(id,target))return;
+  if(!Array.isArray(data.links))data.links=[];
+  data.links.push({from:id,to:target,kind:safeRelation(f.get('kind'))});
+  close();save();
+ };
+}
+function configureWorkTypeForm(series,linkParentId,initialKind){
+ const form=$('#seriesForm');if(!form)return;
+ const grid=form.querySelector('.form-grid'),kind=series?series.kind||'series':initialKind;
+ const opts='<option value="series" '+(kind!=='oneshot'?'selected':'')+'>Serie manga (più volumi)</option>'
+  +'<option value="oneshot" '+(kind==='oneshot'?'selected':'')+'>Volume unico / One-shot</option>';
+ grid.insertAdjacentHTML('afterbegin','<div class="field full"><label for="workKind">Tipologia dell’opera *</label><select class="input" id="workKind" name="kind">'+opts+'</select></div>');
+ grid.insertAdjacentHTML('beforeend','<div class="field full nx-oneshot-owned"><label><input type="checkbox" name="oneShotOwned" '+(!series||series.owned.includes(1)?'checked':'')+'> Volume unico già posseduto</label><div class="small-note">Se non lo possiedi ancora, comparirà nella Mancolista.</div></div>');
+ if(linkParentId){
+  const parent=data.series.find(s=>s.id===linkParentId);
+  const kinds=Object.entries(relationKinds).map(([key,value])=>'<option value="'+key+'">'+value+'</option>').join('');
+  grid.insertAdjacentHTML('beforeend','<div class="field full"><label>Relazione con '+esc(parent?.title||'opera originale')+'</label><select class="input" name="linkKind">'+kinds+'</select></div>');
+ }
+ const kindEl=form.querySelector('#workKind'),totalEl=form.querySelector('[name="total"]'),ownedRow=form.querySelector('.nx-oneshot-owned');
+ function updateType(){
+  const one=kindEl.value==='oneshot';
+  totalEl.closest('.field').hidden=one;totalEl.disabled=one;ownedRow.hidden=!one;
+  const heading=form.parentElement?.querySelector('h2');
+  if(heading&&!series)heading.textContent=one?'Nuovo volume unico':'Nuova serie';
+ }
+ kindEl.addEventListener('change',updateType);updateType();
+}
+
+function edit(id,fromWishlist=null,linkParentId=null,initialKind='series'){
  const s=data.series.find(x=>x.id===id);
  modal(`<h2>${s?'Modifica serie':'Nuova serie'}</h2><p class="muted">Inserisci i dati della tua edizione italiana.</p><form id="seriesForm"><div class="form-grid"><div class="field full"><label>Titolo della serie *</label><input class="input" name="title" maxlength="120" required value="${esc(s?.title||fromWishlist?.title||'')}" placeholder="Es. One Piece"></div><div class="field"><label>Edizione</label><input class="input" name="edition" maxlength="100" value="${esc(s?.edition||'Edizione regolare')}"></div><div class="field"><label>Editore</label><input class="input" name="publisher" maxlength="100" value="${esc(s?.publisher||'')}"></div><div class="field"><label>Autore</label><input class="input" name="author" maxlength="100" value="${esc(s?.author||'')}"></div><div class="field"><label>Volumi pubblicati / previsti *</label><input class="input" type="number" name="total" min="1" max="2000" required value="${s?.total||1}"></div><div class="field full"><label>Note</label><textarea class="input" name="notes" rows="3" maxlength="1200">${esc(s?.notes||fromWishlist?.notes||'')}</textarea></div></div><div class="actions"><button class="btn" type="button" data-action="close">Annulla</button><button class="btn primary" type="submit">Salva serie</button></div></form>`);
  $('#seriesForm').onsubmit=e=>{
