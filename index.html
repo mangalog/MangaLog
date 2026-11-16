@@ -1473,7 +1473,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .nx-related-cover{display:grid;place-items:center;flex:0 0 42px;height:57px;border:1px solid #79424c;border-radius:5px;background:linear-gradient(135deg,#411927,#181a25);color:#eac2c8;font-weight:900;font-size:12px}
 .nx-related-remove{padding:5px 7px;font-size:11px}
 .nx-oneshot-owned[hidden],.field[hidden]{display:none!important}
-.nx-oneshot-owned{padding:10px;border:1px solid #54505a;border-radius:10px}.nx-oneshot-owned label{display:flex;gap:10px;align-items:center}
+.nx-oneshot-owned{padding:10px;border:1px solid #54505a;border-radius:10px}.nx-oneshot-owned .nx-owned-check{display:flex;align-items:center;justify-content:flex-start;gap:10px;font-size:13px;font-weight:750;color:#f3f0f2;cursor:pointer;width:100%}.nx-oneshot-owned .nx-owned-check input[type="checkbox"]{width:18px;min-width:18px;height:18px;margin:0;flex:0 0 18px;accent-color:#e45f72}.nx-oneshot-owned .nx-owned-check span{flex:1;white-space:normal}
 @media(max-width:540px){.nx-related-panel{padding:12px}.nx-related-entry{flex-wrap:wrap}.nx-related-remove{margin-left:auto}}
 </style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.10 · Scanner ISBN</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="./cloud-config.js"></script><script src="./isbn-modal-v13.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=true;</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
@@ -2521,26 +2521,33 @@ function linkWork(id){
   close();save();
  };
 }
+function ownedSelectionForWork(series,kind,total,checked){
+ if(kind==='oneshot')return checked?[1]:[];
+ if(checked)return Array.from({length:total},(_,i)=>i+1);
+ if(series?.kind==='series'&&series.total===total&&series.owned.length===series.total)return [];
+ return series?.owned||[];
+}
 function configureWorkTypeForm(series,linkParentId,initialKind){
  const form=$('#seriesForm');if(!form)return;
  const grid=form.querySelector('.form-grid'),kind=series?series.kind||'series':initialKind;
  const opts='<option value="series" '+(kind!=='oneshot'?'selected':'')+'>Serie manga (più volumi)</option>'
   +'<option value="oneshot" '+(kind==='oneshot'?'selected':'')+'>Volume unico / One-shot</option>';
  grid.insertAdjacentHTML('afterbegin','<div class="field full"><label for="workKind">Tipologia dell’opera *</label><select class="input" id="workKind" name="kind">'+opts+'</select></div>');
- grid.insertAdjacentHTML('beforeend','<div class="field full nx-oneshot-owned"><label><input type="checkbox" name="oneShotOwned" '+(!series||series.owned.includes(1)?'checked':'')+'> Volume unico già posseduto</label><div class="small-note">Se non lo possiedi ancora, comparirà nella Mancolista.</div></div>');
+ grid.insertAdjacentHTML('beforeend','<div class="field full nx-oneshot-owned"><label class="nx-owned-check" for="workAlreadyOwned"><input id="workAlreadyOwned" type="checkbox" name="oneShotOwned" '+(series&&(series.kind==='oneshot'?series.owned.includes(1):series.owned.length===series.total)?'checked':'')+'><span>Volume unico già posseduto</span></label></div>');
  if(linkParentId){
   const parent=data.series.find(s=>s.id===linkParentId);
   const kinds=Object.entries(relationKinds).map(([key,value])=>'<option value="'+key+'">'+value+'</option>').join('');
   grid.insertAdjacentHTML('beforeend','<div class="field full"><label>Relazione con '+esc(parent?.title||'opera originale')+'</label><select class="input" name="linkKind">'+kinds+'</select></div>');
  }
- const kindEl=form.querySelector('#workKind'),totalEl=form.querySelector('[name="total"]'),ownedRow=form.querySelector('.nx-oneshot-owned');
- function updateType(){
+ const kindEl=form.querySelector('#workKind'),totalEl=form.querySelector('[name="total"]'),ownedRow=form.querySelector('.nx-oneshot-owned'),ownedCheck=form.querySelector('[name="oneShotOwned"]');
+ function updateType(resetOwned=false){
   const one=kindEl.value==='oneshot';
-  totalEl.closest('.field').hidden=one;totalEl.disabled=one;ownedRow.hidden=!one;
+  totalEl.closest('.field').hidden=one;totalEl.disabled=one;ownedRow.hidden=false;
+  if(resetOwned)ownedCheck.checked=Boolean(series&&(one?series.kind==='oneshot'&&series.owned.includes(1):series.kind==='series'&&series.owned.length===series.total));
   const heading=form.parentElement?.querySelector('h2');
   if(heading&&!series)heading.textContent=one?'Nuovo volume unico':'Nuova serie';
  }
- kindEl.addEventListener('change',updateType);updateType();
+ kindEl.addEventListener('change',()=>updateType(true));updateType();
 }
 
 function edit(id,fromWishlist=null,linkParentId=null,initialKind='series'){
@@ -2552,7 +2559,13 @@ function edit(id,fromWishlist=null,linkParentId=null,initialKind='series'){
   const f=new FormData(e.target),title=String(f.get('title')).trim(),kind=f.get('kind')==='oneshot'?'oneshot':'series',total=kind==='oneshot'?1:Number(f.get('total'));
   if(!title||!Number.isInteger(total)||total<1||total>2000)return alert('Inserisci un titolo e un numero valido di volumi.');
   if(s&&kind==='oneshot'&&(s.total>1||s.owned.some(n=>n>1)||(s.specialVolumes||[]).length))return alert('Questa serie contiene più volumi o variant: non convertirla in volume unico per evitare perdita di dati.');
-  const obj=norm({id:s?.id||uid(),kind,title,total,edition:String(f.get('edition')).trim(),publisher:String(f.get('publisher')).trim(),author:String(f.get('author')).trim(),notes:String(f.get('notes')).trim(),owned:kind==='oneshot'?(f.has('oneShotOwned')?[1]:[]):s?.owned||[],purchasePlans:kind==='oneshot'?{}:s?.purchasePlans||{},specialVolumes:s?.specialVolumes||[],missingPriority:s?.missingPriority||'media',created:s?.created||Date.now()});
+  const alreadyOwned=f.has('oneShotOwned');
+  if(s&&kind==='series'&&s.kind==='series'&&s.total===total&&s.owned.length===s.total&&!alreadyOwned&&!confirm('Deselezionando questa casella, tutti i volumi della serie saranno segnati come mancanti. Confermi?'))return;
+  const newOwned=ownedSelectionForWork(s,kind,total,alreadyOwned);
+  const obj=norm({id:s?.id||uid(),kind,title,total,edition:String(f.get('edition')).trim(),publisher:String(f.get('publisher')).trim(),author:String(f.get('author')).trim(),notes:String(f.get('notes')).trim(),owned:newOwned,purchasePlans:kind==='oneshot'||alreadyOwned?{}:s?.purchasePlans||{},specialVolumes:s?.specialVolumes||[],missingPriority:s?.missingPriority||'media',created:s?.created||Date.now()});
+  const oldOwned=new Set(s?.owned||[]),currentOwned=new Set(obj.owned);
+  for(const n of oldOwned)if(!currentOwned.has(n))unregisteredVolume(obj.id,n);
+  for(const n of obj.owned)if(!oldOwned.has(n))registeredVolume(obj.id,n);
   if(s)data.series[data.series.indexOf(s)]=obj;else data.series.push(obj);
   if(fromWishlist)data.wishlist=data.wishlist.filter(w=>w.id!==fromWishlist.id);
   if(linkParentId&&!s&&data.series.some(x=>x.id===linkParentId)){if(!Array.isArray(data.links))data.links=[];data.links.push({from:linkParentId,to:obj.id,kind:safeRelation(f.get('linkKind'))})}
