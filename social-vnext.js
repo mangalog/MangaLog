@@ -104,7 +104,7 @@ function notificationsPage(){
  '</div>'}).join(''):'<p class="hint">Non hai notifiche da leggere.</p>'));
 }
 async function fetchNotifications(){
- if(S.mode!=='real'||!S.user||!S.profile)return;
+ if(S.mode!=='real'||!S.user||!S.profile){if(S.mode==='real'){S.notifications=[];S.unread=0}return;}
  const list=await get(client.from('social_notifications')
   .select('id,actor_id,kind,target_id,read_at,created_at')
   .order('created_at',{ascending:false}).limit(50));
@@ -207,7 +207,7 @@ if(d.like){act(async()=>{const p=S.posts.find(p=>p.id===d.like);if(!p)return;if(
 if(d.deletePost){if(!confirm('Eliminare il post?'))return;act(async()=>{if(S.mode==='real')await get(client.from('social_posts').delete().eq('id',d.deletePost).eq('author_id',S.user.id));else S.posts=S.posts.filter(p=>p.id!==d.deletePost);await reload()});return}
 if(d.block){if(!confirm('Bloccare questo utente?'))return;act(async()=>{if(S.mode==='real')await get(client.from('social_blocks').insert({blocker_id:S.user.id,blocked_id:d.block}));else S.friends=S.friends.filter(id=>id!==d.block);await reload()});return}
 if(d.clearVolumes){if(!confirm('Cancellare tutti i volumi condivisi nel Social?'))return;act(async()=>{await get(client.from('social_collection_volumes').delete().eq('user_id',S.user.id));await reload()});return}
-if(d.logout){act(async()=>{await client.auth.signOut();S.user=null;S.profile=null;render()});return}
+if(d.logout){act(async()=>{await client.auth.signOut();S.user=null;S.profile=null;S.notifications=[];S.unread=0;S.friends=[];S.requests=[];S.posts=[];S.volumes=[];S.searchResults=[];S.people={};render()});return}
 });
 root.addEventListener('change',event=>{
 const t=event.target;if(t.id==='compare-select'){S.compare=t.value;S.filter='all';act(reload);return}
@@ -228,7 +228,7 @@ if(c&&c.enabled){
 const url=String(c.url||''),key=String(c.publishableKey||'');
 if(!/^https:\/\/[a-z0-9-]+\.supabase\.co\/?$/.test(url)||!key||url.includes('trfbpctrqrlaqczpyzks')){note('Configurazione di test non valida o collegata alla produzione. La demo resta isolata.',true)}
 else if(!window.supabase){note('Supabase non disponibile. Modalità demo.',true)}
-else try{client=window.supabase.createClient(url,key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'mangalog-social-test-only'}});S.mode='real';S.profile=null;const {data,error}=await client.auth.getUser();if(error&&error.name!=='AuthSessionMissingError')throw error;S.user=data.user;await reload();return}catch(e){S.mode='demo';S.user=null;client=null;note('Ambiente di test non raggiungibile: '+e.message+'. Mostro la demo.',true)}}
+else try{client=window.supabase.createClient(url,key,{auth:{persistSession:true,autoRefreshToken:true,detectSessionInUrl:true,storageKey:'mangalog-social-test-only'}});S.mode='real';S.profile=null;S.notifications=[];S.unread=0;const {data,error}=await client.auth.getUser();if(error&&error.name!=='AuthSessionMissingError')throw error;S.user=data.user;await reload();return}catch(e){S.mode='demo';S.user=null;client=null;note('Ambiente di test non raggiungibile: '+e.message+'. Mostro la demo.',true)}}
 render();
 }
 boot();
