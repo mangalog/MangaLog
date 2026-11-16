@@ -11,7 +11,7 @@ const live=fs.readFileSync(path.join(base,'social.html'),'utf8');
 const config=fs.readFileSync(path.join(base,'social-test-config.js'),'utf8');
 const nodes=new Map();
 const handlers={};
-for(const name of ['social-app','social-view','social-banner','social-side','social-bottom','social-mode','profile-editor','search-results']){
+for(const name of ['social-app','social-view','social-banner','social-side','social-bottom','social-mode','social-mobile-tabs','profile-editor','search-results']){
  nodes.set(name,{id:name,innerHTML:'',textContent:'',classList:{toggle(){}},
    addEventListener(type,listener){handlers[type]=listener;}});
 }
@@ -28,7 +28,9 @@ const tick=async()=>{for(let i=0;i<30;i++)await Promise.resolve()};
 async function main(){
   assert.match(html(),/Feed Social/);
   assert.match(html(),/Frieren/);
-  assert.match(nodes.get('social-bottom').innerHTML,/Confronta/);
+  assert.match(nodes.get('social-mobile-tabs').innerHTML,/Confronta/);
+  assert.match(nodes.get('social-bottom').innerHTML,/Collezione/);
+  assert.doesNotMatch(nodes.get('social-bottom').innerHTML,/data-page=/);
   click({page:'profile'});await tick();assert.match(html(),/Il mio profilo/);
   click({page:'friends'});await tick();assert.match(html(),/Amici e collezionisti/);
   click({friendTab:'requests'});assert.match(html(),/Richieste \(2\)/);
@@ -48,7 +50,9 @@ async function main(){
   assert.doesNotMatch(page,/https:\/\/.*supabase\.co/);
   assert.doesNotMatch(page,/<script src=/);
   assert.match(live,/social-vnext\.js/);
-  assert.match(config,/enabled:false/);
+  assert.match(config,/enabled:true/);
+  assert.match(config,/bwohofvlcihlfixesnus/);
+  assert.doesNotMatch(config,/trfbpctrqrlaqczpyzks/);
   console.log('PASS: Social demo navigation, friends, volume comparison, privacy, feed, escaping, standalone isolation');
 }
 main().catch(e=>{console.error(e);process.exitCode=1});
