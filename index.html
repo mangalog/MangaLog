@@ -2533,7 +2533,7 @@ function configureWorkTypeForm(series,linkParentId,initialKind){
  const opts='<option value="series" '+(kind!=='oneshot'?'selected':'')+'>Serie manga (più volumi)</option>'
   +'<option value="oneshot" '+(kind==='oneshot'?'selected':'')+'>Volume unico / One-shot</option>';
  grid.insertAdjacentHTML('afterbegin','<div class="field full"><label for="workKind">Tipologia dell’opera *</label><select class="input" id="workKind" name="kind">'+opts+'</select></div>');
- grid.insertAdjacentHTML('beforeend','<div class="field full nx-oneshot-owned"><label class="nx-owned-check" for="workAlreadyOwned"><input id="workAlreadyOwned" type="checkbox" name="oneShotOwned" '+(series&&(series.kind==='oneshot'?series.owned.includes(1):series.owned.length===series.total)?'checked':'')+'><span>Volume unico già posseduto</span></label></div>');
+ grid.insertAdjacentHTML('beforeend','<div class="field full nx-oneshot-owned"><label class="nx-owned-check" for="workAlreadyOwned"><input id="workAlreadyOwned" type="checkbox" name="oneShotOwned" '+(series&&(series.kind==='oneshot'?series.owned.includes(1):series.owned.length===series.total)?'checked':'')+'><span class="nx-owned-label">Volume unico già in possesso</span></label></div>');
  if(linkParentId){
   const parent=data.series.find(s=>s.id===linkParentId);
   const kinds=Object.entries(relationKinds).map(([key,value])=>'<option value="'+key+'">'+value+'</option>').join('');
@@ -2543,6 +2543,7 @@ function configureWorkTypeForm(series,linkParentId,initialKind){
  function updateType(resetOwned=false){
   const one=kindEl.value==='oneshot';
   totalEl.closest('.field').hidden=one;totalEl.disabled=one;ownedRow.hidden=false;
+  ownedRow.querySelector('.nx-owned-label').textContent=one?'Volume unico già in possesso':'Serie già in possesso';
   if(resetOwned)ownedCheck.checked=Boolean(series&&(one?series.kind==='oneshot'&&series.owned.includes(1):series.kind==='series'&&series.owned.length===series.total));
   const heading=form.parentElement?.querySelector('h2');
   if(heading&&!series)heading.textContent=one?'Nuovo volume unico':'Nuova serie';
