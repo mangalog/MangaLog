@@ -4,7 +4,7 @@
 const root=document.getElementById('social-app'), view=document.getElementById('social-view');
 const banner=document.getElementById('social-banner');
 const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const pages=[['feed','◉','Feed'],['profile','◯','Profilo'],['friends','♧','Amici'],['compare','▤','Confronta'],['privacy','⚙','Privacy']];
+const pages=[['feed','◉','Feed'],['friends','♧','Amici'],['compare','▤','Confronta'],['profile','◯','Profilo']];
 const makePerson=(id,name)=>({user_id:id,username:name.toLowerCase(),display_name:name,collection_visibility:'friends'});
 const examplePeople=[makePerson('riko','RikoManga'),makePerson('luca','LucaCollects'),makePerson('vale','MangaVale'),makePerson('hiro','MangaHiro'),makePerson('sakura','SakuraReads'),makePerson('ken','KenManga')];
 const exampleVolumes=[['One Piece','Standard',1,1,1],['One Piece','Standard',2,1,1],['One Piece','Standard',3,1,0],['One Piece','Standard',4,0,1],['Frieren','Standard',1,1,1],['Frieren','Standard',2,0,1],['Frieren','Standard',3,1,0],['Berserk','Serie Nera',1,1,1],['Berserk','Serie Nera',2,1,0],['Berserk','Serie Nera',3,0,1],['Chainsaw Man','Standard',1,1,1],['Chainsaw Man','Standard',2,1,0]].map(v=>({series_title:v[0],series_key:v[1],volume_number:v[2],mine:!!v[3],theirs:!!v[4]}));
@@ -25,7 +25,18 @@ function person(id){return id===myId()&&S.profile?S.profile:(S.people[id]||makeP
 function avatar(p){const letter=String(p.display_name||'?')[0].toUpperCase(),kind=letter==='R'?' gold':letter==='L'?' blue':letter==='M'?' red':'';return '<div class="avatar'+kind+'">'+esc(letter)+'</div>'}
 function button(text,action,value,secondary){return '<button type="button" class="btn'+(secondary?' alt':'')+'" data-'+action+'="'+esc(value)+'">'+text+'</button>'}
 function head(title,description){return '<h1>'+title+'</h1><p class="sub">'+description+'</p>'}
-function navigation(){const html=pages.map(p=>'<button class="nav '+(S.page===p[0]?'active':'')+'" data-page="'+p[0]+'"><span class="nav-icon">'+p[1]+'</span>'+p[2]+'</button>').join('');document.getElementById('social-side').innerHTML='<div class="section-label">LA COMMUNITY</div>'+html+'<div class="sidebar-tip">'+(S.mode==='demo'?'Anteprima locale · dati di esempio':'Progetto Supabase di TEST')+'<br>Le tue collezioni reali restano intatte.</div>';document.getElementById('social-bottom').innerHTML=html;document.getElementById('social-mode').textContent=S.mode==='demo'?'DEMO NAVIGABILE':'TEST ISOLATO'}
+function navigation(){
+ const tabs=pages.map(p=>'<button class="social-tab '+(S.page===p[0]?'active':'')+'" data-page="'+p[0]+'"><span class="nav-icon">'+p[1]+'</span>'+p[2]+'</button>').join('');
+ const mainLinks=[['home','⌂','Home'],['collection','▦','Collezione'],['missing','☷','Mancolista'],['wishlist','♡','Wishlist'],['social','♧','Social']];
+ const mainHtml=mainLinks.map(p=>'<button class="nav '+(p[0]==='social'?'active':'')+'" data-main-nav="'+p[0]+'"><span class="nav-icon">'+p[1]+'</span>'+p[2]+'</button>').join('');
+ const sidebarLinks=mainLinks.map(p=>'<button class="nav '+(p[0]==='social'?'active':'')+'" data-main-nav="'+p[0]+'"><span class="nav-icon">'+p[1]+'</span>'+p[2]+'</button>'+ (p[0]==='social'?'<div class="desktop-social-submenu">'+tabs+'<button class="social-tab '+(S.page==='privacy'?'active':'')+'" data-page="privacy"><span class="nav-icon">⚙</span>Privacy</button></div>':'')).join('');
+ document.getElementById('social-side').innerHTML='<div class="section-label">MANGALOG NEXT</div>'+sidebarLinks+'<div class="sidebar-tip">'+(S.mode==='demo'?'Anteprima locale · dati di esempio':'Progetto Supabase di TEST')+'<br>Le tue collezioni reali restano intatte.</div>';
+ document.getElementById('social-bottom').innerHTML=mainHtml;
+ document.getElementById('social-mobile-tabs').innerHTML=tabs;
+ document.getElementById('social-mobile-tabs').hidden=S.page==='privacy';
+ document.getElementById('social-mode').textContent=S.mode==='demo'?'DEMO NAVIGABILE':'TEST ISOLATO';
+}
+
 function section(content){return '<section class="panel">'+content+'</section>'}
 function peopleCard(p,actions){return '<div class="person row between"><div class="row">'+avatar(p)+'<div><strong>'+esc(p.display_name)+'</strong><small>@'+esc(p.username)+'</small></div></div><div class="row actions">'+actions+'</div></div>'}
 function stats(a,b,c){return '<div class="stats"><div><strong>'+a+'</strong><small>In comune</small></div><div><strong>'+b+'</strong><small>Solo tuoi</small></div><div><strong>'+c+'</strong><small>Solo suoi</small></div></div>'}
@@ -107,6 +118,11 @@ else S.searchResults=examplePeople.filter(p=>p.username.includes(S.search)&&!S.f
 root.addEventListener('click',event=>{
 const btn=event.target.closest('button');if(!btn)return;
 const d=btn.dataset;
+if(d.mainNav){
+ if(d.mainNav==='social'){act(()=>route('feed'));return}
+ try{sessionStorage.setItem('mangalog_next_target',d.mainNav)}catch(e){}
+ window.location.href='./index.html';return;
+}
 if(d.page){act(()=>route(d.page));return}
 if(d.friendTab){S.friendTab=d.friendTab;render();return}
 if(d.filter){S.filter=d.filter;render();return}
