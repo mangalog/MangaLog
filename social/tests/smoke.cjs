@@ -12,7 +12,7 @@ const config=fs.readFileSync(path.join(base,'social-test-config.js'),'utf8');
 const nodes=new Map();
 const handlers={};
 for(const name of ['social-app','social-view','social-banner','social-side','social-bottom','social-mode','social-mobile-tabs','social-bell','profile-editor','search-results']){
- nodes.set(name,{id:name,innerHTML:'',textContent:'',classList:{toggle(){}},
+ nodes.set(name,{id:name,innerHTML:'',textContent:'',hidden:false,setAttribute(){},classList:{toggle(){}},
    addEventListener(type,listener){handlers[type]=listener;}});
 }
 const document={getElementById:id=>nodes.get(id)||null};
