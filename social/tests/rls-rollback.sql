@@ -2,9 +2,9 @@
 -- Run on separate Supabase test project after the four Social migrations.
 begin;
 do $$ begin
- if has_function_privilege('anon','public.social_are_friends(uuid,uuid)','execute')
- or has_function_privilege('anon','public.social_is_blocked(uuid,uuid)','execute')
- or has_function_privilege('anon','public.social_respond_to_request(uuid,text)','execute')
+ if has_schema_privilege('anon','social_private','usage') or has_function_privilege('anon','social_private.are_friends(uuid,uuid)','execute')
+ or has_function_privilege('anon','social_private.is_blocked(uuid,uuid)','execute')
+ or has_function_privilege('anon','public.social_compare_collections(uuid)','execute')
  then raise exception 'Anonymous API privileges are unsafe';end if;
 end $$;
 insert into auth.users(id,email) values
