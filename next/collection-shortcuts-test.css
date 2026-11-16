@@ -1,0 +1,161 @@
+/* MangaLog Next – restyling MIRATO del solo menu rapido Collezione.
+   Ramo test separato: nessuna modifica ai dati, al Social o al Market. */
+#content > .nx-shortcuts {
+  display:block;
+  margin:0 0 18px;
+  padding:8px;
+  border:1px solid rgba(98,130,158,.34);
+  border-radius:14px;
+  background:rgba(10,25,42,.91);
+  box-shadow:0 5px 20px rgba(0,0,0,.12);
+}
+#content > .nx-shortcuts .nx-shortcut-items{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:5px;
+}
+#content > .nx-shortcuts .nx-shortcut-items .btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:7px;
+  min-height:38px;
+  padding:8px 11px;
+  border:1px solid transparent;
+  border-radius:9px;
+  background:transparent;
+  color:#d1dfed;
+  font-weight:750;
+  line-height:1.2;
+  font-size:12px;
+  white-space:nowrap;
+  box-shadow:none;
+  transition:background .15s ease,color .15s ease,border-color .15s ease;
+}
+#content > .nx-shortcuts .nx-shortcut-items .btn:hover{
+  background:rgba(87,123,160,.18);
+  border-color:rgba(105,145,186,.25);
+  filter:none;
+}
+#content > .nx-shortcuts .nx-shortcut-items .btn.nx-current{
+  background:rgba(174,54,81,.30);
+  border-color:#e65872;
+  color:#fff;
+}
+#content > .nx-shortcuts .nx-shortcut-items .nx-shortcut-icon{
+  font-size:16px;
+  line-height:1;
+  font-weight:500;
+  opacity:.95;
+}
+#content > .nx-shortcuts .nx-shortcuts-toggle{
+  display:none;
+}
+#content > .nx-shortcuts button:focus-visible{
+  outline:2px solid #80d5ff!important;
+  outline-offset:2px;
+}
+/* Tema chiaro: contrasto e colori coerenti. */
+:root[data-theme="paper"] #content > .nx-shortcuts{
+  background:rgba(255,253,248,.96);
+  border-color:#bfccd6;
+}
+:root[data-theme="paper"] #content > .nx-shortcuts .nx-shortcut-items .btn{
+  color:#263e55;
+}
+:root[data-theme="paper"] #content > .nx-shortcuts .nx-shortcut-items .btn:hover{
+  background:#e8edf2;
+}
+:root[data-theme="paper"] #content > .nx-shortcuts .nx-shortcut-items .btn.nx-current{
+  background:#8c2947;
+  border-color:#a72b4b;
+  color:#fff;
+}
+@media(max-width:800px){
+  #content > .nx-shortcuts{
+    margin:0 0 14px;
+    padding:5px;
+    border-radius:12px;
+  }
+  #content > .nx-shortcuts .nx-shortcuts-toggle{
+    appearance:none;
+    width:100%;
+    min-height:42px;
+    border:0;
+    border-radius:9px;
+    background:transparent;
+    color:#f1f7ff;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    padding:7px 11px;
+    font:inherit;
+    text-align:left;
+    cursor:pointer;
+  }
+  #content > .nx-shortcuts .nx-shortcuts-toggle .nx-shortcuts-trigger-title{
+    font-size:13px;
+    font-weight:850;
+    flex:1 1 auto;
+  }
+  #content > .nx-shortcuts .nx-shortcuts-toggle .nx-shortcuts-active-label{
+    max-width:34%;
+    white-space:nowrap;
+    overflow:hidden;
+    text-overflow:ellipsis;
+    color:#ff9fb3;
+    font-size:11px;
+    font-weight:800;
+  }
+  #content > .nx-shortcuts .nx-shortcuts-toggle .nx-shortcuts-caret{
+    font-size:20px;
+    line-height:1;
+    transition:transform .15s ease;
+  }
+  #content > .nx-shortcuts.is-open .nx-shortcuts-caret{transform:rotate(180deg)}
+  #content > .nx-shortcuts .nx-shortcut-items{display:none}
+  #content > .nx-shortcuts.is-open .nx-shortcut-items{
+    display:grid;
+    grid-template-columns:repeat(2,minmax(0,1fr));
+    padding:6px 5px 5px;
+    gap:6px;
+    border-top:1px solid rgba(107,139,169,.23);
+    margin-top:4px;
+  }
+  #content > .nx-shortcuts.is-open .nx-shortcut-items .btn{
+    justify-content:flex-start;
+    min-width:0;
+    min-height:43px;
+    padding:9px 10px;
+    text-align:left;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    font-size:12px;
+    border:1px solid rgba(118,155,187,.19);
+    background:rgba(43,71,95,.30);
+  }
+  #content > .nx-shortcuts.is-open .nx-shortcut-items .btn.nx-current{
+    background:rgba(174,54,81,.33);
+    border-color:#e65872;
+  }
+  :root[data-theme="paper"] #content > .nx-shortcuts .nx-shortcuts-toggle{
+    color:#253c52;
+  }
+  :root[data-theme="paper"] #content > .nx-shortcuts .nx-shortcuts-toggle .nx-shortcuts-active-label{
+    color:#a02c4e;
+  }
+  :root[data-theme="paper"] #content > .nx-shortcuts.is-open .nx-shortcut-items .btn{
+    background:#edf1f5;
+    border-color:#d4dce6;
+  }
+  :root[data-theme="paper"] #content > .nx-shortcuts.is-open .nx-shortcut-items .btn.nx-current{
+    background:#8c2947;
+    color:#fff;
+    border-color:#a72b4b;
+  }
+}
+@media(prefers-reduced-motion:reduce){
+  #content > .nx-shortcuts .nx-shortcut-items .btn,
+  #content > .nx-shortcuts .nx-shortcuts-caret{transition:none}
+}
