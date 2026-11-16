@@ -10,9 +10,9 @@
 1. `social/schema.sql`
 2. `social/collection-compare.sql`
 3. `social/privacy-hardening.sql`
-4. `social/api-privileges.sql`
+4. `social/api-privileges.sql` (RPC anon bloccate)\n5. `social/safe-friendship-responses.sql` (accettazione con RLS senza RPC privilegiata)\n6. `social/private-rls-helpers.sql` (funzioni interne fuori dallo schema pubblico)
 
-Le sette tabelle `social_*` hanno tutte RLS attivo. Le RPC sensibili sono negate al ruolo `anon`. L'advisor di sicurezza segnala ancora le funzioni `SECURITY DEFINER` richiamabili dal ruolo `authenticated`, una scelta controllata per amicizie e blocchi da riesaminare prima della produzione.
+Le sette tabelle `social_*` hanno tutte RLS attivo. Le RPC sensibili sono negate al ruolo `anon`. Le due funzioni interne `SECURITY DEFINER` sono nello schema non esposto `social_private`, richiamabili soltanto dal ruolo autenticato. L'advisor di sicurezza Supabase non segnala più avvisi nel progetto di test (verifica del 16 novembre 2026).
 
 ### Test eseguiti
 - SQL transazionale con due identità fittizie, **ROLLBACK** al termine.
@@ -31,3 +31,5 @@ Le sette tabelle `social_*` hanno tutte RLS attivo. Le RPC sensibili sono negate
 - La pagina `social-preview-standalone.html` usa *solo dati fittizi* e non chiede credenziali.
 - Il database Social non importa in automatico la Collezione principale: gli utenti decidono esplicitamente cosa condividere.
 - Non utilizzare un visualizzatore HTML di terze parti per inserire password reali, nemmeno di test, senza averne verificato l'affidabilità.
+
+### Verifica delle risposte alle richieste\nIl mittente non può accettare una richiesta: solo il destinatario può aggiornare `status` da `pending` a `accepted` o `declined`, attraverso RLS e permessi di colonna. L'indice `social_friend_unique_pair_idx` evita richieste duplicate anche in direzioni opposte. Le prove con SQL vengono sempre annullate tramite `ROLLBACK`.\n
