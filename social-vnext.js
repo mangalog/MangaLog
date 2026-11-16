@@ -112,7 +112,7 @@ try{
 }
 async function act(fn){if(S.busy)return;S.busy=true;try{await fn()}catch(e){err(e)}finally{S.busy=false}}
 async function route(p){S.page=p;S.activePost='';note('');await reload()}
-async function respond(id,value){if(S.mode==='real'){await get(client.rpc('social_respond_to_request',{request_id:id,response:value}))}else{let r=S.requests.find(r=>r.id===id);if(r){r.status=value;if(value==='accepted')S.friends.push(r.sender_id)}}await reload()}
+async function respond(id,value){if(S.mode==='real'){if(!['accepted','declined'].includes(value))throw Error('Risposta non valida');const changed=await get(client.from('social_friend_requests').update({status:value,updated_at:new Date().toISOString()}).eq('id',id).eq('receiver_id',S.user.id).eq('status','pending').select('id'));if(!changed.length)throw Error('Richiesta non disponibile o già gestita')}else{let r=S.requests.find(r=>r.id===id);if(r){r.status=value;if(value==='accepted')S.friends.push(r.sender_id)}}await reload()}
 async function searchUsers(term){S.search=term.toLowerCase().replace(/[%]/g,'');if(S.mode==='real')S.searchResults=await get(client.from('social_profiles').select('user_id,username,display_name').ilike('username','%'+S.search+'%').neq('user_id',S.user.id).limit(25));
 else S.searchResults=examplePeople.filter(p=>p.username.includes(S.search)&&!S.friends.includes(p.user_id)&&!S.sent.includes(p.user_id));render()}
 root.addEventListener('click',event=>{
@@ -132,7 +132,7 @@ if(d.compareFriend){S.compare=d.compareFriend;S.filter='all';act(()=>route('comp
 if(d.openComments){S.activePost=S.activePost===d.openComments?'':d.openComments;render();return}
 if(d.accept){act(()=>respond(d.accept,'accepted'));return}
 if(d.decline){act(()=>respond(d.decline,'declined'));return}
-if(d.add){act(async()=>{if(S.mode==='real')await get(client.from('social_friend_requests').insert({sender_id:S.user.id,receiver_id:d.add}));else{S.sent.push(d.add);S.searchResults=S.searchResults.filter(p=>p.user_id!==d.add)}note('Richiesta inviata.');await reload()});return}
+if(d.add){act(async()=>{if(S.mode==='real'){const prior=await get(client.from('social_friend_requests').select('id,status').eq('sender_id',S.user.id).eq('receiver_id',d.add).maybeSingle());if(prior?.status==='pending'||prior?.status==='accepted')throw Error('Richiesta o amicizia già presente');if(prior?.status==='declined')await get(client.from('social_friend_requests').delete().eq('id',prior.id));await get(client.from('social_friend_requests').insert({sender_id:S.user.id,receiver_id:d.add}))}else{S.sent.push(d.add);S.searchResults=S.searchResults.filter(p=>p.user_id!==d.add)}note('Richiesta inviata.');await reload()});return}
 if(d.cancel){act(async()=>{await get(client.from('social_friend_requests').delete().eq('id',d.cancel));await reload()});return}
 if(d.like){act(async()=>{const p=S.posts.find(p=>p.id===d.like);if(!p)return;if(S.mode==='real'){if(p.liked)await get(client.from('social_likes').delete().eq('post_id',p.id).eq('user_id',S.user.id));else await get(client.from('social_likes').insert({post_id:p.id,user_id:S.user.id}))}else{p.likes+=p.liked?-1:1;p.liked=!p.liked}await reload()});return}
 if(d.deletePost){if(!confirm('Eliminare il post?'))return;act(async()=>{if(S.mode==='real')await get(client.from('social_posts').delete().eq('id',d.deletePost).eq('author_id',S.user.id));else S.posts=S.posts.filter(p=>p.id!==d.deletePost);await reload()});return}
