@@ -1471,7 +1471,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .nx-market p{max-width:580px;margin:12px auto}
 @media(max-width:1000px){.nx-social{grid-template-columns:1fr 1fr}.nx-social .panel:last-child{grid-column:1/-1}}
 @media(max-width:700px){.nx-social{grid-template-columns:1fr}.nx-social .panel:last-child{grid-column:auto}.nx-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.nx-shortcuts .btn{white-space:normal;font-size:12px}}
-</style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog Next · Collezione originale</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="../isbn-modal-v13.js"></script><script>window.MANGALOG_CLOUD={};window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=false;</script>
+</style><link rel="stylesheet" href="./collection-shortcuts.css"></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog Next · Collezione originale</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="../isbn-modal-v13.js"></script><script>window.MANGALOG_CLOUD={};window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=false;</script>
 <script>
 (()=>{'use strict';const KEY='mangalog_next_actual_collection_2026';const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uid=()=>typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();let data={series:[],wishlist:[],activity:[]},page='home',selected=null,query='',sort='title',view=localStorage.getItem('mangalog_next_actual_view_2026')==='list'?'list':'grid',filter='all';let undoStack=[],lastSavedJSON='',restoringHistory=false;let cloudClient=null,cloudUser=null,cloudRevision=null,cloudReady=false,cloudBlocked=false,cloudState='offline',cloudMessage='Modalità locale',cloudTimer=null,cloudSerial=Promise.resolve(),cloudLoadingUserId=null;let cloudIsAdmin=false,adminMetrics=null,adminError='',adminLoading=false;let adminUsers=[],adminOverview=null,adminFilter='',adminActionBusy=false,sessionGuardBusy=false;
 // Supabase puo' rimuovere il token dall'URL prima che si concluda l'inizializzazione.
@@ -2262,10 +2262,25 @@ function nxMarket(){
  '<p class="muted">Per ora questa pagina resta volutamente vuota. In futuro ospiterà i negozi aderenti e le schede dei manga collegati alla Mancolista. Nessuna vendita o pagamento è attivo.</p></div>';
 }
 function nxLibraryButtons(){
- const items=[['collection','▦ Collezione'],['wishlist','♡ Wishlist'],['stats','▥ Statistiche'],['owned','▤ Volumi posseduti'],['purchases','▣ Gestione acquisti'],['settings','⚙ Impostazioni']];
+ const items=[['collection','▦','Collezione'],['wishlist','♡','Wishlist'],['stats','▥','Statistiche'],['owned','▤','Volumi posseduti'],['purchases','▣','Gestione acquisti'],['settings','⚙','Impostazioni']];
+ const current=items.find(([id])=>id===page);
  return '<nav class="nx-shortcuts" aria-label="Sezioni della Collezione">'+
- items.map(([id,caption])=>'<button type="button" data-nav="'+id+'" class="btn small '+(page===id?'nx-current':'')+'">'+caption+'</button>').join('')+'</nav>';
+  '<button type="button" class="nx-shortcuts-toggle" data-nx-shortcuts-toggle aria-controls="nx-shortcuts-links" aria-expanded="false">'+
+  '<span class="nx-shortcuts-trigger-title">▦ Sezioni Collezione</span>'+
+  '<span class="nx-shortcuts-active-label">'+esc(current?current[2]:'Collezione')+'</span>'+
+  '<span class="nx-shortcuts-caret" aria-hidden="true">⌄</span></button>'+
+  '<div class="nx-shortcut-items" id="nx-shortcuts-links">'+
+  items.map(([id,icon,label])=>'<button type="button" data-nav="'+id+'" class="btn small '+(page===id?'nx-current':'')+'"'+(page===id?' aria-current="page"':'')+'><span class="nx-shortcut-icon" aria-hidden="true">'+icon+'</span><span>'+label+'</span></button>').join('')+
+  '</div></nav>';
 }
+document.addEventListener('click',e=>{
+ const trigger=e.target.closest('[data-nx-shortcuts-toggle]');
+ if(!trigger)return;
+ const nav=trigger.closest('.nx-shortcuts');
+ if(!nav)return;
+ const opened=nav.classList.toggle('is-open');
+ trigger.setAttribute('aria-expanded',String(opened));
+});
 function nxNotice(){
  return '<div class="nx-banner" role="note">▣ <strong>MangaLog Next · Demo separata.</strong> Le schermate Collezione sono quelle dell’app originale. I dati modificati qui non vengono sincronizzati e non cambiano la MangaLog che utilizzi oggi.</div>';
 }
