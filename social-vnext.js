@@ -21,7 +21,7 @@ let client=null;
 function note(text,error){banner.textContent=text||'';banner.classList.toggle('error',!!error)}
 function err(e){note('Operazione non riuscita: '+String(e.message||e),true)}
 function dateLabel(d){if(!d)return '';if(isNaN(Date.parse(d)))return esc(d);return new Date(d).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'})}
-function person(id){return S.people[id]||makePerson(id,'Utente')}
+function person(id){return id===myId()&&S.profile?S.profile:(S.people[id]||makePerson(id,'Utente'))}
 function avatar(p){const letter=String(p.display_name||'?')[0].toUpperCase(),kind=letter==='R'?' gold':letter==='L'?' blue':letter==='M'?' red':'';return '<div class="avatar'+kind+'">'+esc(letter)+'</div>'}
 function button(text,action,value,secondary){return '<button type="button" class="btn'+(secondary?' alt':'')+'" data-'+action+'="'+esc(value)+'">'+text+'</button>'}
 function head(title,description){return '<h1>'+title+'</h1><p class="sub">'+description+'</p>'}
@@ -102,7 +102,7 @@ try{
 async function act(fn){if(S.busy)return;S.busy=true;try{await fn()}catch(e){err(e)}finally{S.busy=false}}
 async function route(p){S.page=p;S.activePost='';note('');await reload()}
 async function respond(id,value){if(S.mode==='real'){await get(client.rpc('social_respond_to_request',{request_id:id,response:value}))}else{let r=S.requests.find(r=>r.id===id);if(r){r.status=value;if(value==='accepted')S.friends.push(r.sender_id)}}await reload()}
-async function searchUsers(term){S.search=term.toLowerCase().replace(/[%_]/g,'');if(S.mode==='real')S.searchResults=await get(client.from('social_profiles').select('user_id,username,display_name').ilike('username','%'+S.search+'%').neq('user_id',S.user.id).limit(25));
+async function searchUsers(term){S.search=term.toLowerCase().replace(/[%]/g,'');if(S.mode==='real')S.searchResults=await get(client.from('social_profiles').select('user_id,username,display_name').ilike('username','%'+S.search+'%').neq('user_id',S.user.id).limit(25));
 else S.searchResults=examplePeople.filter(p=>p.username.includes(S.search)&&!S.friends.includes(p.user_id)&&!S.sent.includes(p.user_id));render()}
 root.addEventListener('click',event=>{
 const btn=event.target.closest('button');if(!btn)return;
