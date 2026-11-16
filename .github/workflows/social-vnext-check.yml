@@ -1,0 +1,24 @@
+name: Social vNext — smoke tests
+on:
+  push:
+    branches: [mangalog-vnext-social-market]
+    paths:
+      - 'social.html'
+      - 'social-vnext.js'
+      - 'social-vnext.css'
+      - 'social-preview-standalone.html'
+      - 'social-test-config.js'
+      - 'social/tests/**'
+      - '.github/workflows/social-vnext-check.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  demo-smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify JavaScript syntax
+        run: node --check social-vnext.js
+      - name: Test responsive Social demo logic and safety defaults
+        run: node social/tests/smoke.cjs
