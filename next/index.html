@@ -1473,7 +1473,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 @media(max-width:700px){.nx-social{grid-template-columns:1fr}.nx-social .panel:last-child{grid-column:auto}.nx-shortcuts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}.nx-shortcuts .btn{white-space:normal;font-size:12px}}
 </style><link rel="stylesheet" href="./collection-shortcuts.css"></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog Next · Collezione originale</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script src="../isbn-modal-v13.js"></script><script>window.MANGALOG_CLOUD={};window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=false;</script>
 <script>
-(()=>{'use strict';const KEY='mangalog_next_actual_collection_2026';const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uid=()=>typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();let data={series:[],wishlist:[],activity:[]},page='home',selected=null,query='',sort='title',view=localStorage.getItem('mangalog_next_actual_view_2026')==='list'?'list':'grid',filter='all';let undoStack=[],lastSavedJSON='',restoringHistory=false;let cloudClient=null,cloudUser=null,cloudRevision=null,cloudReady=false,cloudBlocked=false,cloudState='offline',cloudMessage='Modalità locale',cloudTimer=null,cloudSerial=Promise.resolve(),cloudLoadingUserId=null;let cloudIsAdmin=false,adminMetrics=null,adminError='',adminLoading=false;let adminUsers=[],adminOverview=null,adminFilter='',adminActionBusy=false,sessionGuardBusy=false;
+(()=>{'use strict';const KEY='mangalog_next_actual_collection_2026';const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uid=()=>typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();let data={series:[],wishlist:[],activity:[],links:[]},page='home',selected=null,query='',sort='title',view=localStorage.getItem('mangalog_next_actual_view_2026')==='list'?'list':'grid',filter='all';let undoStack=[],lastSavedJSON='',restoringHistory=false;let cloudClient=null,cloudUser=null,cloudRevision=null,cloudReady=false,cloudBlocked=false,cloudState='offline',cloudMessage='Modalità locale',cloudTimer=null,cloudSerial=Promise.resolve(),cloudLoadingUserId=null;let cloudIsAdmin=false,adminMetrics=null,adminError='',adminLoading=false;let adminUsers=[],adminOverview=null,adminFilter='',adminActionBusy=false,sessionGuardBusy=false;
 // Supabase puo' rimuovere il token dall'URL prima che si concluda l'inizializzazione.
 let passwordRecoveryMode=new URLSearchParams(location.hash.slice(1)).get('type')==='recovery'||new URLSearchParams(location.search).get('type')==='recovery';const priorityLabels={alta:'Alta',media:'Media',bassa:'Bassa'};
 const orderLabels={da_ordinare:'Da ordinare',in_corso:'Ordine in corso'};
@@ -1504,7 +1504,8 @@ function normalizeWishlistItem(w){
  return {id:String(w.id||uid()),title:String(w.title||'').slice(0,120),notes:String(w.notes||'').slice(0,300),priority:safePriority(w.priority),price:parsePrice(w.price)};
 }
 function norm(o){
- const total=Math.max(1,Math.min(2000,Math.floor(Number(o.total)||1)));
+ const kind=o.kind==='oneshot'?'oneshot':'series';
+ const total=kind==='oneshot'?1:Math.max(1,Math.min(2000,Math.floor(Number(o.total)||1)));
  const owned=[...new Set((Array.isArray(o.owned)?o.owned:[]).map(Number).filter(n=>Number.isInteger(n)&&n>0&&n<=total))].sort((a,b)=>a-b);
  const purchasePlans={};
  if(o.purchasePlans&&typeof o.purchasePlans==='object'&&!Array.isArray(o.purchasePlans)){
@@ -1526,7 +1527,42 @@ function norm(o){
   specialVolumes.push({id:String(v.id||uid()).slice(0,200),number,label,owned:v.owned===true});
  }
  specialVolumes.sort((a,b)=>a.number-b.number||a.label.localeCompare(b.label,'it'));
- return {id:String(o.id||uid()),title:String(o.title||'Senza titolo').slice(0,120),edition:String(o.edition||'Edizione regolare').slice(0,100),publisher:String(o.publisher||'Non specificato').slice(0,100),author:String(o.author||'').slice(0,100),total,owned,purchasePlans,specialVolumes,missingPriority:safePriority(o.missingPriority),notes:String(o.notes||'').slice(0,1200),created:Number(o.created)||Date.now()};
+ return {id:String(o.id||uid()),kind,title:String(o.title||'Senza titolo').slice(0,120),edition:String(o.edition||'Edizione regolare').slice(0,100),publisher:String(o.publisher||'Non specificato').slice(0,100),author:String(o.author||'').slice(0,100),total,owned,purchasePlans,specialVolumes,missingPriority:safePriority(o.missingPriority),notes:String(o.notes||'').slice(0,1200),created:Number(o.created)||Date.now()};
+}
+
+
+/* Next: un record per opera, relazioni come riferimenti (mai volumi duplicati). */
+const relationKinds={related:'Opera collegata',sequel:'Sequel',prequel:'Prequel',spinoff:'Spin-off',parallel:'Storia parallela'};
+const safeRelation=v=>Object.prototype.hasOwnProperty.call(relationKinds,String(v))?String(v):'related';
+const pairKey=(a,b)=>JSON.stringify([a,b].sort());
+function normalizeLinks(raw,series){
+ const ids=new Set(series.map(s=>s.id)),seen=new Set(),out=[];
+ for(const link of (Array.isArray(raw)?raw:[]).slice(0,2000)){
+  if(!link||typeof link!=='object')continue;
+  const from=String(link.from||''),to=String(link.to||'');
+  if(!ids.has(from)||!ids.has(to)||from===to)continue;
+  const key=pairKey(from,to);if(seen.has(key))continue;
+  seen.add(key);out.push({from,to,kind:safeRelation(link.kind)});
+ }
+ return out;
+}
+function directWorkLink(a,b){
+ return (data.links||[]).find(x=>pairKey(x.from,x.to)===pairKey(a,b))||null;
+}
+function universeWorks(id){
+ const visited=new Set([id]),queue=[id],links=data.links||[];
+ for(let i=0;i<queue.length;i++)for(const link of links){
+  const other=link.from===queue[i]?link.to:link.to===queue[i]?link.from:null;
+  if(other&&!visited.has(other)){visited.add(other);queue.push(other)}
+ }
+ return data.series.filter(s=>s.id!==id&&visited.has(s.id)).sort((a,b)=>a.title.localeCompare(b.title,'it'));
+}
+function relationText(fromId,link){
+ const forward=link.from===fromId;
+ if(link.kind==='sequel')return forward?'Sequel':'Prequel';
+ if(link.kind==='prequel')return forward?'Prequel':'Sequel';
+ if(link.kind==='spinoff')return forward?'Spin-off':'Opera originale';
+ return relationKinds[link.kind]||'Opera collegata';
 }
 
 function safeActivity(list){
@@ -1620,13 +1656,13 @@ function commitMissingPicks(){
  if(added)save();else render();
 }
 
-function load(){try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&Array.isArray(v.series)){data.series=v.series.map(norm);data.wishlist=Array.isArray(v.wishlist)?v.wishlist.filter(x=>x&&typeof x.title==='string').map(normalizeWishlistItem):[];data.activity=safeActivity(v.activity)}}catch(e){console.warn(e)}}const starter=[{title:'Naruto',author:'Masashi Kishimoto',publisher:'Planet Manga (Panini Comics)',edition:'Edizione standard — da verificare',total:72},{title:'One Piece',author:'Eiichiro Oda',publisher:'Star Comics',edition:'Edizione regolare',total:114},{title:'Dragon Ball',author:'Akira Toriyama',publisher:'Star Comics',edition:'Serie originale — edizione da verificare',total:42},{title:'Bleach',author:'Tite Kubo',publisher:'Planet Manga (Panini Comics)',edition:'Edizione standard — da verificare',total:74}];function addStarter(){let added=0;for(const item of starter){if(!data.series.some(x=>x.title.toLowerCase()===item.title.toLowerCase()&&x.edition===item.edition)){data.series.push(norm({...item,id:uid(),owned:[],notes:'Dati iniziali della serie. Verifica l’edizione italiana in tuo possesso prima di segnare i volumi.',created:Date.now()}));added++}}save();alert(added?added+' serie aggiunte. I volumi posseduti sono ancora da indicare.':'Le quattro serie sono già presenti con queste edizioni.')}function restoreSnapshot(raw){
+function load(){try{const v=JSON.parse(localStorage.getItem(KEY));if(v&&Array.isArray(v.series)){data.series=v.series.map(norm);data.wishlist=Array.isArray(v.wishlist)?v.wishlist.filter(x=>x&&typeof x.title==='string').map(normalizeWishlistItem):[];data.activity=safeActivity(v.activity);data.links=normalizeLinks(v.links,data.series)}}catch(e){console.warn(e)}}const starter=[{title:'Naruto',author:'Masashi Kishimoto',publisher:'Planet Manga (Panini Comics)',edition:'Edizione standard — da verificare',total:72},{title:'One Piece',author:'Eiichiro Oda',publisher:'Star Comics',edition:'Edizione regolare',total:114},{title:'Dragon Ball',author:'Akira Toriyama',publisher:'Star Comics',edition:'Serie originale — edizione da verificare',total:42},{title:'Bleach',author:'Tite Kubo',publisher:'Planet Manga (Panini Comics)',edition:'Edizione standard — da verificare',total:74}];function addStarter(){let added=0;for(const item of starter){if(!data.series.some(x=>x.title.toLowerCase()===item.title.toLowerCase()&&x.edition===item.edition)){data.series.push(norm({...item,id:uid(),owned:[],notes:'Dati iniziali della serie. Verifica l’edizione italiana in tuo possesso prima di segnare i volumi.',created:Date.now()}));added++}}save();alert(added?added+' serie aggiunte. I volumi posseduti sono ancora da indicare.':'Le quattro serie sono già presenti con queste edizioni.')}function restoreSnapshot(raw){
  try{
   const v=JSON.parse(raw);
   if(v&&Array.isArray(v.series)){
    data.series=v.series.map(norm);
    data.wishlist=Array.isArray(v.wishlist)?v.wishlist.filter(x=>x&&typeof x.title==='string').map(normalizeWishlistItem):[];
-   data.activity=safeActivity(v.activity);
+   data.activity=safeActivity(v.activity);data.links=normalizeLinks(v.links,data.series);
   }
  }catch(e){console.warn(e)}
 }
@@ -1705,6 +1741,7 @@ function cloneEdition(){
   publisher:s.publisher,
   author:s.author,
   total:s.total,
+  kind:s.kind,
   owned:[],
   purchasePlans:{},
   notes:(s.notes?`Duplicata da "${s.edition}".\n\n${s.notes}`:`Duplicata da "${s.edition}".`),
@@ -2540,7 +2577,7 @@ function planEdit(id,num){
   openMissingGroups.add(s.id);close();save();
  };
 }
-function exportData(){let b=new Blob([JSON.stringify({version:12,exportedAt:new Date().toISOString(),...data},null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='MangaLog_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}function importData(file){if(!file||file.size>5e6)return alert('File troppo grande o non valido.');const reader=new FileReader();reader.onload=()=>{try{let v=JSON.parse(reader.result);if(!v||!Array.isArray(v.series)||v.series.length>10000||!Array.isArray(v.wishlist||[]))throw Error();if(!confirm('Sostituire la collezione attuale con quella del backup?'))return;missingSelection.clear();lastMissingSuccess='';data={series:v.series.map(norm),wishlist:(v.wishlist||[]).slice(0,10000).filter(x=>x&&typeof x.title==='string').map(normalizeWishlistItem),activity:safeActivity(v.activity)};save();alert('Backup importato.')}catch(e){alert('Backup non valido.')}};reader.readAsText(file)}
+function exportData(){let b=new Blob([JSON.stringify({version:12,exportedAt:new Date().toISOString(),...data},null,2)],{type:'application/json'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download='MangaLog_backup_'+new Date().toISOString().slice(0,10)+'.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000)}function importData(file){if(!file||file.size>5e6)return alert('File troppo grande o non valido.');const reader=new FileReader();reader.onload=()=>{try{let v=JSON.parse(reader.result);if(!v||!Array.isArray(v.series)||v.series.length>10000||!Array.isArray(v.wishlist||[]))throw Error();if(!confirm('Sostituire la collezione attuale con quella del backup?'))return;missingSelection.clear();lastMissingSuccess='';data={series:v.series.map(norm),wishlist:(v.wishlist||[]).slice(0,10000).filter(x=>x&&typeof x.title==='string').map(normalizeWishlistItem),activity:safeActivity(v.activity),links:[]};data.links=normalizeLinks(v.links,data.series);save();alert('Backup importato.')}catch(e){alert('Backup non valido.')}};reader.readAsText(file)}
 let dragSelection=null,suppressVolumeClick=false;
 function paintVolumeButton(button,owned){
  button.classList.toggle('owned',owned);
