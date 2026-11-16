@@ -11,7 +11,7 @@ const live=fs.readFileSync(path.join(base,'social.html'),'utf8');
 const config=fs.readFileSync(path.join(base,'social-test-config.js'),'utf8');
 const nodes=new Map();
 const handlers={};
-for(const name of ['social-app','social-view','social-banner','social-side','social-bottom','social-mode','social-mobile-tabs','profile-editor','search-results']){
+for(const name of ['social-app','social-view','social-banner','social-side','social-bottom','social-mode','social-mobile-tabs','social-bell','profile-editor','search-results']){
  nodes.set(name,{id:name,innerHTML:'',textContent:'',classList:{toggle(){}},
    addEventListener(type,listener){handlers[type]=listener;}});
 }
@@ -45,6 +45,14 @@ async function main(){
   submit('post-form',{body:'<script>alert("bad")</script>',audience:'friends'});await tick();
   assert.match(html(),/&lt;script&gt;/);
   assert.doesNotMatch(html(),/<script>alert/);
+  click({notifications:'true'});await tick();
+  assert.match(html(),/Le tue notifiche/);
+  assert.match(nodes.get('social-bell').innerHTML,/notif-count/);
+  click({openNotification:'ndemo1'});await tick();
+  assert.match(html(),/Richieste ricevute/);
+  click({notifications:'true'});await tick();
+  click({readAll:'yes'});await tick();
+  assert.doesNotMatch(nodes.get('social-bell').innerHTML,/notif-count/);
   assert.match(page,/DEMO NAVIGABILE/);
   assert.match(page,/window.MANGALOG_SOCIAL_TEST_CONFIG=\{enabled:false/);
   assert.doesNotMatch(page,/https:\/\/.*supabase\.co/);
@@ -53,6 +61,6 @@ async function main(){
   assert.match(config,/enabled:true/);
   assert.match(config,/bwohofvlcihlfixesnus/);
   assert.doesNotMatch(config,/trfbpctrqrlaqczpyzks/);
-  console.log('PASS: Social demo navigation, friends, volume comparison, privacy, feed, escaping, standalone isolation');
+  console.log('PASS: Social demo navigation, friends, volume comparison, privacy, feed, notifications, escaping, standalone isolation');
 }
 main().catch(e=>{console.error(e);process.exitCode=1});
