@@ -15,3 +15,14 @@
 .mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr))}
 .mobile-nav .nav{font-size:10px;word-break:normal}
 }
+
+/* Lightweight Social notifications */
+.notification-bell{position:relative;min-width:40px;min-height:38px;border:1px solid #484954;border-radius:11px;background:#282933;color:#fff;font-size:19px;display:grid;place-items:center;cursor:pointer}
+.notification-bell[hidden]{display:none}
+.notif-count{position:absolute;top:-6px;right:-6px;border-radius:99px;background:#e84258;color:#fff;font-size:10px;line-height:18px;min-width:18px;height:18px;padding:0 4px;font-weight:800;border:1px solid #161720}
+.notification-item{display:flex;align-items:center;gap:12px;padding:13px 4px;border-top:1px solid #3b3c46}
+.notification-item.unread{background:#2e222c;border-radius:10px;padding-inline:9px}
+.notification-open{flex:1;min-width:0;border:0;background:transparent;color:#d5d6e0;cursor:pointer;text-align:left;font-size:13px;line-height:1.5;padding:6px}
+.notification-open strong{color:#fff}
+.notification-open small{display:block;color:#aeb0bc;margin-top:4px;font-size:11px}
+@media(max-width:790px){.notification-bell{min-width:34px;min-height:34px;font-size:17px}.head-right{gap:7px}}
