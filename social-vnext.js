@@ -38,7 +38,7 @@ function navigation(){
  document.getElementById('social-mobile-tabs').innerHTML=tabs;
  document.getElementById('social-mobile-tabs').hidden=['privacy','notifications'].includes(S.page);
  const bell=document.getElementById('social-bell');
- if(bell){bell.hidden=S.mode==='real'&&!S.user;bell.innerHTML='♧ <span aria-hidden="true">🔔</span>'+(S.unread?'<span class="notif-count">'+(S.unread>50?'50+':S.unread)+'</span>':'');bell.setAttribute('aria-label','Notifiche'+(S.unread?' non lette: '+S.unread:''));}
+ if(bell){bell.hidden=S.mode==='real'&&!S.user;bell.innerHTML='<span aria-hidden="true">🔔</span>'+(S.unread?'<span class="notif-count">'+(S.unread>50?'50+':S.unread)+'</span>':'');bell.setAttribute('aria-label','Notifiche'+(S.unread?' non lette: '+S.unread:''));}
  document.getElementById('social-mode').textContent=S.mode==='demo'?'DEMO NAVIGABILE':'TEST ISOLATO';
 }
 
@@ -80,7 +80,7 @@ if(S.mode==='real')html+=section('<h3>La mia lista condivisa · '+S.myVolumes.le
 return html;
 }
 function visLabel(v){return v==='public'?'pubblica':v==='friends'?'visibile agli amici':'privata'}
-function privacy(){const vis=S.profile?.collection_visibility||'private';return head('Privacy e visibilità','Scegli chi può vedere i tuoi dati e i volumi condivisi.')+section('<h3>La mia collezione Social</h3>'+[['private','🔒 Privata','Visibile soltanto a te'],['friends','♧ Solo amici','Visibile agli amici accettati'],['public','◎ Pubblica','Visibile agli utenti autenticati']].map(v=>'<label class="privacy-choice"><input type="radio" name="visibility" value="'+v[0]+'" '+(vis===v[0]?'checked':'')+'><span><strong>'+v[1]+'</strong><small>'+v[2]+'</small></span></label>').join('')+'<p class="hint">Nessun volume della Collezione principale viene pubblicato in automatico.</p>')+section('<h3>Foto e archiviazione</h3><p class="hint">I post sono soltanto testuali. Non sono previsti caricamenti di immagini sui server.</p>'+(S.mode==='real'?button('Esci dal Social di test','logout','yes',true):''));
+function privacy(){const vis=S.profile?.collection_visibility||'private';return head('Privacy e visibilità','Scegli chi può vedere i tuoi dati e i volumi condivisi.')+button('← Il mio profilo','page','profile',true)+section('<h3>La mia collezione Social</h3>'+[['private','🔒 Privata','Visibile soltanto a te'],['friends','♧ Solo amici','Visibile agli amici accettati'],['public','◎ Pubblica','Visibile agli utenti autenticati']].map(v=>'<label class="privacy-choice"><input type="radio" name="visibility" value="'+v[0]+'" '+(vis===v[0]?'checked':'')+'><span><strong>'+v[1]+'</strong><small>'+v[2]+'</small></span></label>').join('')+'<p class="hint">Nessun volume della Collezione principale viene pubblicato in automatico.</p>')+section('<h3>Foto e archiviazione</h3><p class="hint">I post sono soltanto testuali. Non sono previsti caricamenti di immagini sui server.</p>'+(S.mode==='real'?button('Esci dal Social di test','logout','yes',true):''));
 }
 
 function notificationLabel(n){
@@ -95,6 +95,7 @@ function notificationLabel(n){
 function notificationsPage(){
  let list=S.notifications||[];
  return head('Notifiche','Le interazioni più recenti della tua community.')+
+ button('← Torna al Feed','page','feed',true)+
  section('<div class="row between" style="margin-bottom:8px"><strong>Le tue notifiche</strong>'+
  (list.some(n=>!n.read_at)?button('Segna tutte lette','read-all','yes',true):'<span class="hint">Tutto letto ✓</span>')+'</div>'+
  (list.length?list.map(n=>{const who=person(n.actor_id);return '<div class="notification-item'+(!n.read_at?' unread':'')+'">'+
@@ -113,11 +114,13 @@ async function fetchNotifications(){
 }
 async function markNotificationRead(id){
  const n=S.notifications.find(x=>x.id===id);if(!n)return;
- if(S.mode==='real'&&!n.read_at){
+ const wasUnread=!n.read_at;
+ if(S.mode==='real'&&wasUnread){
   await get(client.from('social_notifications').update({read_at:new Date().toISOString()})
-  .eq('id',id).eq('recipient_id',S.user.id));
- }else n.read_at=n.read_at||new Date().toISOString();
- S.unread=Math.max(0,S.unread-(!n.read_at?1:0));
+   .eq('id',id).eq('recipient_id',S.user.id));
+ }
+ n.read_at=n.read_at||new Date().toISOString();
+ if(wasUnread)S.unread=Math.max(0,S.unread-1);
 }
 async function openNotification(id){
  const n=S.notifications.find(x=>x.id===id);if(!n)return;
