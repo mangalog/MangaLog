@@ -27,7 +27,7 @@ function button(text,action,value,secondary){return '<button type="button" class
 function head(title,description){return '<h1>'+title+'</h1><p class="sub">'+description+'</p>'}
 function navigation(){
  const tabs=pages.map(p=>'<button class="social-tab '+(S.page===p[0]?'active':'')+'" data-page="'+p[0]+'"><span class="nav-icon">'+p[1]+'</span>'+p[2]+'</button>').join('');
- const mainLinks=[['home','⌂','Home'],['collection','▦','Collezione'],['missing','☷','Mancolista'],['wishlist','♡','Wishlist'],['social','♧','Social']];
+ const mainLinks=[['home','⌂','Home'],['collection','▦','Collezione'],['missing','☷','Mancolista'],['wishlist','♡','Wishlist'],['stats','▥','Statistiche'],['social','♧','Social']];
  const mainHtml=mainLinks.map(p=>'<button class="nav '+(p[0]==='social'?'active':'')+'" data-main-nav="'+p[0]+'"><span class="nav-icon">'+p[1]+'</span>'+p[2]+'</button>').join('');
  const sidebarLinks=mainLinks.map(p=>'<button class="nav '+(p[0]==='social'?'active':'')+'" data-main-nav="'+p[0]+'"><span class="nav-icon">'+p[1]+'</span>'+p[2]+'</button>'+ (p[0]==='social'?'<div class="desktop-social-submenu">'+tabs+'<button class="social-tab '+(S.page==='privacy'?'active':'')+'" data-page="privacy"><span class="nav-icon">⚙</span>Privacy</button></div>':'')).join('');
  document.getElementById('social-side').innerHTML='<div class="section-label">MANGALOG NEXT</div>'+sidebarLinks+'<div class="sidebar-tip">'+(S.mode==='demo'?'Anteprima locale · dati di esempio':'Progetto Supabase di TEST')+'<br>Le tue collezioni reali restano intatte.</div>';
