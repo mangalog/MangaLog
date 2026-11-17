@@ -179,6 +179,9 @@ const btn=event.target.closest('button');if(!btn)return;
 const d=btn.dataset;
 if(d.mainNav){
  if(d.mainNav==='social'){act(()=>route('feed'));return}
+ if(/(^|\.)supabase\.co$|(^|\.)raw\.githack\.com$/i.test(window.location?.hostname||'')){
+   note('In questa prova è disponibile solo la sezione Social. Le altre sezioni MangaLog rimangono in sviluppo.');return;
+ }
  try{sessionStorage.setItem('mangalog_next_target',d.mainNav)}catch(e){}
  window.location.href='./index.html';return;
 }
