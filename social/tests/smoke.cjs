@@ -27,7 +27,7 @@ assert.match(collectionPage,/MANGALOG_NEXT_TEST=true/);
 assert.match(collectionPage,/mangalog-social-test-only/);
 assert.match(collectionPage,/next-collection-bridge\.js/);
 assert.match(collectionPage,/next-isbn-modal-v13\.js/);
-assert.match(collectionPage,/mangalog_next_v1_test/);
+assert.match(collectionPage,/mangatrack_next_v1_test/);
 assert.doesNotMatch(collectionPage,/trfbpctrqrlaqczpyzks|service_role\s*[:=]/);
 const vercelConfig=JSON.parse(fs.readFileSync(path.join(base,'social/test-site/vercel.json'),'utf8'));
 assert(Array.isArray(vercelConfig.headers));
