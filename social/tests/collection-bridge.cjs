@@ -28,7 +28,7 @@ assert.throws(()=>buildSnapshot({}),/series valida/);
 const update=buildSnapshot({series:[{title:'One Piece',edition:'Edizione standard',publisher:'Star Comics',owned:[1,3,4]}]});
 const changes=diffSnapshots(rows,update);
 assert.equal(changes.upsert.length,1,'Only new volume 4 to insert');
-assert.equal(changes.remove.length,4,'Removed other edition, publisher, special and oneshot');
+assert.equal(changes.remove.length,5,'Removed volume 2 plus other edition, publisher, special and oneshot');
 assert.equal(makeKey('F'.repeat(140),'E'.repeat(140),'P'.repeat(140)).length,160);
 assert.deepEqual(buildSnapshot({series:[{title:'B',owned:[-1,0,2,2,2.5,10001]}]}).map(x=>x.volume_number),[2]);
 console.log('PASS: existing MangaLog owned volumes projection, editions, one-shots, specials, privacy, idempotence, additions and removals');
