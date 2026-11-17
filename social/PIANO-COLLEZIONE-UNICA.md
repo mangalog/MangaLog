@@ -43,6 +43,8 @@
 Il primo matching è conservativo: titolo + edizione + editore; eventuali abbreviazioni o sinonimi possono far risultare non coincidenti due versioni realmente uguali. Per migliorare l'accuratezza sarà utile un identificativo catalogo canonico per edizione. Non assumere che tutte le serie con lo stesso titolo siano identiche.
 
 ## Limiti attuali (non confondere con funzionalità già attive)
-`collection-bridge.js` **non è ancora collegato all'interfaccia**, né al database test.
-Nel Social Test il confronto continua a utilizzare gli snapshot condivisi manualmente.
+Il primo collegamento **Collezione Next + Social** è ora disponibile nell'ambiente Vercel TEST: `/collection.html` usa il database Supabase TEST e condivide l'autenticazione con il Social. Il pulsante di inserimento manuale è stato rimosso in favore dell'opzione Privacy → Condividi automaticamente i volumi.
+
+La RPC `social_sync_owned_volumes` aggiorna automaticamente lo snapshot dopo i salvataggi cloud completati, con opt-in e RLS. Le prove SQL e CI sono superate, ma **resta da collaudare il percorso browser end-to-end con due account reali** (edizioni, nuovi volumi, rimozioni, privacy, caricamento sfondi).
+
 La versione online ufficiale non è stata modificata.
