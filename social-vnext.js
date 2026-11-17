@@ -82,15 +82,51 @@ if(!S.friends.includes(S.compare))S.compare=S.friends[0];
 const selected=person(S.compare),filtered=S.volumes.filter(r=>S.filter==='all'||(S.filter==='common'&&r.mine&&r.theirs)||(S.filter==='mine'&&r.mine&&!r.theirs)||(S.filter==='theirs'&&!r.mine&&r.theirs));
 const common=S.volumes.filter(r=>r.mine&&r.theirs).length,mine=S.volumes.filter(r=>r.mine&&!r.theirs).length,theirs=S.volumes.filter(r=>!r.mine&&r.theirs).length;
 let html=head('Confronta collezioni','Scopri i manga e i volumi che possedete entrambi.');
-html+=section('<label class="fields">Confronta con<select id="compare-select" class="field">'+friends.map(p=>'<option value="'+esc(p.user_id)+'" '+(p.user_id===S.compare?'selected':'')+'>'+esc(p.display_name)+'</option>').join('')+'</select></label>'+(S.compareLocked?'<p class="warning">La collezione di questo utente è privata. Non è possibile effettuare il confronto.</p>':stats(common,mine,theirs))+'<p class="hint">'+(S.mode==='demo'?'Dati dimostrativi: 12 volumi di esempio.':'Confronto dei soli numeri condivisi volontariamente nel Social.')+'</p>');
+html+=section('<label class="fields">Confronta con<select id="compare-select" class="field">'+friends.map(p=>'<option value="'+esc(p.user_id)+'" '+(p.user_id===S.compare?'selected':'')+'>'+esc(p.display_name)+'</option>').join('')+'</select></label>'+(S.compareLocked?'<p class="warning">La collezione non è stata condivisa oppure è privata. Il confronto non è disponibile.</p>':stats(common,mine,theirs))+'<p class="hint">'+(S.mode==='demo'?'Dati dimostrativi: 12 volumi di esempio.':'Confronto dei soli numeri condivisi volontariamente nel Social.')+'</p>');
 if(!S.compareLocked)html+=section('<div class="tabs">'+[['all','Tutti'],['common','In comune'],['mine','Solo miei'],['theirs','Solo suoi']].map(t=>'<button class="tab '+(S.filter===t[0]?'active':'')+'" data-filter="'+t[0]+'">'+t[1]+'</button>').join('')+'</div><div class="volume-row heading-row"><span>Serie / edizione / N.</span><span>Tu</span><span>'+esc(selected.display_name.slice(0,7))+'</span></div>'+(filtered.map(v=>'<div class="volume-row"><div><strong>'+esc(v.series_title)+'</strong><small>'+esc(v.series_key.split('::').slice(-1)[0])+' · Vol. '+v.volume_number+'</small></div><span class="'+(v.mine?'yes':'no')+'">'+(v.mine?'✓':'—')+'</span><span class="'+(v.theirs?'yes':'no')+'">'+(v.theirs?'✓':'—')+'</span></div>').join('')||'<p class="hint">Nessun volume per questo filtro.</p>'));
-if(S.mode==='real')html+=section('<h3>La mia lista condivisa · '+S.myVolumes.length+' volumi</h3><p class="hint">Aggiungi soltanto i numeri che desideri condividere. La Collezione principale non viene letta né modificata.</p><form id="volumes-form" class="fields"><label>Titolo serie<input class="field" name="title" maxlength="90" required placeholder="Es. One Piece"></label><label>Edizione<input class="field" name="edition" maxlength="55" required placeholder="Es. Standard"></label><label>Volumi posseduti (separati da virgole)<input class="field" name="numbers" required placeholder="Es. 1, 2, 3"></label><button class="btn" type="submit">Aggiungi alla lista condivisa</button></form>'+(S.myVolumes.length?'<div class="space">'+button('Cancella la lista condivisa','clear-volumes','yes',true)+'</div>':''));
+if(S.mode==='real'){
+ const enabled=S.profile?.auto_sync_enabled===true;
+ html+=section('<h3>La mia collezione Next</h3>'+
+ '<p class="hint">'+(enabled?'Sincronizzazione automatica attiva: ogni volume salvato nella Collezione Next aggiorna il confronto.':'La sincronizzazione non è attiva. Puoi abilitarla dal Profilo, scegliendo chi può vedere i tuoi volumi.')+'</p>'+
+ (enabled?button('Apri la Collezione Next','main-nav','collection'):button('Impostazioni di condivisione','page','privacy',true)));
+}
 return html;
 }
 function visLabel(v){return v==='public'?'pubblica':v==='friends'?'visibile agli amici':'privata'}
-function privacy(){const vis=S.profile?.collection_visibility||'private';return head('Privacy e visibilità','Scegli chi può vedere i tuoi dati e i volumi condivisi.')+button('← Il mio profilo','page','profile',true)+section('<h3>La mia collezione Social</h3>'+[['private','🔒 Privata','Visibile soltanto a te'],['friends','♧ Solo amici','Visibile agli amici accettati'],['public','◎ Pubblica','Visibile agli utenti autenticati']].map(v=>'<label class="privacy-choice"><input type="radio" name="visibility" value="'+v[0]+'" '+(vis===v[0]?'checked':'')+'><span><strong>'+v[1]+'</strong><small>'+v[2]+'</small></span></label>').join('')+'<p class="hint">Nessun volume della Collezione principale viene pubblicato in automatico.</p>')+section('<h3>Foto e archiviazione</h3><p class="hint">I post sono soltanto testuali. Non sono previsti caricamenti di immagini sui server.</p>'+(S.mode==='real'?button('Esci dal Social di test','logout','yes',true):''));
+function privacy(){
+ const vis=S.profile?.collection_visibility||'private';
+ const enabled=S.profile?.auto_sync_enabled===true;
+ return head('Privacy e visibilità','Scegli chi può vedere i tuoi dati e i volumi condivisi.')+
+ button('← Il mio profilo','page','profile',true)+
+ section('<h3>Collezione unica MangaLog Next</h3>'+
+ '<label class="privacy-choice"><input type="checkbox" name="auto_collection_sync" '+(enabled?'checked':'')+'><span><strong>Condividi automaticamente i miei volumi</strong><small>Usa soltanto la Collezione Next di test: niente inserimenti manuali nel Social, né dati della versione ufficiale.</small></span></label>'+
+ '<p class="hint">La condivisione parte solo dopo la tua scelta. Disattivandola i volumi diventano subito invisibili agli altri utenti.</p>')+
+ section('<h3>Chi può vedere i miei volumi condivisi?</h3>'+
+ [['private','🔒 Privata','Visibile soltanto a te'],['friends','♧ Solo amici','Visibile agli amici accettati'],['public','◎ Pubblica','Visibile agli utenti autenticati']]
+ .map(v=>'<label class="privacy-choice"><input type="radio" name="visibility" value="'+v[0]+'" '+(vis===v[0]?'checked':'')+'><span><strong>'+v[1]+'</strong><small>'+v[2]+'</small></span></label>').join('')+
+ '<p class="hint">Le impostazioni agiscono solo sul Social Next di prova.</p>')+
+ section('<h3>Foto e archiviazione</h3><p class="hint">I post sono soltanto testuali. Non sono previsti caricamenti di immagini sui server.</p>'+
+ (S.mode==='real'?button('Esci dal Social di test','logout','yes',true):''));
 }
-
+async function setNextSharing(enabled){
+ if(S.mode!=='real'){S.profile.auto_sync_enabled=enabled;render();return}
+ const uid=S.user.id;
+ if(enabled){
+  const b=window.MangaLogCollectionBridge;
+  if(!b?.buildSnapshot)throw Error('Modulo Collezione Next non disponibile');
+  const doc=await get(client.from('mangalog_collections').select('payload').eq('user_id',uid).maybeSingle());
+  const rows=b.buildSnapshot(doc?.payload||{series:[]});
+  // Old manual test snapshots must never become visible while enabling auto-sharing.
+  await get(client.from('social_collection_volumes').delete().eq('user_id',uid));
+  await get(client.from('social_profiles').update({auto_sync_enabled:true}).eq('user_id',uid));
+  await get(client.rpc('social_sync_owned_volumes',{rows}));
+ }else{
+  await get(client.from('social_profiles').update({auto_sync_enabled:false}).eq('user_id',uid));
+  await get(client.from('social_collection_volumes').delete().eq('user_id',uid));
+ }
+ await reload();
+ note(enabled?'Condivisione automatica attiva. I volumi della tua Collezione Next sono sincronizzati.':'Condivisione disattivata. I volumi non sono più visibili agli altri utenti.');
+}
 function notificationLabel(n){
  const labels={
   friend_request:'ti ha inviato una richiesta di amicizia',
@@ -147,7 +183,7 @@ function auth(){return head('Social di test','Accedi solo con un account del pro
 function myId(){return S.mode==='real'?S.user?.id:'me'}
 function render(){navigation();view.innerHTML=S.mode==='real'&&!S.user?auth():S.mode==='real'&&!S.profile&&S.page!=='profile'?head('Benvenuto nel Social','Crea prima un profilo personale.')+section(button('Crea profilo','page','profile')):({feed,profile,friends,compare,privacy,notifications:notificationsPage}[S.page]||feed)()}
 async function get(query){const {data,error}=await query;if(error)throw error;return data}
-async function names(ids){let unique=[...new Set(ids.filter(Boolean))];if(!unique.length)return{};const list=await get(client.from('social_profiles').select('user_id,username,display_name,collection_visibility').in('user_id',unique));return Object.fromEntries(list.map(p=>[p.user_id,p]))}
+async function names(ids){let unique=[...new Set(ids.filter(Boolean))];if(!unique.length)return{};const list=await get(client.from('social_profiles').select('user_id,username,display_name,collection_visibility,auto_sync_enabled').in('user_id',unique));return Object.fromEntries(list.map(p=>[p.user_id,p]))}
 async function reload(){
 if(S.mode!=='real'||!S.user){render();return}
 view.innerHTML='<div class="panel">Caricamento Social…</div>';
@@ -171,7 +207,7 @@ try{
  S.myVolumes=await get(client.from('social_collection_volumes').select('series_key,series_title,volume_number').eq('user_id',S.user.id).limit(3000));
  if(!S.friends.includes(S.compare))S.compare=S.friends[0]||'';
  S.volumes=[];S.compareLocked=false;
- if(S.compare){let p=person(S.compare);if(p.collection_visibility==='private')S.compareLocked=true;
+ if(S.compare){let p=person(S.compare);if(p.collection_visibility==='private'||!p.auto_sync_enabled)S.compareLocked=true;
  else {let rows=await get(client.rpc('social_compare_collections',{other_user:S.compare}));S.volumes=rows||[]}}
  }
  render();
@@ -222,6 +258,7 @@ if(d.logout){act(async()=>{await client.auth.signOut();S.user=null;S.profile=nul
 });
 root.addEventListener('change',event=>{
 const t=event.target;if(t.id==='compare-select'){S.compare=t.value;S.filter='all';act(reload);return}
+if(t.name==='auto_collection_sync'){act(()=>setNextSharing(t.checked));return}
 if(t.name==='visibility'){act(async()=>{if(S.mode==='real')await get(client.from('social_profiles').update({collection_visibility:t.value}).eq('user_id',S.user.id));else S.profile.collection_visibility=t.value;await reload();note('Preferenza di privacy aggiornata.')})}
 });
 root.addEventListener('submit',event=>{
