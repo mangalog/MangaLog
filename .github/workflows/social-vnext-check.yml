@@ -9,6 +9,7 @@ on:
       - 'social-preview-standalone.html'
       - 'social-test-config.js'
       - 'social/tests/**'
+      - 'social/collection-bridge.js'
       - 'social/test-site/**'
       - 'social/hosting/**'
       - '.github/workflows/social-vnext-check.yml'
@@ -24,3 +25,5 @@ jobs:
         run: node --check social-vnext.js
       - name: Test responsive Social demo logic and safety defaults
         run: node social/tests/smoke.cjs
+      - name: Test automatic Collection-to-Social projection
+        run: node social/tests/collection-bridge.cjs
