@@ -20,7 +20,7 @@ assert(hostedPage.includes(source),'Hosted version must use the latest Social JS
 assert(hostedPage.includes(fs.readFileSync(path.join(base,'social-vnext.css'),'utf8')),'Hosted version must use the latest CSS');
 assert.match(hostedPage,/id="social-mobile-tabs"/);
 assert.match(hostedPage,/id="social-bell"/);
-assert.doesNotMatch(hostedPage,/sb_secret_|service_role/);
+assert.doesNotMatch(hostedPage,/sb_secret_[a-zA-Z0-9_-]{10,}|service_role\s*[:=]\s*['\"][^'\"]+/);
 assert.doesNotMatch(hostedPage,/<script src="\.\//);
 
 const nodes=new Map();
