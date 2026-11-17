@@ -1478,7 +1478,7 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 </style><meta name="robots" content="noindex,nofollow,noarchive"><style>@media(max-width:800px){.mobile-nav{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:2px}.mobile-nav button{min-width:0;font-size:9px;padding:5px 0}}</style></head><body><div class="app"><aside class="sidebar"><div class="logo">MANGA<b>LOG</b></div><div id="desktopNav"></div><div class="sidefoot">● MangaLog · v12.10 · Scanner ISBN</div></aside><main class="main"><div class="account-topbar" id="accountTopbar" aria-label="Account MangaLog"></div><div id="content"></div></main></div><nav class="mobile-nav" id="mobileNav"></nav><div class="modal-back" id="modalBack"><div class="modal" id="modalContent"></div></div><script>// Solo Supabase MangaLog Social Test. Chiave publishable, MAI service_role.
 window.MANGALOG_SOCIAL_TEST_CONFIG={enabled:true,url:"https://bwohofvlcihlfixesnus.supabase.co",publishableKey:"sb_publishable_U0yJ8eqHVzHgsaYuFj3Ehw_YYz6uqHu"};
 
-window.MANGALOG_CLOUD={url:window.MANGALOG_SOCIAL_TEST_CONFIG.url,publishableKey:window.MANGALOG_SOCIAL_TEST_CONFIG.publishableKey};</script><script src="./next-isbn-modal-v13.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=false;window.MANGALOG_NEXT_TEST=true;</script>
+window.MANGALOG_CLOUD={url:window.MANGALOG_SOCIAL_TEST_CONFIG.url,publishableKey:window.MANGALOG_SOCIAL_TEST_CONFIG.publishableKey};</script><script src="./next-isbn-modal-v13.js"></script><script src="./next-collection-bridge.js"></script><script>window.MANGALOG_READONLY_PREVIEW=false;window.MANGALOG_SESSION_GUARD=false;window.MANGALOG_NEXT_TEST=true;</script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.119.0/dist/umd/supabase.min.js"></script>
 <script>
 (()=>{'use strict';const KEY='mangatrack_next_v1_test';const $=s=>document.querySelector(s);const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));const uid=()=>typeof crypto!=='undefined'&&crypto.randomUUID?crypto.randomUUID():String(Date.now())+Math.random();let data={series:[],wishlist:[],activity:[],links:[]},page='home',selected=null,query='',sort='title',view=localStorage.getItem('mangatrack_view')==='list'?'list':'grid',filter='all';let undoStack=[],lastSavedJSON='',restoringHistory=false;let cloudClient=null,cloudUser=null,cloudRevision=null,cloudReady=false,cloudBlocked=false,cloudState='offline',cloudMessage='Modalità locale',cloudTimer=null,cloudSerial=Promise.resolve(),cloudLoadingUserId=null;let cloudIsAdmin=false,adminMetrics=null,adminError='',adminLoading=false;let adminUsers=[],adminOverview=null,adminFilter='',adminActionBusy=false,sessionGuardBusy=false;
@@ -2207,8 +2207,32 @@ async function cloudSwitch(session){
  }catch(err){
   cloudReady=false;cloudNote('error','Impossibile leggere il cloud: '+String(err.message||err).slice(0,110));
   alert('Connessione o database non disponibile. I dati del cloud NON verranno sovrascritti. Controlla configurazione, tabella SQL e connessione.');
- } finally {cloudLoadingUserId=null;if(cloudUser?.id===session.user.id){cloudIsAdmin=false;render()}}
+ } finally {cloudLoadingUserId=null;if(cloudUser?.id===session.user.id){cloudIsAdmin=false;render();if(cloudReady)queueNextSocialSync()}}
 }
+
+/* Only a user's saved TEST Collection is projected into the Social TEST database.
+   Sync is explicit opt-in (social_profiles.auto_sync_enabled), never production.
+   Failed cloud reads/writes NEVER replace the shared volumes with an empty list. */
+let nextSocialSerial=Promise.resolve();
+function queueNextSocialSync(){
+ nextSocialSerial=nextSocialSerial.then(async()=>{
+  if(!cloudClient||!cloudUser||!cloudReady||cloudBlocked)return;
+  const userId=cloudUser.id;
+  const {data:profile,error:profileError}=await cloudClient.from('social_profiles')
+    .select('auto_sync_enabled').eq('user_id',userId).maybeSingle();
+  if(profileError)throw profileError;
+  if(!profile?.auto_sync_enabled||cloudUser?.id!==userId||!cloudReady)return;
+  const bridge=window.MangaLogCollectionBridge;
+  if(!bridge?.buildSnapshot)throw Error('Modulo confronto collezioni non disponibile');
+  const rows=bridge.buildSnapshot(data);
+  const result=await cloudClient.rpc('social_sync_owned_volumes',{rows});
+  if(result.error)throw result.error;
+ }).catch(err=>{
+  console.warn('MangaLog Next Social sync:',err);
+  if(cloudUser&&cloudReady)cloudNote('error','Collezione salvata ma confronto Social non sincronizzato: '+String(err.message||err).slice(0,95));
+ });
+}
+
 function queueCloudPush(){
  if(!cloudUser)return;
  if(window.MANGALOG_READONLY_PREVIEW){cloudNote('offline','v12.8 collaudo: cloud in sola lettura, modifiche soltanto locali');return;}
@@ -2246,6 +2270,7 @@ async function cloudPush(force){
   cloudRevision=response.data.revision;cloudBlocked=false;
   if(JSON.stringify(data)!==JSON.stringify(payload)){queueCloudPush();return}
   cloudNote('synced','✓ Collezione sincronizzata');
+  queueNextSocialSync();
  }catch(err){
   if(String(err.code||'')==='23505'){cloudBlocked=true;cloudNote('error','Conflitto cloud: dati già presenti da un altro dispositivo')}
   else cloudNote('error','Cloud non sincronizzato: '+String(err.message||err).slice(0,120));
