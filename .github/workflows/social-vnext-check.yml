@@ -9,6 +9,8 @@ on:
       - 'social-preview-standalone.html'
       - 'social-test-config.js'
       - 'social/tests/**'
+      - 'social/test-site/**'
+      - 'social/hosting/**'
       - '.github/workflows/social-vnext-check.yml'
   workflow_dispatch:
 permissions:
