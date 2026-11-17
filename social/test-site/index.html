@@ -57,7 +57,15 @@ const S={page:'feed',friendTab:'list',filter:'all',compare:'riko',search:'',sear
 };
 let client=null;
 function note(text,error){banner.textContent=text||'';banner.classList.toggle('error',!!error)}
-function err(e){note('Operazione non riuscita: '+String(e.message||e),true)}
+function err(e){
+ const message=String(e?.message||e||'');
+ const code=String(e?.code||'');
+ if(code==='over_email_send_rate_limit'||/email rate limit exceeded/i.test(message)){
+  note('Limite di invio email di Supabase raggiunto nel progetto Social Test. La registrazione non è stata completata. Non ripetere subito la richiesta: per le prove si può disattivare temporaneamente la conferma email SOLO nel database di test.',true);
+  return;
+ }
+ note('Operazione non riuscita: '+message,true);
+}
 function dateLabel(d){if(!d)return '';if(isNaN(Date.parse(d)))return esc(d);return new Date(d).toLocaleString('it-IT',{dateStyle:'short',timeStyle:'short'})}
 function person(id){return id===myId()&&S.profile?S.profile:(S.people[id]||makePerson(id,'Utente'))}
 function avatar(p){const letter=String(p.display_name||'?')[0].toUpperCase(),kind=letter==='R'?' gold':letter==='L'?' blue':letter==='M'?' red':'';return '<div class="avatar'+kind+'">'+esc(letter)+'</div>'}
