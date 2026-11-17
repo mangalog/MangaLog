@@ -20,7 +20,15 @@ assert(hostedPage.includes(fs.readFileSync(path.join(base,'social-vnext.css'),'u
 assert.match(hostedPage,/id="social-mobile-tabs"/);
 assert.match(hostedPage,/id="social-bell"/);
 assert.doesNotMatch(hostedPage,/sb_secret_[a-zA-Z0-9_-]{10,}|service_role\s*[:=]\s*['"][^'"]+/);
-assert.doesNotMatch(hostedPage,/<script src="\.\//);
+assert.match(hostedPage,/<script src="\.\/next-collection-bridge\.js"><\/script>/);
+assert.doesNotMatch(hostedPage,/<script src="\.\/(?!next-collection-bridge\.js)[^"]+"/);
+const collectionPage=fs.readFileSync(path.join(base,'social/test-site/collection.html'),'utf8');
+assert.match(collectionPage,/MANGALOG_NEXT_TEST=true/);
+assert.match(collectionPage,/mangalog-social-test-only/);
+assert.match(collectionPage,/next-collection-bridge\.js/);
+assert.match(collectionPage,/next-isbn-modal-v13\.js/);
+assert.match(collectionPage,/mangalog_next_v1_test/);
+assert.doesNotMatch(collectionPage,/trfbpctrqrlaqczpyzks|service_role\s*[:=]/);
 const vercelConfig=JSON.parse(fs.readFileSync(path.join(base,'social/test-site/vercel.json'),'utf8'));
 assert(Array.isArray(vercelConfig.headers));
 
