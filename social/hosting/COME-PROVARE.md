@@ -34,3 +34,17 @@ https://bwohofvlcihlfixesnus.supabase.co/functions/v1/mangalog-social-test
 
 ## Aggiornamenti del sito
 Quando cambia `social.html`, `social-vnext.css` o `social-vnext.js`, ricostruire e distribuire di nuovo `social/hosting/supabase-edge-social-test.ts` nel **progetto test**. I test automatici verificano che il codice HTML ospitato corrisponda al codice Social corrente.
+
+## Correzione redirect email (registrazione)
+
+Se cliccando sulla mail di conferma il browser apre `localhost` e mostra `ERR_CONNECTION_REFUSED`, significa che **Supabase Auth** ha ancora `Site URL` impostato su localhost. L'utente potrebbe **essere già confermato**: tornare a Vercel e provare **Accedi**.
+
+Configurare solo il progetto **Supabase MangaLog Social Test**:
+- Dashboard: https://supabase.com/dashboard/project/bwohofvlcihlfixesnus/auth/url-configuration
+- **Site URL:** `https://mangalog-social-test.vercel.app/`
+- **Redirect URLs:** aggiungere `https://mangalog-social-test.vercel.app/**`
+- Salvare le modifiche. **Non** modificare il progetto MangaLog principale.
+- In `social-vnext.js`, `signUp` passa ora `options.emailRedirectTo` con il dominio Vercel di test.
+
+La precedente mail già utilizzata non va rinviata se il conto è confermato; effettuare l'accesso. I nuovi collegamenti di conferma useranno il sito Vercel dopo che le impostazioni Supabase saranno salvate.
+
