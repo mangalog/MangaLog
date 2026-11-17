@@ -9,6 +9,20 @@ const source=fs.readFileSync(path.join(base,'social-vnext.js'),'utf8');
 const page=fs.readFileSync(path.join(base,'social-preview-standalone.html'),'utf8');
 const live=fs.readFileSync(path.join(base,'social.html'),'utf8');
 const config=fs.readFileSync(path.join(base,'social-test-config.js'),'utf8');
+const edgeSource=fs.readFileSync(path.join(base,'social/hosting/supabase-edge-social-test.ts'),'utf8');
+const pageMatch=edgeSource.match(/const PAGE = ([^\r\n]+);/);
+assert(pageMatch,'Standalone Edge Function HTML not found');
+const hostedPage=JSON.parse(pageMatch[1]);
+assert.match(hostedPage,/mangalog-social-test-only/);
+assert.match(hostedPage,/MANGALOG_SOCIAL_TEST_CONFIG=\{enabled:true,url:"https:\/\/bwohofvlcihlfixesnus\.supabase\.co"/);
+assert.match(hostedPage,/supabase-js@2\.119\.0/);
+assert(hostedPage.includes(source),'Hosted version must use the latest Social JS');
+assert(hostedPage.includes(fs.readFileSync(path.join(base,'social-vnext.css'),'utf8')),'Hosted version must use the latest CSS');
+assert.match(hostedPage,/id="social-mobile-tabs"/);
+assert.match(hostedPage,/id="social-bell"/);
+assert.doesNotMatch(hostedPage,/sb_secret_|service_role/);
+assert.doesNotMatch(hostedPage,/<script src="\.\//);
+
 const nodes=new Map();
 const handlers={};
 for(const name of ['social-app','social-view','social-banner','social-side','social-bottom','social-mode','social-mobile-tabs','social-bell','profile-editor','search-results']){
