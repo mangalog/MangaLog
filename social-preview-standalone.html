@@ -13,7 +13,7 @@
 .social-mobile-tabs .social-tab{display:flex;flex-direction:column;justify-content:center;align-items:center;gap:5px;background:#282a34;border:1px solid #373945;color:#d1d2dc;border-radius:10px;padding:9px 2px;min-width:0;font-size:11px;font-weight:750;cursor:pointer}
 .social-mobile-tabs .social-tab.active{background:#e84258;border-color:#e84258;color:white}
 .social-mobile-tabs .social-tab .nav-icon{font-size:20px}
-.mobile-nav{grid-template-columns:repeat(5,minmax(0,1fr))}
+.mobile-nav{grid-template-columns:repeat(6,minmax(0,1fr))}
 .mobile-nav .nav{font-size:10px;word-break:normal}
 }
 
@@ -212,6 +212,9 @@ const btn=event.target.closest('button');if(!btn)return;
 const d=btn.dataset;
 if(d.mainNav){
  if(d.mainNav==='social'){act(()=>route('feed'));return}
+ if(/(^|\.)supabase\.co$|(^|\.)raw\.githack\.com$/i.test(window.location?.hostname||'')){
+   note('In questa prova è disponibile solo la sezione Social. Le altre sezioni MangaLog rimangono in sviluppo.');return;
+ }
  try{sessionStorage.setItem('mangalog_next_target',d.mainNav)}catch(e){}
  window.location.href='./index.html';return;
 }
